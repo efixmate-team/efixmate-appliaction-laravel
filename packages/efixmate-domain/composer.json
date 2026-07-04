@@ -1,0 +1,16 @@
+{
+    "name": "efixmate/domain",
+    "description": "Shared Eloquent models and support classes for the eFixMate admin (Inertia) app and v1 API app, against one common MySQL schema.",
+    "type": "library",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Efixmate\\Domain\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "illuminate/database": "^11.0|^12.0|^13.0",
+        "laravel/sanctum": "^4.0"
+    }
+}

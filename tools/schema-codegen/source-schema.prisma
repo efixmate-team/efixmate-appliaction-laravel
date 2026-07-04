@@ -1,0 +1,3349 @@
+datasource db {
+  provider = "postgresql"
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_admin_menus {
+  menu_id        Int       @id @default(autoincrement())
+  menu_name      String    @db.VarChar(50)
+  menu_path      String    @db.VarChar(100)
+  menu_icon      String    @db.VarChar(100)
+  menu_parent_id Int?
+  menu_group_id  Int
+  menu_group     String    @db.VarChar(100)
+  sort_order     Int
+  menu_type      String    @default("I") @db.Char(1)
+  is_active      Boolean   @default(true)
+  created_by     String    @db.VarChar(12)
+  created_at     DateTime  @db.Timestamp(6)
+  updated_by     String?   @db.VarChar(12)
+  updated_at     DateTime? @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// efm_technician_menus — dropped (migration 48)
+// efm_customer_menus   — dropped (migration 48)
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_admin_privileges {
+  privilege_id   Int       @id @default(autoincrement())
+  menu_id        Int
+  privilege_name String    @db.VarChar(50)
+  is_active      Boolean   @default(true)
+  created_by     String    @db.VarChar(12)
+  created_at     DateTime  @db.Timestamp(6)
+  updated_by     String?   @db.VarChar(12)
+  updated_at     DateTime? @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([menu_id, privilege_name], map: "unique_menu_privilege")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_admin_roles {
+  role_id    Int       @id @default(autoincrement())
+  role_name  String    @db.VarChar(100)
+  role_code  String?   @unique @db.VarChar(20)
+  is_active  Boolean   @default(true)
+  created_by String    @db.VarChar(12)
+  created_at DateTime  @db.Timestamp(6)
+  updated_by String?   @db.VarChar(12)
+  updated_at DateTime? @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_admins {
+  admin_id               Int       @id @default(autoincrement())
+  admin_uid              String    @db.VarChar(255)
+  admin_code             String?   @unique @db.VarChar(20)
+  first_name             String    @db.VarChar(50)
+  last_name              String    @db.VarChar(50)
+  mobile_number          String    @db.VarChar(15)
+  email                  String    @db.VarChar(50)
+  password               String    @db.VarChar(100)
+  secret_key             String    @db.VarChar(255)
+  admin_type             String    @db.Char(1)
+  email_verified         Boolean   @default(false)
+  mobile_verified        Boolean   @default(false)
+  is_active              Boolean   @default(true)
+  totp_enabled           Boolean   @default(false)
+  totp_secret_encrypted  String?
+  failed_login_count     Int       @default(0)
+  locked_until           DateTime? @db.Timestamptz(6)
+  created_by             String    @db.VarChar(12)
+  created_at             DateTime  @db.Timestamp(6)
+  updated_by             String?   @db.VarChar(12)
+  updated_at             DateTime? @db.Timestamp(6)
+  role_id                Int?
+  role_active            Boolean   @default(true)
+  profile_image          String?   @db.Text
+
+  is_deleted  Boolean  @default(false)
+  efm_admin_sessions efm_admin_sessions[]
+}
+
+model efm_admin_sessions {
+  session_id   BigInt    @id @default(autoincrement())
+  admin_id     Int
+  device_id    String?   @db.VarChar(128)
+  device_name  String?   @db.VarChar(120)
+  platform     String?   @db.VarChar(40)
+  ip_address   String?   @db.VarChar(45)
+  user_agent   String?
+  token_jti    String?   @db.VarChar(64)
+  is_active    Boolean   @default(true)
+  last_seen_at DateTime  @default(now()) @db.Timestamptz(6)
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+  revoked_at   DateTime? @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_admins efm_admins @relation(fields: [admin_id], references: [admin_id], onDelete: Cascade)
+
+  @@index([admin_id, is_active, last_seen_at(sort: Desc)])
+}
+
+model efm_admin_ip_rules {
+  rule_id    Int      @id @default(autoincrement())
+  scope      String   @default("global") @db.VarChar(20)
+  admin_id   Int?
+  ip_address String?  @db.VarChar(45)
+  cidr       String?  @db.VarChar(50)
+  label      String?  @db.VarChar(120)
+  is_active  Boolean  @default(true)
+  created_by Int?
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([scope, is_active])
+}
+
+model efm_admin_failed_logins {
+  attempt_id BigInt   @id @default(autoincrement())
+  admin_id   Int?
+  email      String?  @db.VarChar(100)
+  ip_address String?  @db.VarChar(45)
+  user_agent String?
+  reason     String   @db.VarChar(80)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([created_at(sort: Desc)])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_customer_address {
+  address_id  Int       @id @default(autoincrement())
+  customer_id Int
+  address     String?   @db.VarChar(100)
+  city        String    @db.VarChar(100)
+  state       String    @db.VarChar(100)
+  country     String    @db.VarChar(100)
+  pincode     Int
+  latitude    String    @db.VarChar(50)
+  longitude   String    @db.VarChar(50)
+  area_id     Int?
+  is_active   Boolean   @default(true)
+  created_by  String    @db.VarChar(12)
+  created_at  DateTime  @db.Timestamp(6)
+  updated_by  String?   @db.VarChar(12)
+  updated_at  DateTime? @db.Timestamp(6)
+  is_selected Boolean   @default(false)
+  is_deleted  Boolean  @default(false)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_customer_login_otp {
+  login_id      Int       @id @default(autoincrement())
+  customer_id   Int?
+  mobile_number String    @db.VarChar(15)
+  otp           Int
+  ip_address    String    @db.VarChar(45)
+  is_registered Boolean?  @default(false)
+  generated_at  DateTime? @default(now()) @db.Timestamp(6)
+  expired_at    DateTime  @db.Timestamp(6)
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  created_by    String    @db.VarChar(12)
+  attempts      Int       @default(0)
+  is_deleted  Boolean  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_customers {
+  customer_id             Int       @id @default(autoincrement())
+  customer_uid            String    @db.VarChar(255)
+  customer_code           String?   @unique @db.VarChar(20)
+  first_name              String    @db.VarChar(100)
+  last_name               String    @db.VarChar(100)
+  mobile_number           String    @db.VarChar(15)
+  email                   String?   @db.VarChar(100)
+  email_verified          Boolean   @default(false)
+  mobile_verified         Boolean   @default(false)
+  is_active               Boolean   @default(true)
+  profile_pitcher         String?   @db.VarChar(255)
+  is_blocked              Boolean   @default(false)
+  blocked_at              DateTime? @db.Timestamptz(6)
+  blocked_reason          String?
+  blocked_by              Int?
+  spam_score              Int       @default(0)
+  spam_flag               Boolean   @default(false)
+  referral_code           String?   @unique @db.VarChar(32)
+  referred_by_customer_id Int?
+  created_by              String    @db.VarChar(12)
+  created_at              DateTime  @db.Timestamp(6)
+  updated_by              String?   @db.VarChar(12)
+  updated_at              DateTime? @db.Timestamp(6)
+  last_retention_nudge_at DateTime? @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([spam_flag, spam_score(sort: Desc)])
+  @@index([is_blocked, blocked_at(sort: Desc)])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_lkp_document_type {
+  document_type_id Int      @id @default(autoincrement())
+  order_seq        Int
+  document_type    String   @db.VarChar(100)
+  applies_to       String?  @db.VarChar(100)
+  is_mandatory     Boolean  @default(true)
+  is_active        Boolean  @default(true)
+  created_by       String   @db.VarChar(12)
+  created_at       DateTime @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_lkp_status {
+  status_id      Int      @id @default(autoincrement())
+  order_seq      Int
+  status_type_id Int
+  status         String   @db.VarChar(100)
+  description    String   @default("") @db.VarChar(255)
+  is_active      Boolean  @default(true)
+  created_by     String   @db.VarChar(12)
+  created_at     DateTime @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_lkp_status_type {
+  status_type_id Int      @id @default(autoincrement())
+  order_seq      Int
+  status_type    String   @db.VarChar(100)
+  description    String
+  is_active      Boolean  @default(true)
+  created_by     String   @db.VarChar(12)
+  created_at     DateTime @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+// efm_log_admin_login    — dropped (migration 48, use efm_log_auth)
+// efm_log_customer_login — dropped (migration 48, use efm_log_auth)
+// efm_log_technician_login — dropped (migration 48, use efm_log_auth)
+// efm_map_admin_role     — dropped (migration 48, role_active col on efm_admins)
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_map_admin_role_privilege {
+  map_id          Int       @id @default(autoincrement())
+  privilege_id    Int
+  role_id         Int
+  permission_type String    @default("ALLOW") @db.VarChar(10)
+  is_active       Boolean   @default(true)
+  created_by      String    @db.VarChar(12)
+  created_at      DateTime  @db.Timestamp(6)
+  updated_by      String?   @db.VarChar(12)
+  updated_at      DateTime? @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([role_id, privilege_id, permission_type], map: "ux_admin_role_privilege_type")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_map_technician_services {
+  map_id        Int       @id @default(autoincrement())
+  technician_id Int
+  service_id    Int
+  is_active     Boolean   @default(true)
+  created_by    String    @db.VarChar(12)
+  created_at    DateTime  @db.Timestamp(6)
+  updated_by    String?   @db.VarChar(12)
+  updated_at    DateTime? @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_mstr_service_category {
+  category_id                      Int                                @id @default(autoincrement())
+  order_seq                        Int
+  category_name                    String                             @unique @db.VarChar(100)
+  category_code                    String?                            @unique @db.VarChar(20)
+  description                      String
+  is_active                        Boolean                            @default(true)
+  created_by                       String                             @db.VarChar(12)
+  created_at                       DateTime                           @db.Timestamp(6)
+  updated_by                       String?                            @db.VarChar(12)
+  updated_at                       DateTime?                          @db.Timestamp(6)
+  category_icon                    String?                            @db.VarChar(100)
+  category_route                   String?                            @db.VarChar(100)
+  category_color                   String?                            @db.VarChar(20)
+  is_deleted  Boolean  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_mstr_services {
+  service_id         Int       @id @default(autoincrement())
+  order_seq          Int
+  category_id        Int
+  service            String    @unique @db.VarChar(100)
+  service_code       String?   @unique @db.VarChar(20)
+  description        String
+  is_active          Boolean   @default(true)
+  created_by         String    @db.VarChar(12)
+  created_at         DateTime  @db.Timestamp(6)
+  updated_by         String?   @db.VarChar(12)
+  updated_at         DateTime? @db.Timestamp(6)
+  base_price         Decimal?  @default(0) @db.Decimal(10, 2)
+  duration           String?   @db.VarChar(50)
+  base_duration      String?   @db.VarChar(50)
+  image_url          String    @default("") @db.VarChar(255)
+  video_url          String?   @db.VarChar(255)
+  service_icon       String?   @db.VarChar(255)
+  service_color      String?   @db.VarChar(20)
+  slug               String?   @db.VarChar(120)
+  meta_title         String?   @db.VarChar(70)
+  meta_description   String?   @db.VarChar(160)
+  /// JSON arrays replacing efm_map_service_booking_type/unit/charge (migration 48)
+  booking_type_ids   Json      @default("[]") @db.JsonB
+  unit_ids           Json      @default("[]") @db.JsonB
+  charge_ids         Json      @default("[]") @db.JsonB
+  avg_rating         Decimal   @default(0) @db.Decimal(3, 2)
+  review_count       Int       @default(0)
+  /// Service type flags — used by emergency/quick/instant/one-click service endpoints
+  is_emergency       Boolean   @default(false)
+  is_quick_service   Boolean   @default(false)
+  is_instant_service Boolean   @default(false)
+  is_one_click_service Boolean @default(false)
+
+  is_deleted  Boolean  @default(false)
+  @@index([slug])
+}
+
+model efm_service_pricing {
+  pricing_id      Int       @id @default(autoincrement())
+  service_id      Int
+  booking_type_id Int?
+  city_id         Int?
+  price           Decimal?  @db.Decimal(10, 2)
+  unit_price      Decimal?  @db.Decimal(10, 2)
+  is_active       Boolean?  @default(true)
+  created_at      DateTime? @default(now()) @db.Timestamp(6)
+  updated_at      DateTime? @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([service_id])
+  @@index([city_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_technician_bank_details {
+  details_id         Int       @id @default(autoincrement())
+  technician_id      Int
+  acount_holder_name String    @db.VarChar(100)
+  account_number     String    @db.VarChar(15)
+  ifsc_number        String    @db.VarChar(15)
+  account_type       String    @default("C") @db.Char(1)
+  status_id          Int
+  is_verified        Boolean   @default(false)
+  reject_remark      String?
+  is_active          Boolean   @default(true)
+  created_by         String    @db.VarChar(12)
+  created_at         DateTime  @db.Timestamp(6)
+  updated_by         String?   @db.VarChar(12)
+  updated_at         DateTime? @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// Per-section approval / rejection for technician registration (migration 50).
+/// section values: 'personal_info' | 'skills' | 'selfie' | 'bank' | 'doc_{document_id}'
+model efm_technician_section_reviews {
+  review_id     Int       @id @default(autoincrement())
+  technician_id Int
+  section       String    @db.VarChar(60)
+  status        String    @default("pending") @db.VarChar(20)
+  remark        String?
+  reviewed_by   String?   @db.VarChar(50)
+  reviewed_at   DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([technician_id, section], map: "uq_tech_section")
+  @@index([technician_id], map: "idx_tech_section_reviews_tech")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_technician_login_otp {
+  login_id      Int       @id @default(autoincrement())
+  technician_id Int?
+  mobile_number String    @db.VarChar(15)
+  otp           Int
+  ip_address    String    @default("127.0.0.1") @db.VarChar(15)
+  attempts      Int       @default(0)
+  is_registered Boolean?  @default(false)
+  generated_at  DateTime? @db.Timestamp(6)
+  expired_at    DateTime  @db.Timestamp(6)
+  created_at    DateTime  @db.Timestamp(6)
+  created_by    String    @db.VarChar(12)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_technicians {
+  technician_id                Int                            @id @default(autoincrement())
+  first_name                   String                         @db.VarChar(100)
+  last_name                    String?                        @db.VarChar(100)
+  mobile_number                String                         @db.VarChar(15)
+  email                        String?                        @db.VarChar(100)
+  profile_pitcher              String?                        @db.VarChar(255)
+  selfie_photo                 String?                        @db.VarChar(255)
+  status_id                    Int?
+  is_selfie_verified           Boolean                        @default(false)
+  is_active                    Boolean                        @default(false)
+  created_by                   String                         @db.VarChar(12)
+  created_at                   DateTime                       @db.Timestamp(6)
+  updated_by                   String?                        @db.VarChar(12)
+  updated_at                   DateTime?                      @db.Timestamp(6)
+  category_id                  Int?
+  /// Primary service (efm_mstr_services.service_id); DB column name kept for compatibility.
+  sub_category_id              Int?
+  current_jobs                 Int                            @default(0)
+  max_jobs                     Int                            @default(1)
+  application_status           String?                        @db.VarChar(32)
+  application_reject_reason    String?
+  technician_unique_id         String?                        @unique @db.VarChar(20)
+  is_online                    Boolean                        @default(false)
+  fcm_token                    String?                        @db.VarChar(512)
+  /// Merged from efm_technician_availability_state (migration 48)
+  vacation_mode                Boolean                        @default(false)
+  vacation_until               DateTime?                      @db.Timestamptz(6)
+  service_radius_km            Decimal                        @default(10) @db.Decimal(6, 2)
+  geo_fence_enabled            Boolean                        @default(false)
+  referral_code                String?                        @unique @db.VarChar(32)
+  referred_by_technician_id    Int?
+  availability_status          String                         @default("AVAILABLE") @db.VarChar(20)
+  avg_rating                   Decimal                        @default(0) @db.Decimal(3, 2)
+  review_count                 Int                            @default(0)
+  is_deleted  Boolean  @default(false)
+  efm_technician_documents efm_technician_documents[]
+  efm_technician_location  efm_technician_location[]
+  efm_technician_areas         efm_technician_areas[]
+  efm_technician_live_locations efm_technician_live_locations?
+}
+
+model efm_technician_documents {
+  document_id                      Int                  @id @default(autoincrement())
+  technician_id                    Int
+  document_type_id                 Int
+  document_number                  String?              @db.VarChar(50)
+  attachement                      String?              @db.VarChar(100)
+  status_id                        Int
+  is_verified                      Boolean              @default(false)
+  reject_remark                    String?
+  is_active                        Boolean              @default(true)
+  created_by                       String               @db.VarChar(12)
+  created_at                       DateTime             @db.Timestamp(6)
+  updated_by                       String?              @db.VarChar(12)
+  updated_at                       DateTime?            @db.Timestamp(6)
+  efm_techniciansTechnician_id Int?
+  is_deleted  Boolean  @default(false)
+  efm_technicians               efm_technicians? @relation(fields: [efm_techniciansTechnician_id], references: [technician_id])
+}
+
+model efm_technician_location {
+  location_id                      Int                  @id @default(autoincrement())
+  technician_id                    Int
+  city                             String               @db.VarChar(100)
+  state                            String               @db.VarChar(100)
+  country                          String               @db.VarChar(100)
+  address                          String               @db.VarChar(200)
+  pincode                          Int
+  latitude                         String               @db.VarChar(50)
+  longitude                        String               @db.VarChar(50)
+  status_id                        Int
+  is_active                        Boolean              @default(true)
+  created_by                       String               @db.VarChar(12)
+  created_at                       DateTime             @db.Timestamp(6)
+  updated_by                       String?              @db.VarChar(12)
+  updated_at                       DateTime?            @db.Timestamp(6)
+  efm_techniciansTechnician_id Int?
+  is_deleted  Boolean  @default(false)
+  efm_technicians               efm_technicians? @relation(fields: [efm_techniciansTechnician_id], references: [technician_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_booking_technicians {
+  asignment_id    Int       @id @default(autoincrement())
+  technician_id   Int
+  booking_id      Int
+  assignment_role String?   @default("primary") @db.VarChar(30)
+  is_primary      Boolean   @default(false)
+  assigned_at     DateTime? @db.Timestamp(6)
+  started_at      DateTime? @db.Timestamp(6)
+  completed_at    DateTime? @db.Timestamp(6)
+  is_active       Boolean   @default(true)
+  created_by      String    @db.VarChar(12)
+  created_at      DateTime  @db.Timestamp(6)
+  updated_by      String?   @db.VarChar(12)
+  updated_at      DateTime? @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_bookings {
+  booking_id          Int       @id @default(autoincrement())
+  booking_uid         String    @db.VarChar(100)
+  customer_id         Int
+  address_id          Int
+  service_category_id Int
+  service_id          Int
+  booking_type_id     Int
+  quantity            Int
+  base_price          Decimal   @db.Decimal(10, 2)
+  unit_price          Decimal   @db.Decimal(10, 2)
+  inspection_fee      Decimal?  @db.Decimal(10, 2)
+  estimated_price     Decimal?  @db.Decimal(10, 2)
+  final_price         Decimal?  @db.Decimal(10, 2)
+  booking_status_id   Int?
+  payment_status_id   Int?
+  payment_mode_id     Int?
+  problem_description String?
+  scheduled_date      DateTime? @db.Timestamp(6)
+  scheduled_time      String?   @db.VarChar(50)
+  assigned_at         DateTime? @db.Timestamp(6)
+  started_at          DateTime? @db.Timestamp(6)
+  completed_at        DateTime? @db.Timestamp(6)
+  cancelled_at        DateTime? @db.Timestamp(6)
+  is_active           Boolean   @default(true)
+  created_by          String    @db.VarChar(12)
+  created_at          DateTime  @db.Timestamp(6)
+  updated_by          String?   @db.VarChar(12)
+  updated_at          DateTime? @db.Timestamp(6)
+  area_id             Int?
+  fy_id               Int?
+  slot_id             Int?
+  technician_id       Int?
+  country_id          Int?
+  state_id            Int?
+  city_id             Int?
+  lifecycle_state         String?   @default("CREATED") @db.VarChar(40)
+  is_emergency            Boolean   @default(false)
+  priority                String    @default("normal") @db.VarChar(20)
+  sla_due_at              DateTime? @db.Timestamptz(6)
+  fraud_score             Int       @default(0)
+  fraud_flags             Json      @default("[]") @db.JsonB
+  duplicate_of_booking_id Int?
+  assigned_admin_id       Int?
+  no_service_at           DateTime? @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+  efm_booking_pricing_snapshot     efm_booking_pricing_snapshot?
+  efm_booking_price_breakdown      efm_booking_price_breakdown?
+  efm_booking_price_breakdown_line efm_booking_price_breakdown_line[]
+  efm_booking_commission_snapshot  efm_booking_commission_snapshot?
+  efm_booking_settlement_item      efm_booking_settlement_item[]
+
+  @@index([lifecycle_state, booking_status_id])
+  @@index([lifecycle_state, booking_status_id, is_emergency, priority, sla_due_at])
+  @@index([customer_id, service_id, scheduled_date])
+  @@index([fy_id])
+  @@index([area_id, fy_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_lkp_booking_type {
+  booking_type_id Int      @id @default(autoincrement())
+  order_seq       Int
+  booking_type    String   @db.VarChar(100)
+  description     String   @db.VarChar(255)
+  is_active       Boolean  @default(true)
+  created_by      String   @db.VarChar(12)
+  created_at      DateTime @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_lkp_payment_modes {
+  payment_mode_id Int      @id @default(autoincrement())
+  order_seq       Int
+  payment_mode    String   @db.VarChar(100)
+  description     String   @db.VarChar(255)
+  is_active       Boolean  @default(true)
+  created_by      String   @db.VarChar(12)
+  created_at      DateTime @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_payment_orders {
+  order_id          Int       @id @default(autoincrement())
+  customer_id       Int
+  booking_id        Int
+  fy_id             Int?
+  country_id        Int?
+  state_id          Int?
+  city_id           Int?
+  area_id           Int?
+  amount            Decimal   @db.Decimal(10, 2)
+  currency          String?   @db.VarChar(12)
+  payment_type      String?   @db.VarChar(50)
+  booking_type_id   Int?
+  gateway_order_id  String?   @db.VarChar(255)
+  payment_status_id Int?
+  is_active         Boolean   @default(true)
+  created_by        String    @db.VarChar(12)
+  created_at        DateTime  @db.Timestamp(6)
+  updated_by        String?   @db.VarChar(12)
+  updated_at        DateTime? @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([fy_id])
+  @@index([country_id, state_id, city_id, area_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_refunds {
+  refund_id         Int       @id @default(autoincrement())
+  payment_id        Int
+  gateway_refund_id String    @db.VarChar(255)
+  amount            Decimal   @db.Decimal(10, 2)
+  reason            String?
+  refund_status_id  Int?
+  refunded_at       DateTime? @db.Timestamp(6)
+  raw_response      Json      @db.Json
+  created_at        DateTime  @db.Timestamp(6)
+  country_id        Int?
+  state_id          Int?
+  city_id           Int?
+  area_id           Int?
+  fy_id             Int?
+  is_deleted  Boolean  @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model efm_gateway_payment {
+  payment_id         Int       @id @default(autoincrement())
+  order_id           Int
+  gateway_payment_id String?   @db.VarChar(255)
+  gateway_signature  String?   @db.Text
+  amount             Decimal   @db.Decimal(10, 2)
+  currency           String?   @default("INR") @db.VarChar(12)
+  payment_mode_id    Int?
+  payment_status_id  Int?
+  paid_at            DateTime? @db.Timestamp(6)
+  raw_response       Json?     @db.Json
+  is_active          Boolean   @default(true)
+  created_by         String    @db.VarChar(12)
+  created_at         DateTime  @default(now()) @db.Timestamp(6)
+  country_id         Int?
+  state_id           Int?
+  city_id            Int?
+  area_id            Int?
+  fy_id              Int?
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_mstr_cities {
+  city_id            Int              @id @default(autoincrement())
+  state_id           Int?
+  city_name          String           @unique @db.VarChar(100)
+  is_active          Boolean?         @default(true)
+  created_at         DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?        @db.Timestamp(6)
+  slug               String?          @db.VarChar(120)
+  meta_title         String?          @db.VarChar(70)
+  meta_description   String?          @db.VarChar(160)
+  is_deleted  Boolean  @default(false)
+  efm_mstr_states    efm_mstr_states? @relation(fields: [state_id], references: [state_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([slug])
+}
+
+// efm_mstr_commissions — dropped (migration 48, superseded by efm_mstr_commission_rules)
+
+/// Multi-dimensional commission rules (area, service, technician, surge, promo, dynamic).
+model efm_mstr_commission_rules {
+  rule_id            BigInt    @id @default(autoincrement())
+  rule_name          String    @db.VarChar(120)
+  rule_type          String    @default("GLOBAL") @db.VarChar(32)
+  commission_mode    String    @default("PERCENTAGE") @db.VarChar(20)
+  commission_value   Decimal   @default(0) @db.Decimal(12, 4)
+  min_commission     Decimal?  @db.Decimal(12, 2)
+  max_commission     Decimal?  @db.Decimal(12, 2)
+  service_id         Int?
+  area_id            Int?
+  city_id            Int?
+  technician_id      Int?
+  campaign_code      String?   @db.VarChar(64)
+  applies_to_surge   Boolean   @default(false)
+  surge_rate_addon   Decimal?  @db.Decimal(12, 4)
+  formula            Json?     @db.JsonB
+  stack_group        String    @default("BASE") @db.VarChar(32)
+  priority           Int       @default(100)
+  valid_from         DateTime? @db.Timestamptz(6)
+  valid_until        DateTime? @db.Timestamptz(6)
+  gst_applicable     Boolean   @default(true)
+  gst_rate           Decimal   @default(18) @db.Decimal(5, 2)
+  tds_applicable     Boolean   @default(true)
+  tds_section        String    @default("194C") @db.VarChar(20)
+  tds_rate           Decimal   @default(1) @db.Decimal(5, 2)
+  is_active          Boolean   @default(true)
+  created_by         String?   @default("system") @db.VarChar(12)
+  created_at         DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime? @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([is_active, rule_type, priority])
+  @@index([service_id, area_id])
+  @@index([technician_id])
+}
+
+/// Frozen commission split when booking completes (settlement source of truth).
+model efm_booking_commission_snapshot {
+  snapshot_id              BigInt   @id @default(autoincrement())
+  booking_id               Int      @unique
+  breakdown_id             BigInt?
+  gross_basis              Decimal  @db.Decimal(14, 2)
+  matched_rules            Json     @default("[]") @db.JsonB
+  base_commission_amount   Decimal  @default(0) @db.Decimal(14, 2)
+  surge_commission_amount  Decimal  @default(0) @db.Decimal(14, 2)
+  promo_adjustment         Decimal  @default(0) @db.Decimal(14, 2)
+  total_commission_amount  Decimal  @default(0) @db.Decimal(14, 2)
+  gst_on_commission        Decimal  @default(0) @db.Decimal(14, 2)
+  gst_rate                 Decimal  @default(18) @db.Decimal(5, 2)
+  technician_gross_earning Decimal  @default(0) @db.Decimal(14, 2)
+  tds_rate                 Decimal  @default(1) @db.Decimal(5, 2)
+  tds_accrued              Decimal  @default(0) @db.Decimal(14, 2)
+  tds_section              String   @default("194C") @db.VarChar(20)
+  technician_net_earning   Decimal  @default(0) @db.Decimal(14, 2)
+  platform_net_revenue     Decimal  @default(0) @db.Decimal(14, 2)
+  calculation_meta         Json?    @db.JsonB
+  engine_version           String   @default("commission-v2") @db.VarChar(32)
+  country_id               Int?
+  state_id                 Int?
+  city_id                  Int?
+  area_id                  Int?
+  fy_id                    Int?
+  created_at               DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_bookings efm_bookings @relation(fields: [booking_id], references: [booking_id], onDelete: Cascade)
+
+  @@index([created_at(sort: Desc)])
+  @@index([fy_id])
+}
+
+/// Ledger lines for payout batches and reconciliation.
+model efm_booking_settlement_item {
+  item_id               BigInt    @id @default(autoincrement())
+  booking_id            Int
+  technician_id         Int?
+  item_type             String    @db.VarChar(32)
+  direction             String    @default("CREDIT") @db.VarChar(8)
+  amount                Decimal   @db.Decimal(14, 2)
+  currency              String    @default("INR") @db.VarChar(3)
+  status                String    @default("PENDING") @db.VarChar(20)
+  settlement_batch_id   BigInt?
+  payout_id             Int?
+  ref_type              String?   @db.VarChar(40)
+  ref_id                String?   @db.VarChar(64)
+  meta                  Json?     @db.JsonB
+  country_id            Int?
+  state_id              Int?
+  city_id               Int?
+  area_id               Int?
+  fy_id                 Int?
+  created_at            DateTime  @default(now()) @db.Timestamptz(6)
+  settled_at            DateTime? @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_bookings                  efm_bookings                   @relation(fields: [booking_id], references: [booking_id], onDelete: Cascade)
+  efm_admin_settlement_batches  efm_admin_settlement_batches?  @relation(fields: [settlement_batch_id], references: [batch_id], onDelete: SetNull)
+  efm_payouts                   efm_payouts?                   @relation(fields: [payout_id], references: [payout_id], onDelete: SetNull)
+
+  @@index([booking_id])
+  @@index([technician_id, status, created_at(sort: Desc)])
+  @@index([settlement_batch_id])
+  @@index([item_type, status])
+  @@index([fy_id, country_id])
+}
+
+model efm_mstr_countries {
+  country_id    Int       @id @default(autoincrement())
+  country_name  String    @db.VarChar(100)
+  country_code  String    @unique @db.VarChar(10)
+  dial_code     String?   @db.VarChar(10)
+  currency_id   Int?
+  is_active     Boolean?  @default(true)
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  updated_at    DateTime? @db.Timestamp(6)
+  /// JSON arrays replacing efm_map_country_language / efm_map_country_timezone (migration 48)
+  language_ids  Json      @default("[]") @db.JsonB
+  timezone_ids  Json      @default("[]") @db.JsonB
+  is_deleted  Boolean  @default(false)
+  efm_mstr_states efm_mstr_states[]
+}
+
+model efm_mstr_coupons {
+  coupon_id           Int       @id @default(autoincrement())
+  coupon_code         String    @unique @db.VarChar(50)
+  discount_type       String?   @default("PERCENTAGE") @db.VarChar(20)
+  discount_value      Decimal   @db.Decimal(10, 2)
+  min_order_amount    Decimal?  @db.Decimal(10, 2)
+  max_discount_amount Decimal?  @db.Decimal(10, 2)
+  valid_from          DateTime? @db.Timestamp(6)
+  valid_until         DateTime? @db.Timestamp(6)
+  is_active           Boolean?  @default(true)
+  created_at          DateTime? @default(now()) @db.Timestamp(6)
+  updated_at          DateTime? @db.Timestamp(6)
+  buy_x               Int?      @default(0)
+  coupon_type         String?   @default("fixed") @db.VarChar(20)
+  get_y               Int?      @default(0)
+  usage_limit         Int?      @default(1)
+  usage_type          String?   @default("single") @db.VarChar(20)
+  max_uses            Int?      @default(0)
+  max_uses_per_user   Int?      @default(1)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_lkp_area_type {
+  area_type_id   Int              @id @default(autoincrement())
+  order_seq      Int              @default(0)
+  area_type      String           @db.VarChar(100)
+  description    String?          @db.VarChar(255)
+  is_active      Boolean          @default(true)
+  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?        @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+  efm_mstr_areas efm_mstr_areas[]
+}
+
+model efm_mstr_areas {
+  area_id             Int                @id @default(autoincrement())
+  area_name           String             @db.VarChar(100)
+  city_id             Int
+  area_type_id        Int?
+  latitude            Decimal            @db.Decimal(9, 6)
+  longitude           Decimal            @db.Decimal(9, 6)
+  radius_km           Decimal            @db.Decimal(10, 2)
+  polygon_coordinates Json?
+  max_active_bookings Int?
+  is_active           Boolean            @default(true)
+  created_by          String             @db.VarChar(12)
+  created_at          DateTime           @default(now()) @db.Timestamp(6)
+  updated_by          String?            @db.VarChar(12)
+  updated_at          DateTime?          @updatedAt @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+  efm_technician_areas efm_technician_areas[]
+  efm_lkp_area_type   efm_lkp_area_type? @relation(fields: [area_type_id], references: [area_type_id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@unique([area_name, city_id])
+}
+
+model efm_technician_areas {
+  technician_id      Int
+  area_id            Int
+  is_active          Boolean             @default(true)
+  created_by         String              @default("system") @db.VarChar(12)
+  created_at         DateTime            @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?           @updatedAt @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+  efm_technician efm_technicians @relation(fields: [technician_id], references: [technician_id], onDelete: Cascade, onUpdate: NoAction)
+  efm_area       efm_mstr_areas       @relation(fields: [area_id], references: [area_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([technician_id, area_id])
+  @@index([area_id])
+  @@index([technician_id])
+}
+
+model efm_technician_live_locations {
+  technician_id      Int                 @id
+  lat                Decimal             @db.Decimal(9, 6)
+  lng                Decimal             @db.Decimal(9, 6)
+  updated_at         DateTime            @default(now()) @updatedAt @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+  efm_technician efm_technicians @relation(fields: [technician_id], references: [technician_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([updated_at])
+}
+
+model efm_dispatch_job_offers {
+  offer_id      Int      @id @default(autoincrement())
+  booking_id    Int
+  technician_id Int
+  wave          Int      @default(1)
+  status        String   @db.VarChar(20)
+  expires_at    DateTime @db.Timestamptz(6)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([booking_id, technician_id, wave])
+  @@index([booking_id, status])
+  @@index([technician_id, status])
+}
+
+model efm_technician_wallet_ledger {
+  ledger_id      BigInt   @id @default(autoincrement())
+  technician_id  Int
+  booking_id     Int?
+  entry_type      String   @db.VarChar(20)
+  amount          Decimal  @db.Decimal(12, 2)
+  balance_after   Decimal  @db.Decimal(12, 2)
+  meta            Json?    @db.Json
+  country_id      Int?
+  state_id        Int?
+  city_id         Int?
+  area_id         Int?
+  fy_id           Int?
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([technician_id, created_at])
+  @@index([fy_id, technician_id])
+}
+
+model efm_technician_withdraw_requests {
+  request_id     BigInt    @id @default(autoincrement())
+  technician_id  Int
+  amount           Decimal   @db.Decimal(12, 2)
+  status           String    @default("pending") @db.VarChar(20)
+  remark           String?
+  country_id       Int?
+  state_id         Int?
+  city_id          Int?
+  area_id          Int?
+  fy_id            Int?
+  created_at       DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime? @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([technician_id, status])
+  @@index([fy_id, technician_id])
+}
+
+model efm_mstr_pricing_rules {
+  rule_id              Int       @id @default(autoincrement())
+  rule_name            String    @db.VarChar(120)
+  service_id           Int
+  rule_type            String    @default("SERVICE") @db.VarChar(30)
+  adjustment_mode      String    @default("REPLACE") @db.VarChar(20)
+  adjustment_value     Decimal?  @db.Decimal(12, 4)
+  price                Decimal?  @db.Decimal(10, 2)
+  discount_type        String?   @default("none") @db.VarChar(20)
+  discount_value       Decimal?  @default(0) @db.Decimal(10, 2)
+  area_id              Int?
+  city_id              Int?
+  state_id             Int?
+  slot_id              Int?
+  is_emergency         Boolean?
+  schedule_days        Json?     @db.JsonB
+  schedule_start_time  String?   @db.VarChar(10)
+  schedule_end_time    String?   @db.VarChar(10)
+  start_date           DateTime? @db.Timestamp(6)
+  end_date             DateTime? @db.Timestamp(6)
+  priority             Int       @default(100)
+  is_active            Boolean   @default(true)
+  created_by           String    @db.VarChar(12)
+  created_at           DateTime  @default(now()) @db.Timestamp(6)
+  updated_at           DateTime? @updatedAt @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([service_id, is_active, rule_type], map: "idx_pricing_rules_service_active")
+  @@index([service_id, area_id], map: "idx_pricing_rules_service_area")
+  @@index([service_id, city_id], map: "idx_pricing_rules_service_city")
+  @@index([service_id, slot_id], map: "idx_pricing_rules_service_slot")
+  @@index([service_id, start_date, end_date], map: "idx_pricing_rules_validity")
+}
+
+model efm_map_coupon_area {
+  map_id     Int      @id @default(autoincrement())
+  coupon_id  Int
+  area_id    Int
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_lkp_currencies {
+  currency_id     Int       @id @default(autoincrement())
+  currency_name   String    @db.VarChar(100)
+  currency_code   String    @unique @db.VarChar(10)
+  currency_symbol String?   @db.VarChar(5)
+  is_active       Boolean?  @default(true)
+  created_at      DateTime? @default(now()) @db.Timestamp(6)
+  updated_at      DateTime? @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_mstr_discounts {
+  discount_id    Int       @id @default(autoincrement())
+  discount_title String    @db.VarChar(150)
+  discount_type  String?   @default("PERCENTAGE") @db.VarChar(20)
+  discount_value Decimal   @db.Decimal(10, 2)
+  is_active      Boolean?  @default(true)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @db.Timestamp(6)
+  target_id      Int?
+  target_type    String    @default("GLOBAL") @db.VarChar(50)
+  is_deleted  Boolean  @default(false)
+}
+
+/// Financial summary header — one row per booking (pairs with line items).
+model efm_booking_price_breakdown {
+  breakdown_id          BigInt   @id @default(autoincrement())
+  booking_id            Int      @unique
+  snapshot_id           BigInt?  @unique
+  currency              String   @default("INR") @db.VarChar(3)
+  quantity              Int      @default(1)
+  base_price            Decimal  @default(0) @db.Decimal(14, 2)
+  area_amount           Decimal  @default(0) @db.Decimal(14, 2)
+  slot_amount           Decimal  @default(0) @db.Decimal(14, 2)
+  surge_amount          Decimal  @default(0) @db.Decimal(14, 2)
+  technician_charges    Decimal  @default(0) @db.Decimal(14, 2)
+  platform_fees         Decimal  @default(0) @db.Decimal(14, 2)
+  tax_amount            Decimal  @default(0) @db.Decimal(14, 2)
+  discount_amount       Decimal  @default(0) @db.Decimal(14, 2)
+  coupon_amount         Decimal  @default(0) @db.Decimal(14, 2)
+  commission_amount     Decimal  @default(0) @db.Decimal(14, 2)
+  wallet_deduction      Decimal  @default(0) @db.Decimal(14, 2)
+  cashback_amount       Decimal  @default(0) @db.Decimal(14, 2)
+  subtotal_before_tax   Decimal  @default(0) @db.Decimal(14, 2)
+  customer_payable      Decimal  @default(0) @db.Decimal(14, 2)
+  technician_settlement Decimal  @default(0) @db.Decimal(14, 2)
+  platform_revenue      Decimal  @default(0) @db.Decimal(14, 2)
+  lines_meta            Json     @default("[]") @db.JsonB
+  calculation_meta      Json?    @db.JsonB
+  schema_version        String   @default("v2") @db.VarChar(16)
+  country_id            Int?
+  state_id              Int?
+  city_id               Int?
+  area_id               Int?
+  fy_id                 Int?
+  created_at            DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_bookings                   efm_bookings                   @relation(fields: [booking_id], references: [booking_id], onDelete: Cascade)
+  efm_booking_pricing_snapshot     efm_booking_pricing_snapshot?    @relation(fields: [snapshot_id], references: [snapshot_id], onDelete: SetNull)
+  efm_booking_price_breakdown_line efm_booking_price_breakdown_line[]
+
+  @@index([created_at(sort: Desc)])
+  @@index([fy_id])
+}
+
+/// Normalized debit/credit lines for enterprise audit & reconciliation.
+model efm_booking_price_breakdown_line {
+  line_id         BigInt   @id @default(autoincrement())
+  breakdown_id    BigInt
+  booking_id      Int
+  line_type       String   @db.VarChar(32)
+  line_category   String   @default("PRICING") @db.VarChar(24)
+  direction       String   @default("DEBIT") @db.VarChar(8)
+  amount          Decimal  @db.Decimal(14, 2)
+  rate_type       String?  @db.VarChar(20)
+  rate_value      Decimal? @db.Decimal(12, 4)
+  ref_type        String?  @db.VarChar(40)
+  ref_id          String?  @db.VarChar(64)
+  label           String   @db.VarChar(150)
+  description     String?  @db.VarChar(255)
+  sort_order      Int      @default(0)
+  meta            Json?    @db.JsonB
+  country_id      Int?
+  state_id        Int?
+  city_id         Int?
+  area_id         Int?
+  fy_id           Int?
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_booking_price_breakdown efm_booking_price_breakdown @relation(fields: [breakdown_id], references: [breakdown_id], onDelete: Cascade)
+  efm_bookings                efm_bookings                @relation(fields: [booking_id], references: [booking_id], onDelete: Cascade)
+
+  @@index([booking_id])
+  @@index([breakdown_id])
+  @@index([booking_id, line_type])
+  @@index([line_category, direction])
+  @@index([fy_id])
+}
+
+/// Immutable pricing captured at booking creation — never updated after insert.
+model efm_booking_pricing_snapshot {
+  snapshot_id         BigInt   @id @default(autoincrement())
+  booking_id          Int      @unique
+  base_price          Decimal  @db.Decimal(12, 2)
+  matched_rules       Json     @default("[]") @db.JsonB
+  area_adjustment     Decimal  @default(0) @db.Decimal(12, 2)
+  slot_adjustment     Decimal  @default(0) @db.Decimal(12, 2)
+  surge_charge        Decimal  @default(0) @db.Decimal(12, 2)
+  discounts           Json     @default("[]") @db.JsonB
+  taxes               Json     @default("[]") @db.JsonB
+  coupon_data         Json?    @db.JsonB
+  subtotal_before_tax Decimal  @db.Decimal(12, 2)
+  final_price         Decimal  @db.Decimal(12, 2)
+  quantity            Int      @default(1)
+  currency            String   @default("INR") @db.VarChar(3)
+  locked_price        Decimal? @db.Decimal(12, 2)
+  lock_id             String?  @db.Uuid
+  engine_version      String   @default("pricing-runtime-v1") @db.VarChar(32)
+  pricing_context     Json?    @db.JsonB
+  lines_snapshot      Json?    @db.JsonB
+  service_snapshot    Json?    @db.JsonB
+  slot_snapshot       Json?    @db.JsonB
+  charge_snapshot     Json?    @db.JsonB
+  technician_snapshot Json?    @db.JsonB
+  pricing_rules_fingerprint String? @db.VarChar(64)
+  country_id          Int?
+  state_id            Int?
+  city_id             Int?
+  area_id             Int?
+  fy_id               Int?
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_bookings                   efm_bookings                     @relation(fields: [booking_id], references: [booking_id], onDelete: Cascade)
+  efm_booking_price_breakdown    efm_booking_price_breakdown?
+
+  @@index([created_at(sort: Desc)])
+  @@index([fy_id])
+}
+
+model efm_lkp_languages {
+  language_id                   Int                            @id @default(autoincrement())
+  language_name                 String                         @db.VarChar(100)
+  language_code                 String                         @unique @db.VarChar(10)
+  is_active                     Boolean?                       @default(true)
+  created_at                    DateTime?                      @default(now()) @db.Timestamp(6)
+  updated_at                    DateTime?                      @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_payouts {
+  payout_id            Int       @id @default(autoincrement())
+  technician_id        Int?
+  amount               Decimal   @db.Decimal(10, 2)
+  payout_method        String?   @db.VarChar(50)
+  status               String?   @default("PENDING") @db.VarChar(50)
+  vendor_type          String?   @default("technician") @db.VarChar(30)
+  vendor_id            Int?
+  settlement_batch_id  BigInt?
+  reference_no         String?   @db.VarChar(80)
+  tds_amount           Decimal?  @default(0) @db.Decimal(12, 2)
+  booking_id           Int?
+  gross_amount         Decimal?  @db.Decimal(14, 2)
+  net_amount           Decimal?  @db.Decimal(14, 2)
+  commission_amount    Decimal?  @default(0) @db.Decimal(14, 2)
+  gst_amount           Decimal?  @default(0) @db.Decimal(14, 2)
+  meta                 Json?     @default("{}") @db.JsonB
+  country_id           Int?
+  state_id             Int?
+  city_id              Int?
+  area_id              Int?
+  fy_id                Int?
+  processed_at         DateTime? @db.Timestamp(6)
+  created_at           DateTime? @default(now()) @db.Timestamp(6)
+  updated_at           DateTime? @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_booking_settlement_item efm_booking_settlement_item[]
+
+  @@index([status, created_at(sort: Desc)])
+  @@index([technician_id, settlement_batch_id])
+  @@index([fy_id, country_id])
+}
+
+model efm_mstr_states {
+  state_id          Int                @id @default(autoincrement())
+  country_id        Int?
+  state_name        String             @unique @db.VarChar(100)
+  state_code        String?            @db.VarChar(10)
+  is_active         Boolean?           @default(true)
+  created_at        DateTime?          @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?          @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+  efm_mstr_cities    efm_mstr_cities[]
+  efm_mstr_countries efm_mstr_countries? @relation(fields: [country_id], references: [country_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model efm_mstr_taxes {
+  tax_id         Int       @id @default(autoincrement())
+  tax_name       String    @db.VarChar(100)
+  tax_percentage Decimal   @db.Decimal(5, 2)
+  is_active      Boolean?  @default(true)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_mstr_charges {
+  charge_id    Int      @id @default(autoincrement())
+  charge_name  String   @db.VarChar(100)
+  charge_type  String   @default("FIXED") @db.VarChar(20)
+  charge_value Decimal  @db.Decimal(10, 2)
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now()) @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_invoices {
+  invoice_id      Int       @id @default(autoincrement())
+  booking_id      Int
+  invoice_number  String    @unique @db.VarChar(50)
+  amount          Decimal   @db.Decimal(10, 2)
+  status          String?   @default("UNPAID") @db.VarChar(20)
+  taxable_amount  Decimal?  @db.Decimal(12, 2)
+  gst_amount      Decimal?  @db.Decimal(12, 2)
+  cgst_amount     Decimal?  @db.Decimal(12, 2)
+  sgst_amount     Decimal?  @db.Decimal(12, 2)
+  igst_amount     Decimal?  @db.Decimal(12, 2)
+  gst_rate        Decimal?  @default(18) @db.Decimal(5, 2)
+  customer_id     Int?
+  payment_id      Int?
+  pdf_meta        Json?     @default("{}") @db.JsonB
+  generated_by    Int?
+  is_active       Boolean   @default(true)
+  country_id      Int?
+  state_id        Int?
+  city_id         Int?
+  area_id         Int?
+  fy_id           Int?
+  created_at      DateTime  @default(now()) @db.Timestamp(6)
+  updated_at      DateTime? @updatedAt @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([created_at(sort: Desc)])
+  @@index([booking_id])
+  @@index([fy_id])
+}
+
+model efm_transaction_taxes {
+  tax_log_id     Int      @id @default(autoincrement())
+  transaction_id String   @db.VarChar(100)
+  tax_amount     Decimal  @db.Decimal(10, 2)
+  tax_type       String?  @db.VarChar(50)
+  is_active      Boolean  @default(true)
+  country_id     Int?
+  state_id       Int?
+  city_id        Int?
+  area_id        Int?
+  fy_id          Int?
+  created_at     DateTime @default(now()) @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// Promotions / banners / carousel / offer banners (`efm_promotions` in backup_20260509).
+/// Legacy `scope` column coexists with `scope_type` / `scope_ids`.
+model efm_promotions {
+  announcement_id     Int       @id @default(autoincrement())
+  title               String    @db.VarChar(200)
+  message             String    @db.Text
+  trigger_type        String?   @db.VarChar(50)
+  scope               String?   @default("GLOBAL") @db.VarChar(50)
+  is_active           Boolean   @default(true)
+  created_at          DateTime  @default(now()) @db.Timestamp(6)
+  updated_at          DateTime? @db.Timestamp(6)
+  subtitle            String?   @db.VarChar(255)
+  description         String?   @db.Text
+  announcement_type   String?   @default("CAROUSEL") @db.VarChar(40)
+  scope_type          String?   @default("GLOBAL") @db.VarChar(40)
+  scope_ids           String?   @db.Text
+  desktop_image_url   String?   @db.VarChar(500)
+  mobile_image_url    String?   @db.VarChar(500)
+  background_color    String?   @db.VarChar(20)
+  cta_text            String?   @db.VarChar(120)
+  cta_action_type     String?   @db.VarChar(50)
+  cta_value           String?   @db.Text
+  coupon_code         String?   @db.VarChar(80)
+  discount_type       String?   @db.VarChar(30)
+  discount_value      Decimal?  @db.Decimal(10, 2)
+  min_order_amount    Decimal?  @db.Decimal(10, 2)
+  max_discount        Decimal?  @db.Decimal(10, 2)
+  usage_limit         Int?
+  per_user_limit      Int?
+  timezone            String?   @default("Asia/Kolkata") @db.VarChar(80)
+  start_at            DateTime? @db.Timestamp(6)
+  end_at              DateTime? @db.Timestamp(6)
+  priority            Int?      @default(0)
+  is_scheduled        Boolean?  @default(false)
+  is_disabled         Boolean?  @default(false)
+  target_audience     String?   @default("USER") @db.VarChar(20)
+  target_screen       String?   @db.VarChar(80)
+  created_by          String?   @db.VarChar(12)
+  updated_by          String?   @db.VarChar(12)
+  is_deleted  Boolean  @default(false)
+}
+
+// Text-only announcements (`efm_announcements`). Not present in backup_20260509;
+// ensureAnnouncementTable() may create this on newer deployments.
+model efm_announcements {
+  text_announcement_id Int       @id @default(autoincrement())
+  title                String    @db.VarChar(255)
+  message              String?
+  target_audience      String?   @default("USER") @db.VarChar(20)
+  target_screen        String?   @db.VarChar(80)
+  scope_type           String?   @default("GLOBAL") @db.VarChar(40)
+  scope_ids            String?
+  priority             Int?      @default(0)
+  start_at             DateTime? @db.Timestamp(6)
+  end_at               DateTime? @db.Timestamp(6)
+  is_active            Boolean?  @default(true)
+  is_disabled          Boolean?  @default(false)
+  is_scheduled         Boolean?  @default(false)
+  timezone             String?   @default("Asia/Kolkata") @db.VarChar(80)
+  created_by           String?   @db.VarChar(12)
+  created_at           DateTime  @default(now()) @db.Timestamp(6)
+  updated_by           String?   @db.VarChar(12)
+  updated_at           DateTime? @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_feedbacks {
+  feedback_id Int      @id @default(autoincrement())
+  user_id     Int
+  rating      Int
+  comment     String?
+  status      String?  @default("PENDING") @db.VarChar(20)
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_referrals {
+  referral_id       Int       @id @default(autoincrement())
+  referrer_id       Int
+  referrer_type     String    @default("CUSTOMER") @db.VarChar(20)
+  referred_id       Int
+  referred_type     String    @default("CUSTOMER") @db.VarChar(20)
+  referral_code     String?   @db.VarChar(32)
+  status            String    @default("PENDING") @db.VarChar(20)
+  trigger_event     String?   @default("FIRST_BOOKING_COMPLETED") @db.VarChar(40)
+  referrer_reward   Decimal   @default(0) @db.Decimal(10, 2)
+  referred_reward   Decimal   @default(0) @db.Decimal(10, 2)
+  rewarded_at       DateTime? @db.Timestamptz(6)
+  is_active         Boolean   @default(true)
+  created_at        DateTime  @default(now()) @db.Timestamp(6)
+  applied_ip        String?   @db.Text
+  is_flagged        Boolean   @default(false)
+  flag_reason       String?
+
+  is_deleted  Boolean  @default(false)
+  @@index([referrer_id, referrer_type, status])
+  @@index([referred_id, referred_type])
+  @@index([referral_code])
+}
+
+model efm_lkp_timezones {
+  timezone_id                   Int                            @id @default(autoincrement())
+  timezone_name                 String                         @db.VarChar(100)
+  utc_offset                    String                         @db.VarChar(20)
+  is_active                     Boolean?                       @default(true)
+  created_at                    DateTime?                      @default(now()) @db.Timestamp(6)
+  updated_at                    DateTime?                      @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_lkp_units {
+  unit_id     Int       @id @default(autoincrement())
+  unit_name   String    @db.VarChar(100)
+  unit_symbol String?   @db.VarChar(20)
+  is_active   Boolean?  @default(true)
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// Flat per-area-service pricing override used during area cloning (area.controller.js).
+/// Complements efm_mstr_pricing_rules for simple flat-price overrides per area.
+model efm_area_service_pricing {
+  area_id     Int
+  service_id  Int
+  price       Decimal? @db.Decimal(10, 2)
+  discount    Decimal? @db.Decimal(10, 2)
+  final_price Decimal? @db.Decimal(10, 2)
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  updated_at  DateTime @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@id([area_id, service_id])
+  @@index([area_id])
+  @@index([service_id])
+}
+
+/// Service availability in an area (pricing is in efm_mstr_pricing_rules only).
+model efm_area_service_mapping {
+  id          Int      @id @default(autoincrement())
+  area_id     Int
+  service_id  Int
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  updated_at  DateTime @updatedAt @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([area_id, service_id])
+}
+
+model efm_map_area_service_booking_type {
+  map_id          Int      @id @default(autoincrement())
+  area_id         Int
+  service_id      Int
+  booking_type_id Int
+  is_active       Boolean? @default(true)
+  created_by      String?  @default("SYSTEM") @db.VarChar(12)
+  created_at      DateTime? @default(now()) @db.Timestamp(6)
+  updated_at      DateTime? @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([area_id, service_id, booking_type_id])
+}
+
+model efm_map_area_service_unit {
+  map_id         Int      @id @default(autoincrement())
+  area_id        Int
+  service_id     Int
+  unit_id        Int
+  price_per_unit Decimal? @db.Decimal(10, 2)
+  flat_price     Decimal? @db.Decimal(10, 2)
+  is_active      Boolean? @default(true)
+  created_by     String?  @default("SYSTEM") @db.VarChar(12)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([area_id, service_id, unit_id])
+}
+
+model efm_map_area_service_charge {
+  map_id       Int      @id @default(autoincrement())
+  area_id      Int
+  service_id   Int
+  charge_id    Int
+  charge_type  String?  @db.VarChar(20)
+  charge_value Decimal? @db.Decimal(10, 2)
+  is_active    Boolean? @default(true)
+  created_by   String?  @default("SYSTEM") @db.VarChar(12)
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+  updated_at   DateTime? @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([area_id, service_id, charge_id])
+}
+
+model efm_map_discount_service {
+  map_id      Int      @id @default(autoincrement())
+  discount_id Int
+  service_id  Int?
+  category_id Int?
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// efm_map_service_booking_type — dropped (migration 48, use booking_type_ids JSON on efm_mstr_services)
+// efm_map_service_unit         — dropped (migration 48, use unit_ids JSON on efm_mstr_services)
+// efm_map_service_charge       — dropped (migration 48, use charge_ids JSON on efm_mstr_services)
+
+model efm_map_coupon_service {
+  map_id      Int      @id @default(autoincrement())
+  coupon_id   Int
+  service_id  Int?
+  category_id Int?
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// efm_map_currency_country  — dropped (migration 48, use currency_id FK on efm_mstr_countries)
+// efm_map_country_language  — dropped (migration 48, use language_ids JSON on efm_mstr_countries)
+// efm_map_country_timezone  — dropped (migration 48, use timezone_ids JSON on efm_mstr_countries)
+
+model efm_mstr_admin_settings {
+  admin_id   Int      @id
+  settings   Json     @default("{}")
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@map("efm_mstr_admin_settings")
+}
+
+model efm_mstr_time_slots {
+  slot_id          Int       @id @default(autoincrement())
+  area_id          Int?
+  service_id       Int?
+  name             String    @db.VarChar(100)
+  start_time       String    @db.VarChar(20)
+  end_time         String    @db.VarChar(20)
+  surge_multiplier Decimal   @default(1.00) @db.Decimal(5, 2)
+  max_capacity     Int?
+  is_instant       Boolean   @default(false)
+  is_active        Boolean   @default(true)
+  created_at       DateTime  @default(now()) @db.Timestamp(6)
+  updated_at       DateTime  @updatedAt @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([area_id, service_id], map: "idx_time_slots_area_service_active")
+  @@index([area_id, service_id, is_instant], map: "idx_time_slots_area_service_instant")
+  @@index([area_id, start_time, end_time], map: "idx_time_slots_area_time_window")
+}
+
+model efm_technician_availability {
+  id            Int      @id @default(autoincrement())
+  technician_id Int
+  area_id       Int
+  slot_id       Int
+  is_available  Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+  updated_at    DateTime @updatedAt @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([technician_id, area_id, slot_id])
+}
+
+model efm_map_area_category {
+  id          Int      @id @default(autoincrement())
+  area_id     Int
+  category_id Int
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([area_id, category_id])
+}
+
+// Recreated by migration 053 while legacy controllers are moved to efm_booking_lifecycle_history.
+
+model efm_booking_status_logs {
+  log_id     BigInt   @id @default(autoincrement())
+  booking_id Int
+  old_status Int?
+  new_status Int
+  changed_by String?  @db.VarChar(100)
+  user_type  String   @default("SYSTEM") @db.VarChar(20)
+  remark     String?
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, created_at], map: "idx_bsl_booking_id")
+}
+
+model efm_booking_locks {
+  lock_id        String   @id @default(uuid())
+  customer_id    Int
+  area_id        Int
+  service_id     Int
+  slot_id        Int
+  scheduled_date DateTime @db.Timestamp(6)
+  locked_price   Decimal  @db.Decimal(10, 2)
+  coupon_code    String?  @db.VarChar(50)
+  status         String   @default("ACTIVE") @db.VarChar(20)
+  lock_status    String?  @db.VarChar(20)
+  expires_at     DateTime @db.Timestamp(6)
+  is_active      Boolean  @default(true)
+  created_at     DateTime @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([area_id, slot_id, scheduled_date])
+}
+
+model efm_log_auth {
+  log_id      Int      @id @default(autoincrement())
+  user_type   String   @db.VarChar(20)
+  user_id     Int?
+  action      String   @db.VarChar(50)
+  ip_address  String?  @db.VarChar(45)
+  device_info Json?    @db.Json
+  status      String   @db.VarChar(20)
+  remark      String?
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([user_id, created_at])
+}
+
+// efm_log_admin_actions — dropped (migration 48, use efm_admin_audit_trail)
+
+model efm_log_technician_assignments {
+  log_id        Int      @id @default(autoincrement())
+  booking_id    Int
+  technician_id Int?
+  type          String   @db.VarChar(20)
+  attempt_no    Int      @default(1)
+  action        String   @db.VarChar(20)
+  reason        String?
+  payload       Json?    @db.Json
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, technician_id])
+}
+
+model efm_log_payments {
+  log_id        Int      @id @default(autoincrement())
+  booking_id    Int
+  payment_id    String?  @db.VarChar(100)
+  gateway_type  String?  @db.VarChar(20)
+  amount        Decimal  @db.Decimal(10, 2)
+  currency      String   @default("INR") @db.VarChar(10)
+  status        String   @db.VarChar(20)
+  gateway_res   Json?    @db.Json
+  webhook_event String?  @db.VarChar(100)
+  attempt_no    Int      @default(1)
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, payment_id])
+}
+
+/// Portal-wide HTTP activity (Admin, Customer app, Technician). Filled by activityLog middleware + optional explicit calls.
+model efm_activity_logs {
+  log_id       Int      @id @default(autoincrement())
+  actor_type   String?  @db.VarChar(20)
+  actor_id     Int?
+  http_method  String   @db.VarChar(10)
+  request_path String   @db.Text
+  status_code  Int
+  ip_address   String?  @db.VarChar(45)
+  user_agent   String?  @db.Text
+  summary      String?  @db.VarChar(500)
+  metadata     Json?    @db.JsonB
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([actor_type, actor_id, created_at(sort: Desc)])
+  @@index([created_at(sort: Desc)])
+}
+
+model efm_log_errors {
+  log_id       Int      @id @default(autoincrement())
+  error_type   String   @db.VarChar(100)
+  message      String
+  stack_trace  String?
+  api_endpoint String?  @db.VarChar(255)
+  payload      Json?    @db.Json
+  user_id      Int?
+  user_type    String?  @db.VarChar(20)
+  created_at   DateTime @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([error_type, created_at])
+}
+
+// efm_log_api_requests — dropped (migration 48, use efm_activity_logs)
+
+// =============================================================================
+// User module feature tables (migration 09_user_module_feature_tables.sql)
+// =============================================================================
+
+model efm_customer_sessions {
+  session_id           BigInt    @id @default(autoincrement())
+  customer_id          Int
+  device_id            String?   @db.VarChar(128)
+  device_name          String?   @db.VarChar(120)
+  platform             String?   @db.VarChar(40)
+  ip_address           String?   @db.VarChar(45)
+  user_agent           String?
+  refresh_token_hash   String?   @db.VarChar(128)
+  is_active            Boolean   @default(true)
+  last_seen_at         DateTime  @default(now()) @db.Timestamptz(6)
+  created_at           DateTime  @default(now()) @db.Timestamptz(6)
+  revoked_at           DateTime? @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_customer_refresh_tokens efm_customer_refresh_tokens[]
+
+  @@index([customer_id, is_active, last_seen_at(sort: Desc)])
+}
+
+model efm_customer_refresh_tokens {
+  token_id     BigInt   @id @default(autoincrement())
+  customer_id  Int
+  session_id   BigInt?
+  token_hash   String   @unique @db.VarChar(128)
+  expires_at   DateTime @db.Timestamptz(6)
+  is_revoked   Boolean  @default(false)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_customer_sessions efm_customer_sessions? @relation(fields: [session_id], references: [session_id], onDelete: SetNull)
+
+  @@index([customer_id, is_revoked])
+}
+
+model efm_customer_wallet {
+  customer_id Int      @id
+  balance     Decimal  @default(0) @db.Decimal(12, 2)
+  updated_at  DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_customer_wallet_ledger {
+  ledger_id     BigInt   @id @default(autoincrement())
+  customer_id   Int
+  booking_id    Int?
+  entry_type    String   @db.VarChar(30)
+  amount        Decimal  @db.Decimal(12, 2)
+  balance_after Decimal  @db.Decimal(12, 2)
+  meta          Json?    @db.JsonB
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, created_at(sort: Desc)])
+}
+
+// efm_customer_notifications — dropped (migration 48, use efm_notifications)
+
+// efm_customer_notification_prefs — dropped (migration 48, use efm_notification_prefs)
+// efm_customer_chat_messages      — dropped (migration 48, use efm_booking_chat_messages)
+
+model efm_service_reviews {
+  review_id    BigInt    @id @default(autoincrement())
+  customer_id  Int
+  service_id   Int
+  booking_id   Int?
+  rating       Int
+  comment      String?
+  image_urls   Json?     @default("[]") @db.JsonB
+  is_active    Boolean   @default(true)
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime? @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([service_id, created_at(sort: Desc)])
+}
+
+/// @ghost — defined in schema; no active references found in current codebase (reserved for per-service FAQ content).
+model efm_service_faqs {
+  faq_id     Int      @id @default(autoincrement())
+  service_id Int
+  question   String
+  answer     String
+  sort_order Int      @default(0)
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([service_id, sort_order])
+}
+
+/// Unified support tickets — customer_id holds requester_id for all types (migration 48)
+model efm_support_tickets {
+  ticket_id           BigInt    @id @default(autoincrement())
+  customer_id         Int
+  booking_id          Int?
+  ticket_number       String?   @unique @db.VarChar(30)
+  subject             String    @db.VarChar(200)
+  description         String?
+  status              String    @default("open") @db.VarChar(30)
+  priority            String?   @default("normal") @db.VarChar(20)
+  category_id         Int?
+  assigned_admin_id   Int?
+  sla_due_at          DateTime? @db.Timestamptz(6)
+  first_response_at   DateTime? @db.Timestamptz(6)
+  resolved_at         DateTime? @db.Timestamptz(6)
+  closed_at           DateTime? @db.Timestamptz(6)
+  escalation_level    Int       @default(0)
+  attachment_urls     Json?     @default("[]") @db.JsonB
+  created_at          DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime? @db.Timestamptz(6)
+  requester_type      String    @default("CUSTOMER") @db.VarChar(20)
+
+  is_deleted  Boolean  @default(false)
+  efm_support_ticket_replies efm_support_ticket_replies[]
+
+  @@index([customer_id, created_at(sort: Desc)])
+  @@index([status, priority, updated_at(sort: Desc)])
+  @@index([requester_type, status])
+}
+
+model efm_support_ticket_replies {
+  reply_id        BigInt   @id @default(autoincrement())
+  ticket_id       BigInt
+  sender_type     String   @db.VarChar(20)
+  message         String
+  attachment_urls Json?    @default("[]") @db.JsonB
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+  ticket_source   String   @default("CUSTOMER") @db.VarChar(20)
+
+  is_deleted  Boolean  @default(false)
+  efm_support_tickets efm_support_tickets @relation(fields: [ticket_id], references: [ticket_id], onDelete: Cascade)
+}
+
+/// @ghost — defined in schema; no active references found in current codebase (reserved for support/help-centre FAQ content).
+model efm_support_faqs {
+  faq_id     Int     @id @default(autoincrement())
+  category   String? @db.VarChar(80)
+  question   String
+  answer     String
+  sort_order Int     @default(0)
+  is_active  Boolean @default(true)
+  audience   String  @default("CUSTOMER") @db.VarChar(20)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_customer_preferences {
+  customer_id    Int      @id
+  language_code  String?  @default("en") @db.VarChar(10)
+  theme          String?  @default("system") @db.VarChar(20)
+  updated_at     DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// efm_customer_favorite_technicians — dropped (migration 48, use efm_customer_favorites)
+// efm_customer_favorite_services   — dropped (migration 48, use efm_customer_favorites)
+
+model efm_customer_saved_payment_methods {
+  method_id    BigInt   @id @default(autoincrement())
+  customer_id  Int
+  provider     String   @default("razorpay") @db.VarChar(40)
+  method_type  String   @db.VarChar(30)
+  token_ref    String   @db.VarChar(255)
+  label        String?  @db.VarChar(120)
+  meta         Json?    @db.JsonB
+  is_default   Boolean  @default(false)
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, is_active])
+}
+
+model efm_booking_notes {
+  note_id     BigInt   @id @default(autoincrement())
+  booking_id  Int
+  customer_id Int
+  note        String
+  author_type String   @default("CUSTOMER") @db.VarChar(20)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, created_at(sort: Desc)])
+}
+
+model efm_booking_media {
+  media_id      BigInt   @id @default(autoincrement())
+  booking_id    Int
+  customer_id   Int
+  media_type    String   @db.VarChar(20)
+  url           String   @db.VarChar(500)
+  uploader_type String   @default("CUSTOMER") @db.VarChar(20)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id])
+}
+
+model efm_customer_referral_invites {
+  invite_id      BigInt   @id @default(autoincrement())
+  customer_id    Int
+  invitee_mobile String   @db.VarChar(15)
+  invitee_name   String?  @db.VarChar(100)
+  status         String   @default("sent") @db.VarChar(30)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, created_at(sort: Desc)])
+}
+
+model efm_customer_email_otp {
+  otp_id      BigInt   @id @default(autoincrement())
+  customer_id Int
+  email       String   @db.VarChar(100)
+  otp         String   @db.VarChar(10)
+  expires_at  DateTime @db.Timestamptz(6)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_customer_mobile_change_otp {
+  otp_id      BigInt   @id @default(autoincrement())
+  customer_id Int
+  new_mobile  String   @db.VarChar(15)
+  otp         String   @db.VarChar(10)
+  expires_at  DateTime @db.Timestamptz(6)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// =============================================================================
+// Technician module feature tables (migration 10_technician_module_feature_tables.sql)
+// =============================================================================
+
+model efm_technician_sessions {
+  session_id           BigInt    @id @default(autoincrement())
+  technician_id        Int
+  device_id            String?   @db.VarChar(128)
+  device_name          String?   @db.VarChar(120)
+  platform             String?   @db.VarChar(40)
+  ip_address           String?   @db.VarChar(45)
+  user_agent           String?
+  refresh_token_hash   String?   @db.VarChar(128)
+  is_active            Boolean   @default(true)
+  last_seen_at         DateTime  @default(now()) @db.Timestamptz(6)
+  created_at           DateTime  @default(now()) @db.Timestamptz(6)
+  revoked_at           DateTime? @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_technician_refresh_tokens efm_technician_refresh_tokens[]
+
+  @@index([technician_id, is_active, last_seen_at(sort: Desc)])
+}
+
+model efm_technician_refresh_tokens {
+  token_id       BigInt   @id @default(autoincrement())
+  technician_id  Int
+  session_id     BigInt?
+  token_hash     String   @unique @db.VarChar(128)
+  expires_at     DateTime @db.Timestamptz(6)
+  is_revoked     Boolean  @default(false)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_technician_sessions efm_technician_sessions? @relation(fields: [session_id], references: [session_id], onDelete: SetNull)
+}
+
+model efm_technician_mobile_change_otp {
+  otp_id        BigInt   @id @default(autoincrement())
+  technician_id Int
+  new_mobile    String   @db.VarChar(15)
+  otp           String   @db.VarChar(10)
+  expires_at    DateTime @db.Timestamptz(6)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_technician_registration_meta {
+  technician_id       Int       @id
+  pan_number          String?   @db.VarChar(20)
+  pan_verified        Boolean?  @default(false)
+  aadhaar_number      String?   @db.VarChar(20)
+  aadhaar_verified    Boolean?  @default(false)
+  emergency_contact   Json?     @default("{}") @db.JsonB
+  experience_years    Int?
+  experience_details  String?
+  languages           Json?     @default("[]") @db.JsonB
+  certificates        Json?     @default("[]") @db.JsonB
+  profile_video_url   String?   @db.VarChar(500)
+  updated_at          DateTime  @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// @ghost — defined in schema; no active references found in current codebase (reserved for bid-based dispatch).
+model efm_technician_job_bids {
+  bid_id        BigInt   @id @default(autoincrement())
+  booking_id    Int
+  technician_id Int
+  bid_amount    Decimal? @db.Decimal(12, 2)
+  message       String?
+  status        String   @default("pending") @db.VarChar(30)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([booking_id, technician_id])
+}
+
+// efm_technician_job_notes — dropped (migration 48, merged into efm_booking_notes with author_type)
+// efm_technician_job_media — dropped (migration 48, merged into efm_booking_media with uploader_type)
+
+/// @ghost — defined in schema; no active references found in current codebase (reserved for on-site material tracking).
+model efm_technician_job_materials {
+  material_id   BigInt   @id @default(autoincrement())
+  booking_id    Int
+  technician_id Int
+  name          String   @db.VarChar(200)
+  quantity      Decimal? @default(1) @db.Decimal(10, 2)
+  unit_cost     Decimal? @default(0) @db.Decimal(12, 2)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// @ghost — defined in schema; no active references found in current codebase (reserved for extra-charge approval flow).
+model efm_technician_job_extra_charges {
+  charge_id     BigInt   @id @default(autoincrement())
+  booking_id    Int
+  technician_id Int
+  amount        Decimal  @db.Decimal(12, 2)
+  reason        String?
+  status        String   @default("pending") @db.VarChar(30)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// @ghost — defined in schema; no active references found in current codebase (reserved for digital job-completion signature).
+model efm_technician_job_signatures {
+  signature_id   BigInt   @id @default(autoincrement())
+  booking_id     Int
+  technician_id  Int
+  signature_url  String   @db.VarChar(500)
+  signed_at      DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// @ghost — defined in schema; no active references found in current codebase (reserved for OTP-verified job-start flow).
+model efm_technician_job_start_otp {
+  booking_id    Int       @id
+  technician_id Int
+  otp_hash      String    @db.VarChar(128)
+  expires_at    DateTime  @db.Timestamptz(6)
+  verified_at   DateTime? @db.Timestamptz(6)
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// @ghost — defined in schema; no active references found in current codebase (reserved for job pause/resume tracking).
+model efm_technician_job_pause {
+  booking_id    Int       @id
+  technician_id Int
+  paused_at     DateTime  @default(now()) @db.Timestamptz(6)
+  resumed_at    DateTime? @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// efm_technician_chat_messages      — dropped (migration 48, use efm_booking_chat_messages)
+// efm_technician_notifications      — dropped (migration 48, use efm_notifications)
+// efm_technician_notification_prefs — dropped (migration 48, use efm_notification_prefs)
+
+/// @ghost — defined in schema; no active references found in current codebase (reserved for weekly availability schedule).
+model efm_technician_availability_schedule {
+  schedule_id   BigInt  @id @default(autoincrement())
+  technician_id Int
+  day_of_week   Int
+  start_time    String  @db.VarChar(10)
+  end_time      String  @db.VarChar(10)
+  is_active     Boolean @default(true)
+  is_deleted  Boolean  @default(false)
+}
+
+// efm_technician_availability_state — dropped (migration 48, cols merged into efm_technicians)
+
+model efm_technician_profile_skills {
+  id            BigInt  @id @default(autoincrement())
+  technician_id Int
+  service_id    Int
+  skill_level   String? @default("standard") @db.VarChar(30)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([technician_id, service_id])
+}
+
+// Migration 051 — separate skills master (admin-defined, maps to services for dispatch)
+
+model efm_mstr_skills {
+  skill_id    Int       @id @default(autoincrement())
+  skill_name  String    @unique @db.VarChar(100)
+  category_id Int
+  description String    @default("") @db.Text
+  skill_icon  String?   @db.VarChar(255)
+  skill_color String?   @db.VarChar(20)
+  order_seq   Int       @default(0)
+  is_active   Boolean   @default(true)
+  created_by  String    @default("system") @db.VarChar(12)
+  created_at  DateTime  @default(now()) @db.Timestamp(6)
+  updated_by  String?   @db.VarChar(12)
+  updated_at  DateTime? @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([category_id], map: "idx_skills_category")
+  @@index([is_active],   map: "idx_skills_active")
+}
+
+model efm_map_skills_to_services {
+  map_id     Int @id @default(autoincrement())
+  skill_id   Int
+  service_id Int
+
+  is_deleted  Boolean  @default(false)
+  @@unique([skill_id, service_id])
+  @@index([skill_id],   map: "idx_skill_svc_skill")
+  @@index([service_id], map: "idx_skill_svc_service")
+}
+
+model efm_technician_skills {
+  id            Int    @id @default(autoincrement())
+  technician_id Int
+  skill_id      Int
+  skill_level   String @default("standard") @db.VarChar(30)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([technician_id, skill_id])
+  @@index([technician_id], map: "idx_tech_skills_tech")
+}
+
+// efm_technician_support_tickets — dropped (migration 48, merged into efm_support_tickets with requester_type='TECHNICIAN')
+// efm_technician_support_replies — dropped (migration 48, merged into efm_support_ticket_replies with ticket_source='TECHNICIAN')
+
+// efm_technician_support_faqs — dropped (migration 48, merged into efm_support_faqs with audience='TECHNICIAN')
+
+model efm_technician_performance_snapshots {
+  technician_id      Int      @id
+  acceptance_ratio   Decimal? @default(0) @db.Decimal(5, 2)
+  completion_ratio   Decimal? @default(0) @db.Decimal(5, 2)
+  avg_rating         Decimal? @default(0) @db.Decimal(3, 2)
+  complaints_count   Int?     @default(0)
+  updated_at         DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// =============================================================================
+// Production systems (migration 11_production_systems.sql)
+// =============================================================================
+
+model efm_booking_lifecycle_history {
+  history_id  BigInt   @id @default(autoincrement())
+  booking_id  Int
+  from_state  String?  @db.VarChar(40)
+  to_state    String   @db.VarChar(40)
+  changed_by  String   @db.VarChar(80)
+  user_type   String?  @db.VarChar(20)
+  meta        Json?    @db.JsonB
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, created_at(sort: Desc)])
+}
+
+model efm_payment_webhook_events {
+  event_id     String    @id @db.VarChar(128)
+  gateway      String    @default("razorpay") @db.VarChar(40)
+  payload      Json      @db.JsonB
+  processed_at DateTime? @db.Timestamptz(6)
+  status       String    @default("received") @db.VarChar(30)
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_module_queue_failures {
+  failure_id    BigInt    @id @default(autoincrement())
+  module        String    @db.VarChar(40)
+  queue_name    String    @db.VarChar(120)
+  job_name      String    @db.VarChar(120)
+  payload       Json?     @db.JsonB
+  error_message String?
+  attempts      Int       @default(0)
+  replay_count  Int?      @default(0)
+  dead_letter_at DateTime? @db.Timestamptz(6)
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// efm_customer_device_tokens  — dropped (migration 48, use efm_device_tokens)
+// efm_technician_device_tokens — dropped (migration 48, use efm_device_tokens)
+
+model efm_tracking_sessions {
+  session_id    BigInt   @id @default(autoincrement())
+  booking_id    Int
+  technician_id Int
+  is_active     Boolean  @default(true)
+  last_lat      Decimal? @db.Decimal(9, 6)
+  last_lng      Decimal? @db.Decimal(9, 6)
+  last_updated  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, is_active])
+}
+
+model efm_app_config {
+  config_key   String   @id @db.VarChar(80)
+  config_value Json     @db.JsonB
+  updated_at   DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// =============================================================================
+// User booking cart (runtime schema in bookingCart.controller.js)
+// =============================================================================
+
+model efm_customer_booking_cart {
+  cart_id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  customer_id    Int
+  area_id        Int?
+  address_id     Int?
+  slot_id        Int?
+  scheduled_date DateTime? @db.Date
+  scheduled_time String?   @db.VarChar(32)
+  instructions   String?   @db.VarChar(500)
+  is_active      Boolean?  @default(true)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_customer_booking_cart_line efm_customer_booking_cart_line[]
+
+  @@index([customer_id, is_active])
+}
+
+model efm_customer_booking_cart_line {
+  line_id         BigInt   @id @default(autoincrement())
+  cart_id         String   @db.Uuid
+  service_id      Int
+  quantity        Int      @default(1)
+  booking_type_id Int?
+  photo_urls      Json?    @default("[]") @db.JsonB
+  sort_order      Int?     @default(0)
+  created_at      DateTime? @default(now()) @db.Timestamp(6)
+  updated_at      DateTime? @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_customer_booking_cart efm_customer_booking_cart @relation(fields: [cart_id], references: [cart_id], onDelete: Cascade)
+
+  @@unique([cart_id, service_id], name: "uq_cart_line_cart_service")
+}
+
+// =============================================================================
+// Admin operational control center (migration 12_admin_operational_tables.sql)
+// =============================================================================
+
+model efm_admin_audit_trail {
+  audit_id    BigInt   @id @default(autoincrement())
+  admin_id    Int
+  module      String   @db.VarChar(60)
+  action      String   @db.VarChar(80)
+  entity_type String?  @db.VarChar(60)
+  entity_id   String?  @db.VarChar(80)
+  payload     Json?    @default("{}") @db.JsonB
+  ip_address  String?  @db.VarChar(45)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([admin_id, created_at(sort: Desc)])
+  @@index([entity_type, entity_id])
+}
+
+// efm_admin_audit_logs — dropped (migration 48, use efm_admin_audit_trail)
+
+model efm_admin_booking_disputes {
+  dispute_id     BigInt    @id @default(autoincrement())
+  booking_id     Int
+  customer_id    Int?
+  technician_id  Int?
+  dispute_type   String    @default("general") @db.VarChar(40)
+  status         String    @default("open") @db.VarChar(30)
+  description    String?
+  resolution     String?
+  assigned_admin Int?
+  meta           Json?     @default("{}") @db.JsonB
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, status])
+}
+
+model efm_admin_booking_escalations {
+  escalation_id BigInt    @id @default(autoincrement())
+  booking_id    Int
+  level         String    @default("L1") @db.VarChar(20)
+  reason        String
+  status        String    @default("open") @db.VarChar(30)
+  escalated_by  Int
+  resolved_at   DateTime? @db.Timestamptz(6)
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, status])
+}
+
+model efm_admin_booking_internal_notes {
+  note_id     BigInt   @id @default(autoincrement())
+  booking_id  Int
+  admin_id    Int
+  note        String
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, created_at(sort: Desc)])
+}
+
+model efm_admin_booking_tags {
+  tag_id     Int      @id @default(autoincrement())
+  name       String   @unique @db.VarChar(80)
+  color      String   @default("slate") @db.VarChar(20)
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_map_booking_tag efm_map_booking_tag[]
+}
+
+model efm_map_booking_tag {
+  booking_id  Int
+  tag_id      Int
+  tagged_by   Int?
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_admin_booking_tags efm_admin_booking_tags @relation(fields: [tag_id], references: [tag_id], onDelete: Cascade)
+
+  @@id([booking_id, tag_id])
+}
+
+model efm_admin_booking_sla_policies {
+  policy_id            Int      @id @default(autoincrement())
+  priority             String   @unique @db.VarChar(20)
+  assignment_minutes   Int
+  completion_minutes   Int
+  is_active            Boolean  @default(true)
+  created_at           DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_admin_pricing_config_versions {
+  version_id   BigInt   @id @default(autoincrement())
+  config_type  String   @db.VarChar(40)
+  area_id      Int?
+  config       Json     @default("{}") @db.JsonB
+  version_no   Int      @default(1)
+  is_active    Boolean  @default(true)
+  created_by   Int?
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([config_type, area_id, is_active])
+}
+
+model efm_admin_notification_templates {
+  template_id   Int      @id @default(autoincrement())
+  channel       String   @db.VarChar(20)
+  template_key  String   @unique @db.VarChar(80)
+  title         String?  @db.VarChar(200)
+  body          String
+  variables     Json?    @default("[]") @db.JsonB
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_admin_notification_campaigns efm_admin_notification_campaigns[]
+  efm_admin_notification_schedules   efm_admin_notification_schedules[]
+}
+
+model efm_admin_notification_campaigns {
+  campaign_id   BigInt    @id @default(autoincrement())
+  name          String    @db.VarChar(120)
+  channel       String    @db.VarChar(20)
+  template_id   Int?
+  audience      Json      @default("{}") @db.JsonB
+  message_body  String?
+  status        String    @default("draft") @db.VarChar(30)
+  is_broadcast  Boolean   @default(false)
+  scheduled_at  DateTime? @db.Timestamptz(6)
+  sent_at       DateTime? @db.Timestamptz(6)
+  created_by    Int?
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_admin_notification_templates efm_admin_notification_templates? @relation(fields: [template_id], references: [template_id], onDelete: SetNull)
+  efm_admin_notification_delivery  efm_admin_notification_delivery[]
+}
+
+model efm_admin_notification_delivery {
+  delivery_id        BigInt    @id @default(autoincrement())
+  campaign_id        BigInt?
+  recipient_type     String?   @db.VarChar(20)
+  recipient_id       Int?
+  channel            String?   @db.VarChar(20)
+  status             String    @default("queued") @db.VarChar(30)
+  subject            String?   @db.VarChar(500)
+  recipient_address  String?   @db.VarChar(320)
+  message_body       String?
+  template_id        Int?
+  scheduled_at       DateTime? @db.Timestamptz(6)
+  sent_at            DateTime? @db.Timestamptz(6)
+  failed_at          DateTime? @db.Timestamptz(6)
+  retry_count        Int       @default(0)
+  max_retries        Int       @default(3)
+  error_message      String?
+  provider           String?   @db.VarChar(50)
+  provider_ref       String?   @db.VarChar(200)
+  meta               Json?     @default("{}") @db.JsonB
+  created_at         DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_admin_notification_campaigns efm_admin_notification_campaigns? @relation(fields: [campaign_id], references: [campaign_id], onDelete: SetNull)
+
+  @@index([channel, status, created_at(sort: Desc)])
+  @@index([campaign_id])
+}
+
+model efm_admin_notification_schedules {
+  schedule_id   BigInt    @id @default(autoincrement())
+  title         String    @db.VarChar(200)
+  channel       String    @db.VarChar(20)
+  template_id   Int?
+  audience      Json      @default("{}") @db.JsonB
+  payload       Json      @default("{}") @db.JsonB
+  scheduled_at  DateTime  @db.Timestamptz(6)
+  status        String    @default("pending") @db.VarChar(30)
+  campaign_id   BigInt?
+  retry_count   Int       @default(0)
+  error_message String?
+  created_by    Int?
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_admin_notification_templates efm_admin_notification_templates? @relation(fields: [template_id], references: [template_id], onDelete: SetNull)
+
+  @@index([status, scheduled_at])
+}
+
+model efm_admin_notification_inbox {
+  inbox_id       BigInt    @id @default(autoincrement())
+  admin_id       Int?
+  title          String    @db.VarChar(300)
+  body           String?
+  channel        String?   @db.VarChar(20)
+  category       String    @default("system") @db.VarChar(60)
+  is_read        Boolean   @default(false)
+  read_at        DateTime? @db.Timestamptz(6)
+  reference_type String?   @db.VarChar(60)
+  reference_id   String?   @db.VarChar(80)
+  meta           Json?     @default("{}") @db.JsonB
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([admin_id, is_read, created_at(sort: Desc)])
+}
+
+model efm_admin_settlement_batches {
+  batch_id            BigInt    @id @default(autoincrement())
+  period_start        DateTime  @db.Date
+  period_end          DateTime  @db.Date
+  status              String    @default("pending") @db.VarChar(30)
+  total_amount        Decimal?  @default(0) @db.Decimal(14, 2)
+  technician_count    Int?      @default(0)
+  commission_total    Decimal?  @default(0) @db.Decimal(14, 2)
+  tds_total           Decimal?  @default(0) @db.Decimal(14, 2)
+  gst_total           Decimal?  @default(0) @db.Decimal(14, 2)
+  gross_payout_total  Decimal?  @default(0) @db.Decimal(14, 2)
+  net_payout_total    Decimal?  @default(0) @db.Decimal(14, 2)
+  meta                Json?     @default("{}") @db.JsonB
+  processed_by        Int?
+  processed_at        DateTime? @db.Timestamptz(6)
+  created_at          DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  efm_booking_settlement_item efm_booking_settlement_item[]
+
+  @@index([created_at(sort: Desc)])
+}
+
+model efm_admin_financial_years {
+  fy_id      Int      @id @default(autoincrement())
+  fy_label   String   @unique @db.VarChar(20)
+  start_date DateTime @db.Date
+  end_date   DateTime @db.Date
+  is_current Boolean  @default(false)
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_admin_scope_preferences {
+  pref_id    Int      @id @default(autoincrement())
+  admin_id   Int      @unique
+  country_id Int?
+  state_id   Int?
+  city_id    Int?
+  area_id    Int?
+  fy_id      Int?
+  updated_at DateTime @default(now()) @db.Timestamp(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([admin_id])
+}
+
+model efm_admin_finance_tds_entries {
+  tds_id         BigInt   @id @default(autoincrement())
+  booking_id     Int?
+  payment_id     Int?
+  technician_id  Int?
+  payout_id      Int?
+  fy_id          Int?
+  gross_amount   Decimal  @db.Decimal(14, 2)
+  tds_rate       Decimal  @default(1) @db.Decimal(5, 2)
+  tds_amount     Decimal  @db.Decimal(14, 2)
+  section_code   String?  @default("194C") @db.VarChar(20)
+  financial_year String?  @db.VarChar(10)
+  period_month   String?  @db.VarChar(7)
+  status         String   @default("accrued") @db.VarChar(20)
+  meta           Json?    @default("{}") @db.JsonB
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([period_month, technician_id])
+  @@index([fy_id])
+}
+
+model efm_admin_finance_report_runs {
+  run_id       BigInt    @id @default(autoincrement())
+  report_type  String    @db.VarChar(40)
+  format       String    @default("json") @db.VarChar(10)
+  date_from    DateTime? @db.Timestamptz(6)
+  date_to      DateTime? @db.Timestamptz(6)
+  row_count    Int?      @default(0)
+  filters      Json?     @default("{}") @db.JsonB
+  generated_by Int?
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([report_type, created_at(sort: Desc)])
+}
+
+model efm_admin_slot_holidays {
+  holiday_id   Int      @id @default(autoincrement())
+  area_id      Int?
+  holiday_date DateTime @db.Date
+  reason       String?  @db.VarChar(200)
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([area_id, holiday_date])
+}
+
+model efm_admin_zone_polygons {
+  zone_id    Int      @id @default(autoincrement())
+  area_id    Int
+  zone_name  String   @db.VarChar(120)
+  polygon    Json     @db.JsonB
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_admin_cms_banners {
+  banner_id     Int       @id @default(autoincrement())
+  title         String    @db.VarChar(200)
+  image_url     String?   @db.VarChar(500)
+  link_url      String?   @db.VarChar(500)
+  redirect_url  String?   @db.VarChar(500)
+  placement     String    @default("home") @db.VarChar(40)
+  banner_type   String    @default("homepage") @db.VarChar(40)
+  sort_order    Int       @default(0)
+  priority      Int       @default(0)
+  visible_from  DateTime? @db.Timestamptz(6)
+  visible_until DateTime? @db.Timestamptz(6)
+  is_active     Boolean   @default(true)
+  deleted_at    DateTime? @db.Timestamptz(6)
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([placement, is_active, priority, visible_from, visible_until])
+}
+
+/// Lightweight CMS static pages (About, Privacy, Terms, etc.).
+model efm_cms_pages {
+  page_id          BigInt    @id @default(autoincrement())
+  title            String    @db.VarChar(200)
+  slug             String    @db.VarChar(120)
+  content          String    @default("")
+  meta_title       String?   @db.VarChar(70)
+  meta_description String?   @db.VarChar(160)
+  status           String    @default("draft") @db.VarChar(20)
+  published_at     DateTime? @db.Timestamptz(6)
+  deleted_at       DateTime? @db.Timestamptz(6)
+  created_by       String?   @default("system") @db.VarChar(12)
+  updated_by       String?   @db.VarChar(12)
+  created_at       DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime  @default(now()) @db.Timestamptz(6)
+  name             String?   @db.VarChar(200)
+  description      String?
+  display_order    Int       @default(0)
+  is_active        Boolean   @default(true)
+  page_type        String    @default("content") @db.VarChar(40)
+  draft_content    Json      @default("{}") @db.JsonB
+  published_content Json     @default("{}") @db.JsonB
+  last_updated_at  DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([status, published_at(sort: Desc)])
+}
+
+model efm_cms_sections {
+  section_id    BigInt   @id @default(autoincrement())
+  page_id       BigInt?
+  section_key   String   @unique @db.VarChar(160)
+  label         String   @db.VarChar(200)
+  section_type  String   @default("json") @db.VarChar(40)
+  is_global     Boolean  @default(false)
+  content       Json     @default("{}") @db.JsonB
+  draft_content Json     @default("{}") @db.JsonB
+  status        String   @default("published") @db.VarChar(20)
+  sort_order    Int      @default(0)
+  is_active     Boolean  @default(true)
+  created_by    String?  @default("system") @db.VarChar(12)
+  updated_by    String?  @db.VarChar(12)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime @default(now()) @db.Timestamptz(6)
+  published_at  DateTime? @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_cms_page_versions {
+  version_id  BigInt   @id @default(autoincrement())
+  page_id     BigInt?
+  version_no  Int
+  title       String   @db.VarChar(200)
+  slug        String   @db.VarChar(120)
+  content     Json     @default("{}") @db.JsonB
+  status      String   @default("draft") @db.VarChar(20)
+  created_by  String?  @default("system") @db.VarChar(12)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  published_at DateTime? @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([page_id, version_no])
+}
+
+model efm_policy_versions {
+  policy_version_id BigInt   @id @default(autoincrement())
+  policy_type       String   @db.VarChar(80)
+  page_slug         String   @db.VarChar(120)
+  version_label     String   @db.VarChar(40)
+  title             String   @db.VarChar(200)
+  effective_from    DateTime @default(now()) @db.Timestamptz(6)
+  published_at      DateTime? @db.Timestamptz(6)
+  is_published      Boolean  @default(true)
+  content_snapshot  Json     @default("{}") @db.JsonB
+  created_by        String?  @default("system") @db.VarChar(12)
+  created_at        DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([policy_type, version_label])
+}
+
+model efm_user_policy_acceptance_logs {
+  acceptance_id     BigInt   @id @default(autoincrement())
+  customer_id       Int
+  policy_type       String   @db.VarChar(80)
+  policy_version_id BigInt?
+  version_label     String   @db.VarChar(40)
+  accepted_at       DateTime @default(now()) @db.Timestamptz(6)
+  ip_address        String?  @db.VarChar(45)
+  user_agent        String?
+  source            String   @default("web") @db.VarChar(40)
+  created_at        DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, policy_type, accepted_at(sort: Desc)], map: "efm_user_policy_acceptance_customer_idx")
+}
+
+model efm_partner_agreement_acceptance_logs {
+  acceptance_id     BigInt   @id @default(autoincrement())
+  technician_id     Int
+  policy_version_id BigInt?
+  version_label     String   @db.VarChar(40)
+  accepted_at       DateTime @default(now()) @db.Timestamptz(6)
+  ip_address        String?  @db.VarChar(45)
+  user_agent        String?
+  source            String   @default("web") @db.VarChar(40)
+  created_at        DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([technician_id, accepted_at(sort: Desc)], map: "efm_partner_agreement_acceptance_tech_idx")
+}
+
+/// SEO overrides for services and cities (pages use efm_cms_pages fields).
+model efm_cms_seo {
+  seo_id           BigInt    @id @default(autoincrement())
+  entity_type      String    @db.VarChar(20)
+  entity_id        Int
+  slug             String    @db.VarChar(120)
+  meta_title       String?   @db.VarChar(70)
+  meta_description String?   @db.VarChar(160)
+  deleted_at       DateTime? @db.Timestamptz(6)
+  created_at       DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([entity_type, entity_id])
+  @@index([entity_type, slug])
+}
+
+model efm_admin_cms_content {
+  content_id   Int      @id @default(autoincrement())
+  content_key  String   @unique @db.VarChar(80)
+  content_type String   @db.VarChar(40)
+  title        String?  @db.VarChar(200)
+  body         String?
+  meta         Json?    @default("{}") @db.JsonB
+  is_active    Boolean  @default(true)
+  updated_at   DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_admin_security_events {
+  event_id    BigInt   @id @default(autoincrement())
+  admin_id    Int?
+  event_type  String   @db.VarChar(60)
+  severity    String   @default("info") @db.VarChar(20)
+  description String?
+  meta        Json?    @default("{}") @db.JsonB
+  ip_address  String?  @db.VarChar(45)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([event_type, created_at(sort: Desc)])
+}
+
+model efm_admin_support_assignments {
+  assignment_id BigInt   @id @default(autoincrement())
+  ticket_id     BigInt
+  ticket_source String   @default("customer") @db.VarChar(20)
+  admin_id      Int
+  priority      String   @default("normal") @db.VarChar(20)
+  status        String   @default("assigned") @db.VarChar(30)
+  note          String?
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_admin_ticket_categories {
+  category_id   Int      @id @default(autoincrement())
+  name          String   @db.VarChar(120)
+  slug          String   @unique @db.VarChar(80)
+  description   String?
+  sort_order    Int      @default(0)
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_admin_ticket_sla_policies {
+  policy_id               Int      @id @default(autoincrement())
+  priority                String   @unique @db.VarChar(20)
+  first_response_minutes  Int
+  resolution_minutes      Int
+  is_active               Boolean  @default(true)
+  created_at              DateTime @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_admin_ticket_internal_notes {
+  note_id       BigInt   @id @default(autoincrement())
+  ticket_id     BigInt
+  ticket_source String   @db.VarChar(20)
+  admin_id      Int
+  note          String
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([ticket_id, ticket_source, created_at(sort: Desc)])
+}
+
+model efm_admin_ticket_timeline {
+  timeline_id   BigInt   @id @default(autoincrement())
+  ticket_id     BigInt
+  ticket_source String   @db.VarChar(20)
+  event_type    String   @db.VarChar(60)
+  event_label   String?  @db.VarChar(200)
+  actor_type    String?  @db.VarChar(20)
+  actor_id      Int?
+  meta          Json?    @default("{}") @db.JsonB
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([ticket_id, ticket_source, created_at(sort: Desc)])
+}
+
+model efm_admin_ticket_escalations {
+  escalation_id BigInt   @id @default(autoincrement())
+  ticket_id     BigInt
+  ticket_source String   @db.VarChar(20)
+  from_level    Int      @default(0)
+  to_level      Int
+  reason        String?
+  escalated_by  Int?
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// =============================================================================
+// CRM customer center (migration 23_crm_customer_center.sql)
+// =============================================================================
+
+model efm_crm_activity_events {
+  event_id     BigInt   @id @default(autoincrement())
+  customer_id  Int
+  event_type   String   @db.VarChar(50)
+  title        String   @db.VarChar(200)
+  description  String?
+  ref_type     String?  @db.VarChar(50)
+  ref_id       String?  @db.VarChar(80)
+  actor_type   String   @default("system") @db.VarChar(20)
+  actor_id     Int?
+  meta         Json?    @default("{}") @db.JsonB
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, created_at(sort: Desc)])
+}
+
+model efm_crm_clv_metrics {
+  customer_id        Int      @id
+  lifetime_value     Decimal  @default(0) @db.Decimal(14, 2)
+  total_bookings     Int      @default(0)
+  completed_bookings Int      @default(0)
+  total_paid         Decimal  @default(0) @db.Decimal(14, 2)
+  avg_order_value    Decimal  @default(0) @db.Decimal(12, 2)
+  first_booking_at   DateTime? @db.Timestamptz(6)
+  last_booking_at    DateTime? @db.Timestamptz(6)
+  computed_at        DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_crm_loyalty_balance {
+  customer_id    Int      @id
+  points_balance Int      @default(0)
+  tier           String   @default("standard") @db.VarChar(30)
+  updated_at     DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_crm_loyalty_ledger {
+  ledger_id     BigInt   @id @default(autoincrement())
+  customer_id   Int
+  points_delta  Int
+  balance_after Int
+  entry_type    String   @db.VarChar(40)
+  ref_type      String?  @db.VarChar(50)
+  ref_id        String?  @db.VarChar(80)
+  note          String?
+  created_by    Int?
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, created_at(sort: Desc)])
+}
+
+model efm_crm_referral_events {
+  referral_id          BigInt   @id @default(autoincrement())
+  referrer_customer_id Int
+  referred_customer_id Int?
+  invite_id            BigInt?
+  event_type           String   @db.VarChar(40)
+  reward_points        Int      @default(0)
+  status               String   @default("pending") @db.VarChar(30)
+  meta                 Json?    @default("{}") @db.JsonB
+  created_at           DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([referrer_customer_id, created_at(sort: Desc)])
+}
+
+model efm_crm_complaints {
+  complaint_id BigInt    @id @default(autoincrement())
+  customer_id  Int
+  booking_id   Int?
+  ticket_id    BigInt?
+  category     String    @default("general") @db.VarChar(60)
+  subject      String    @db.VarChar(200)
+  description  String?
+  status       String    @default("open") @db.VarChar(30)
+  priority     String    @default("normal") @db.VarChar(20)
+  assigned_to  Int?
+  resolution   String?
+  created_by   Int?
+  resolved_at  DateTime? @db.Timestamptz(6)
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, status, created_at(sort: Desc)])
+}
+
+model efm_crm_spam_signals {
+  signal_id   BigInt   @id @default(autoincrement())
+  customer_id Int
+  signal_type String   @db.VarChar(50)
+  score_delta Int      @default(0)
+  details     Json?    @default("{}") @db.JsonB
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, created_at(sort: Desc)])
+}
+
+model efm_crm_block_history {
+  history_id  BigInt   @id @default(autoincrement())
+  customer_id Int
+  action      String   @db.VarChar(20)
+  reason      String?
+  admin_id    Int?
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, created_at(sort: Desc)])
+}
+
+model efm_crm_customer_notes {
+  note_id     BigInt    @id @default(autoincrement())
+  customer_id Int
+  note        String
+  is_pinned   Boolean   @default(false)
+  created_by  Int
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, is_pinned(sort: Desc), created_at(sort: Desc)])
+}
+
+model efm_crm_communications {
+  comm_id     BigInt   @id @default(autoincrement())
+  customer_id Int
+  channel     String   @db.VarChar(30)
+  direction   String   @default("outbound") @db.VarChar(10)
+  subject     String?  @db.VarChar(200)
+  body        String?
+  status      String   @default("sent") @db.VarChar(30)
+  ref_type    String?  @db.VarChar(50)
+  ref_id      String?  @db.VarChar(80)
+  admin_id    Int?
+  meta        Json?    @default("{}") @db.JsonB
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([customer_id, created_at(sort: Desc)])
+}
+
+model efm_contact_inquiries {
+  inquiry_id   BigInt    @id @default(autoincrement())
+  name         String    @db.VarChar(120)
+  email        String    @db.VarChar(200)
+  phone        String?   @db.VarChar(30)
+  subject      String?   @db.VarChar(250)
+  message      String
+  status       String    @default("new") @db.VarChar(30)
+  source       String    @default("website") @db.VarChar(50)
+  admin_notes  String?
+  resolved_at  DateTime? @db.Timestamptz(6)
+  resolved_by  Int?
+  ip_address   String?   @db.VarChar(64)
+  user_agent   String?
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([status, created_at(sort: Desc)])
+  @@index([email])
+  @@index([created_at(sort: Desc)])
+}
+
+// =============================================================================
+// Unified tables added in migration 48_schema_consolidation
+// =============================================================================
+
+/// Unified booking chat — replaces efm_customer_chat_messages + efm_technician_chat_messages
+model efm_booking_chat_messages {
+  message_id    BigInt   @id @default(autoincrement())
+  booking_id    Int
+  sender_type   String   @db.VarChar(20)
+  customer_id   Int?
+  technician_id Int?
+  message_type  String   @default("text") @db.VarChar(20)
+  content       String?
+  media_url     String?  @db.VarChar(500)
+  is_read       Boolean  @default(false)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, created_at(sort: Desc)])
+}
+
+/// Unified notifications — replaces efm_customer_notifications + efm_technician_notifications
+model efm_notifications {
+  notification_id BigInt   @id @default(autoincrement())
+  recipient_type  String   @db.VarChar(20)
+  recipient_id    Int
+  title           String   @db.VarChar(200)
+  body            String?
+  type            String?  @db.VarChar(50)
+  ref_type        String?  @db.VarChar(50)
+  ref_id          String?  @db.VarChar(80)
+  is_read         Boolean  @default(false)
+  meta            Json?    @db.JsonB
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([recipient_type, recipient_id, is_read, created_at(sort: Desc)])
+}
+
+/// Unified notification prefs — replaces efm_customer_notification_prefs + efm_technician_notification_prefs
+model efm_notification_prefs {
+  user_type       String   @db.VarChar(20)
+  user_id         Int
+  push_enabled    Boolean  @default(true)
+  sms_enabled     Boolean  @default(true)
+  email_enabled   Boolean  @default(true)
+  booking_alerts  Boolean  @default(true)
+  promo_alerts    Boolean  @default(true)
+  job_alerts      Boolean  @default(true)
+  earnings_alerts Boolean  @default(true)
+  updated_at      DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@id([user_type, user_id])
+}
+
+/// Unified device tokens — replaces efm_customer_device_tokens + efm_technician_device_tokens
+model efm_device_tokens {
+  token_id   BigInt   @id @default(autoincrement())
+  user_type  String   @db.VarChar(20)
+  user_id    Int
+  fcm_token  String   @db.VarChar(512)
+  device_id  String?  @db.VarChar(128)
+  platform   String?  @db.VarChar(40)
+  is_active  Boolean  @default(true)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([user_type, user_id, fcm_token])
+  @@index([user_type, user_id, is_active])
+}
+
+/// Unified favorites — replaces efm_customer_favorite_technicians + efm_customer_favorite_services
+model efm_customer_favorites {
+  id          BigInt   @id @default(autoincrement())
+  customer_id Int
+  entity_type String   @db.VarChar(20)
+  entity_id   Int
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@unique([customer_id, entity_type, entity_id])
+  @@index([customer_id])
+}
+
+// =============================================================================
+// Global settings and platform hardening tables (migrations 010_160, 020_001–020_008)
+// =============================================================================
+
+model efm_system_settings {
+  setting_key   String   @id @db.VarChar(100)
+  setting_value Json     @default("{}") @db.JsonB
+  updated_by    String?  @db.VarChar(50)
+  updated_at    DateTime @default(now()) @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_slot_reservations {
+  reservation_id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  area_id        Int
+  slot_id        Int
+  scheduled_date DateTime @db.Date
+  scheduled_time String   @db.VarChar(32)
+  customer_id    Int
+  lock_id        String?  @db.Uuid
+  reserved_units Int      @default(1)
+  reserved_until DateTime @db.Timestamptz(6)
+  status         String   @default("HELD") @db.VarChar(16)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_audit_log {
+  audit_id          BigInt   @id @default(autoincrement())
+  entity_type       String   @db.VarChar(64)
+  entity_id         String   @db.VarChar(64)
+  action            String   @db.VarChar(64)
+  old_value         Json?    @db.JsonB
+  new_value         Json?    @db.JsonB
+  performed_by_type String?  @db.VarChar(32)
+  performed_by_id   String?  @db.VarChar(64)
+  ip                String?  @db.VarChar(45)
+  meta              Json?    @db.JsonB
+  created_at        DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_domain_outbox {
+  outbox_id      BigInt    @id @default(autoincrement())
+  event_type     String    @db.VarChar(64)
+  aggregate_type String    @default("booking") @db.VarChar(32)
+  aggregate_id   String    @db.VarChar(64)
+  payload        Json      @default("{}") @db.JsonB
+  status         String    @default("PENDING") @db.VarChar(16)
+  published_at   DateTime? @db.Timestamptz(6)
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_idempotency_keys {
+  idempotency_key String   @id @db.VarChar(128)
+  route           String   @db.VarChar(128)
+  response_status Int?
+  response_body   Json?    @db.JsonB
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+  expires_at      DateTime @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_ledger_accounts {
+  account_code   String               @id @db.VarChar(32)
+  account_name   String               @db.VarChar(120)
+  account_type   String               @db.VarChar(32)
+  is_active      Boolean              @default(true)
+  created_at     DateTime             @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  debit_entries  efm_ledger_entries[] @relation("debit_account")
+  credit_entries efm_ledger_entries[] @relation("credit_account")
+}
+
+model efm_ledger_entries {
+  entry_id         BigInt   @id @default(autoincrement())
+  transaction_id   String   @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  debit_account    String   @db.VarChar(32)
+  credit_account   String   @db.VarChar(32)
+  amount           Decimal  @db.Decimal(14, 2)
+  currency         String   @default("INR") @db.VarChar(3)
+  reference_type   String   @db.VarChar(40)
+  reference_id     String   @db.VarChar(64)
+  transaction_type String   @db.VarChar(40)
+  meta             Json?    @db.JsonB
+  country_id       Int?
+  state_id         Int?
+  city_id          Int?
+  area_id          Int?
+  fy_id            Int?
+  created_at       DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  debit_account_rel  efm_ledger_accounts @relation("debit_account", fields: [debit_account], references: [account_code])
+  credit_account_rel efm_ledger_accounts @relation("credit_account", fields: [credit_account], references: [account_code])
+
+  @@index([fy_id, country_id])
+}
+
+model efm_refund_transactions {
+  refund_tx_id      BigInt    @id @default(autoincrement())
+  booking_id        Int
+  gateway_refund_id String?   @db.VarChar(128)
+  refund_type       String    @default("FULL") @db.VarChar(20)
+  amount            Decimal   @db.Decimal(14, 2)
+  status            String    @default("PENDING") @db.VarChar(20)
+  reason            String?
+  processed_by      String?   @db.VarChar(64)
+  legacy_refund_id  Int?
+  country_id        Int?
+  state_id          Int?
+  city_id           Int?
+  area_id           Int?
+  fy_id             Int?
+  created_at        DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime? @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+model efm_analytics_events {
+  event_id    BigInt   @id @default(autoincrement())
+  event_name  String   @db.VarChar(64)
+  entity_type String?  @db.VarChar(32)
+  entity_id   String?  @db.VarChar(64)
+  payload     Json     @default("{}") @db.JsonB
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// =============================================================================
+// Payment, booking items and pricing tables
+// =============================================================================
+
+model efm_payments {
+  payment_id        BigInt    @id @default(autoincrement())
+  payment_uid       String    @unique @db.VarChar(128)
+  booking_id        Int
+  gateway           String    @default("razorpay") @db.VarChar(40)
+  gateway_txn_id    String?   @db.VarChar(200)
+  amount            Decimal   @db.Decimal(14, 2)
+  currency          String    @default("INR") @db.VarChar(3)
+  status            String    @default("pending") @db.VarChar(30)
+  payment_mode      String?   @db.VarChar(40)
+  payment_status_id Int?
+  country_id        Int?
+  state_id          Int?
+  city_id           Int?
+  area_id           Int?
+  fy_id             Int?
+  initiated_at      DateTime  @default(now()) @db.Timestamptz(6)
+  completed_at      DateTime? @db.Timestamptz(6)
+  failed_at         DateTime? @db.Timestamptz(6)
+  meta              Json?     @default("{}") @db.JsonB
+  created_at        DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime  @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, initiated_at(sort: Desc)])
+  @@index([payment_status_id, created_at(sort: Desc)])
+  @@index([fy_id, country_id])
+}
+
+model efm_booking_items {
+  item_id          BigInt   @id @default(autoincrement())
+  booking_id       Int
+  service_id       Int
+  booking_type_id  Int?
+  unit_id          Int?
+  quantity         Int      @default(1)
+  unit_price       Decimal  @default(0) @db.Decimal(12, 2)
+  line_total       Decimal  @default(0) @db.Decimal(12, 2)
+  display_order    Int      @default(0)
+  technician_notes String?
+  country_id       Int?
+  state_id         Int?
+  city_id          Int?
+  area_id          Int?
+  fy_id            Int?
+  created_at       DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id, display_order])
+  @@index([fy_id])
+}
+
+model efm_booking_pricing {
+  pricing_id        BigInt   @id @default(autoincrement())
+  booking_id        Int      @unique
+  subtotal          Decimal  @default(0) @db.Decimal(14, 2)
+  platform_fee      Decimal  @default(0) @db.Decimal(12, 2)
+  surge_amount      Decimal  @default(0) @db.Decimal(12, 2)
+  manual_discount   Decimal  @default(0) @db.Decimal(12, 2)
+  coupon_code       String?  @db.VarChar(60)
+  coupon_discount   Decimal  @default(0) @db.Decimal(12, 2)
+  tax_rate          Decimal  @default(0) @db.Decimal(5, 2)
+  tax_amount        Decimal  @default(0) @db.Decimal(12, 2)
+  final_amount      Decimal  @default(0) @db.Decimal(14, 2)
+  country_id        Int?
+  state_id          Int?
+  city_id           Int?
+  area_id           Int?
+  fy_id             Int?
+  updated_at        DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id])
+  @@index([fy_id])
+}
+
+// =============================================================================
+// Webapp / dashboard quick-grid configuration (self-managed CREATE TABLE in webapp.controller.js)
+// =============================================================================
+
+/// Admin-configurable quick-access grid tiles shown on the webapp dashboard.
+/// Table is auto-created via CREATE TABLE IF NOT EXISTS in webapp.controller.js.
+model efm_webapp_quick_grids {
+  grid_id    Int      @id @default(autoincrement())
+  title      String   @db.VarChar(150)
+  subtitle   String?  @db.VarChar(300)
+  badge      String?  @db.VarChar(50)
+  accent     String?  @default("#1d4ed8") @db.VarChar(20)
+  items      Json     @default("[]") @db.JsonB
+  sort_order Int      @default(0)
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @default(now()) @db.Timestamp(6)
+  is_deleted  Boolean  @default(false)
+}
+
+// =============================================================================
+// Booking line items — lightweight per-service lines used for popular-service analytics
+// =============================================================================
+
+/// Per-service line rows attached to a booking (queried for booking-count aggregation in services.controller.js).
+model efm_booking_lines {
+  line_id        BigInt   @id @default(autoincrement())
+  booking_id     Int
+  service_id     Int
+  quantity       Int      @default(1)
+  unit_price     Decimal  @default(0) @db.Decimal(12, 2)
+  line_total     Decimal  @default(0) @db.Decimal(12, 2)
+  booking_type_id Int?
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+
+  is_deleted  Boolean  @default(false)
+  @@index([booking_id])
+  @@index([service_id])
+}
+
+// =============================================================================
+// Migration 062 — business logic additions
+// =============================================================================
+
+/// Tracks bookings that reached NO_SERVICE status for manual recovery.
+model efm_no_service_queue {
+  queue_id      BigInt    @id @default(autoincrement())
+  booking_id    Int       @unique
+  status        String    @default("PENDING") @db.VarChar(20)
+  note          String?
+  enqueued_at   DateTime  @default(now()) @db.Timestamptz(6)
+  resolved_at   DateTime? @db.Timestamptz(6)
+  resolved_by   Int?
+
+  is_deleted  Boolean  @default(false)
+  @@index([status, enqueued_at(sort: Desc)])
+}
+
+/// Time-window cancellation fee rules (FLAT fee or PERCENT of final_price).
+model efm_cancellation_policies {
+  policy_id    Int      @id @default(autoincrement())
+  window_hours Int
+  fee_type     String   @default("FLAT") @db.VarChar(10)
+  fee_value    Decimal  @db.Decimal(10, 2)
+  description  String?  @db.VarChar(200)
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// Immutable record of cancellation fee applied at time of cancellation.
+model efm_cancellation_fee_snapshot {
+  snapshot_id   BigInt    @id @default(autoincrement())
+  booking_id    Int       @unique
+  policy_id     Int?
+  fee_type      String    @db.VarChar(10)
+  fee_value     Decimal   @db.Decimal(10, 2)
+  hours_before  Decimal   @db.Decimal(6, 2)
+  cancelled_by  String    @default("CUSTOMER") @db.VarChar(20)
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+  is_deleted  Boolean  @default(false)
+}
+
+/// Audit trail for technician suspensions and reinstatements.
+model efm_technician_suspensions {
+  suspension_id  BigInt    @id @default(autoincrement())
+  technician_id  Int
+  reason         String
+  suspended_by   Int
+  suspended_at   DateTime  @default(now()) @db.Timestamptz(6)
+  reinstated_by  Int?
+  reinstated_at  DateTime? @db.Timestamptz(6)
+  is_active      Boolean   @default(true)
+
+  is_deleted  Boolean  @default(false)
+  @@index([technician_id, is_active])
+}
+
+model efm_tracker_marketing_spend {
+  spend_id     Int      @id @default(autoincrement())
+  period_month DateTime @db.Date
+  channel      String   @default("total") @db.VarChar(50)
+  spend        Decimal  @default(0) @db.Decimal(12, 2)
+  created_by   String?  @default("SYSTEM") @db.VarChar(50)
+  created_at   DateTime @default(now()) @db.Timestamp(6)
+
+  @@unique([period_month, channel])
+}

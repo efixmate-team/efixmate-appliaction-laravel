@@ -64,6 +64,7 @@ Route::middleware(['auth:sanctum', 'admin.token'])->group(function () {
     Route::get('/admin/dashboard/recent-bookings', [\App\Http\Controllers\AdminDashboardController::class, 'recentBookings']);
     Route::get('/admin/dashboard/top-services', [\App\Http\Controllers\AdminDashboardController::class, 'topServices']);
     Route::get('/admin/dashboard/activity', [\App\Http\Controllers\AdminDashboardController::class, 'activity']);
+    Route::get('/admin/menus', [\App\Http\Controllers\AdminMenuManagementController::class, 'myMenus']);
 
     // Admin Management (admins, roles, privileges, role-permission mapping, menus)
     Route::post('/admin/create', [\App\Http\Controllers\AdminManagementController::class, 'store']);

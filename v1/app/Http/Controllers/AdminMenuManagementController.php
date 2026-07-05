@@ -8,6 +8,32 @@ use Illuminate\Http\Request;
 /** Direct port of server/src/modules/admin/controller/menu.controller.js. */
 class AdminMenuManagementController extends Controller
 {
+    /**
+     * GET /api/admin/menus — the sidebar's data source, matching Next.js's
+     * adminAPI.getMenus() shape exactly: menus grouped by menu_group_id, each
+     * group's menus carrying menu_type (P/C/I), menu_parent_id and menu_icon
+     * for client-side tree building (see the outer app's AdminSidebar.vue).
+     * Full per-role privilege filtering is not yet wired end-to-end (no seeded
+     * role/privilege data to filter against) — every active admin currently
+     * sees every active menu, matching a Super Admin's view.
+     */
+    public function myMenus()
+    {
+        $menus = AdminMenu::where('is_active', true)
+            ->orderBy('menu_group_id')->orderBy('sort_order')->orderBy('menu_id')
+            ->get(['menu_id', 'menu_name', 'menu_path', 'menu_icon', 'menu_type', 'menu_parent_id', 'menu_group_id', 'menu_group', 'sort_order']);
+
+        $groups = $menus->groupBy('menu_group_id')->map(function ($groupMenus, $groupId) {
+            return [
+                'menu_group_id' => (int) $groupId,
+                'menu_group' => $groupMenus->first()->menu_group,
+                'menus' => $groupMenus->values(),
+            ];
+        })->values();
+
+        return response()->json(['status' => true, 'groups' => $groups]);
+    }
+
     /** POST /api/admin/create-menus */
     public function store(Request $request)
     {

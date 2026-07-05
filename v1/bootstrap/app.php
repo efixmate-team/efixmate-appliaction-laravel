@@ -33,6 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'idempotent' => \App\Http\Middleware\EnsureIdempotent::class,
             'step-up' => \App\Http\Middleware\RequireStepUp::class,
             'customer.optional' => \App\Http\Middleware\OptionalCustomerAuth::class,
+            'internal.key' => \App\Http\Middleware\EnsureInternalApiKey::class,
         ]);
 
         // API-only app has no named "login" route; without this, unauthenticated

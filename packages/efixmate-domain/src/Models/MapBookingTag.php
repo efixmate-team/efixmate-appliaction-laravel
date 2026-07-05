@@ -16,6 +16,8 @@ class MapBookingTag extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'booking_id',
+        'tag_id',
         'tagged_by',
         'created_at',
     ];

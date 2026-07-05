@@ -2,13 +2,10 @@
 
 namespace Efixmate\Domain\Models;
 
-use Efixmate\Domain\Concerns\HasIsDeletedFlag;
 use Illuminate\Database\Eloquent\Model;
 
 class TrackerMarketingSpend extends Model
 {
-    use HasIsDeletedFlag;
-
     protected $table = 'efm_tracker_marketing_spend';
     protected $primaryKey = 'spend_id';
     public $timestamps = false;

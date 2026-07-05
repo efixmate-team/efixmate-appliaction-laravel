@@ -24,6 +24,34 @@ use App\Http\Controllers\WalletController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// Geo module — internal-API-key-gated, mirrors internalApiKey.middleware.js's requireInternalApiKey.
+Route::prefix('geo')->middleware('internal.key')->group(function () {
+    Route::post('/areas', [\App\Http\Controllers\GeoController::class, 'storeArea']);
+    Route::get('/areas', [\App\Http\Controllers\GeoController::class, 'listAreas']);
+    Route::post('/assign-technician', [\App\Http\Controllers\GeoController::class, 'assignTechnician']);
+});
+
+// Public / webapp — no-auth SEO + discovery surface.
+Route::prefix('public')->group(function () {
+    Route::post('/contact-inquiry', [\App\Http\Controllers\PublicController::class, 'submitContactInquiry']);
+    Route::get('/upload-settings', [\App\Http\Controllers\PublicController::class, 'uploadSettings']);
+    Route::get('/cms/globals', [\App\Http\Controllers\PublicController::class, 'cmsGlobals']);
+    Route::get('/cms/page/{slug}', [\App\Http\Controllers\PublicController::class, 'cmsPage']);
+});
+
+Route::prefix('webapp')->group(function () {
+    Route::get('/catalog', [\App\Http\Controllers\WebappController::class, 'catalog']);
+    Route::get('/popular-services', [\App\Http\Controllers\WebappController::class, 'popularServices']);
+    Route::get('/quick-grids', [\App\Http\Controllers\WebappController::class, 'quickGrids']);
+    Route::get('/emergency-services', [\App\Http\Controllers\WebappController::class, 'emergencyServices']);
+    Route::get('/search', [\App\Http\Controllers\WebappController::class, 'search']);
+    Route::get('/search-services', [\App\Http\Controllers\WebappController::class, 'searchServices']);
+    Route::get('/sitemap-data', [\App\Http\Controllers\WebappController::class, 'sitemapData']);
+});
+
+// Pricing runtime — central engine, called internally by booking/cart flows.
+Route::post('/pricing/calculate', [\App\Http\Controllers\PricingController::class, 'calculate']);
+
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 Route::post('/admin/login-dev', [AdminAuthController::class, 'loginDev']);
 Route::post('/admin/login/verify-2fa', [AdminAuthController::class, 'verify2fa']);
@@ -128,6 +156,206 @@ Route::middleware(['auth:sanctum', 'admin.token'])->group(function () {
     Route::post('/admin/promotions/bulk-action', [\App\Http\Controllers\AdminPromotionExtraController::class, 'bulkAction']);
     Route::get('/admin/promotions/{id}/preview', [\App\Http\Controllers\AdminPromotionExtraController::class, 'preview'])->whereNumber('id');
     Route::post('/admin/promotions/{id}/duplicate', [\App\Http\Controllers\AdminPromotionExtraController::class, 'duplicate'])->whereNumber('id');
+
+    // Analytics
+    Route::get('/admin/analytics/overview', [\App\Http\Controllers\AdminAnalyticsController::class, 'overview']);
+    Route::get('/admin/analytics/bookings-trend', [\App\Http\Controllers\AdminAnalyticsController::class, 'bookingsTrend']);
+    Route::get('/admin/analytics/revenue-trend', [\App\Http\Controllers\AdminAnalyticsController::class, 'revenueTrend']);
+    Route::get('/admin/analytics/events', [\App\Http\Controllers\AdminAnalyticsController::class, 'events']);
+    Route::post('/admin/analytics/events', [\App\Http\Controllers\AdminAnalyticsController::class, 'trackEvent']);
+
+    // Audit
+    Route::get('/admin/audit', [\App\Http\Controllers\AdminAuditController::class, 'index']);
+    Route::get('/admin/audit/{id}', [\App\Http\Controllers\AdminAuditController::class, 'show'])->whereNumber('id');
+    Route::get('/admin/audit/entity/{entityType}/{entityId}', [\App\Http\Controllers\AdminAuditController::class, 'forEntity'])->whereNumber('entityId');
+
+    // Contact inquiries
+    Route::get('/admin/contact-inquiries', [\App\Http\Controllers\AdminContactInquiryController::class, 'index']);
+    Route::get('/admin/contact-inquiries/{id}', [\App\Http\Controllers\AdminContactInquiryController::class, 'show'])->whereNumber('id');
+    Route::post('/admin/contact-inquiries/{id}/resolve', [\App\Http\Controllers\AdminContactInquiryController::class, 'resolve'])->whereNumber('id');
+    Route::post('/admin/contact-inquiries/{id}/status', [\App\Http\Controllers\AdminContactInquiryController::class, 'updateStatus'])->whereNumber('id');
+
+    // Tracker
+    Route::get('/admin/tracker/marketing-spend', [\App\Http\Controllers\AdminTrackerController::class, 'marketingSpend']);
+    Route::get('/admin/tracker/sessions', [\App\Http\Controllers\AdminTrackerController::class, 'sessions']);
+
+    // Realtime (polling fallback)
+    Route::get('/admin/realtime/dashboard-metrics', [\App\Http\Controllers\AdminRealtimeController::class, 'dashboardMetrics']);
+    Route::get('/admin/realtime/technician-positions', [\App\Http\Controllers\AdminRealtimeController::class, 'technicianPositions']);
+    Route::get('/admin/realtime/system-health', [\App\Http\Controllers\AdminRealtimeController::class, 'systemHealth']);
+
+    // Dashboard-live
+    Route::get('/admin/dashboard-live/booking-funnel', [\App\Http\Controllers\AdminDashboardLiveController::class, 'bookingFunnel']);
+    Route::get('/admin/dashboard-live/technician-availability', [\App\Http\Controllers\AdminDashboardLiveController::class, 'technicianAvailability']);
+    Route::get('/admin/dashboard-live/pending-actions', [\App\Http\Controllers\AdminDashboardLiveController::class, 'pendingActions']);
+    Route::get('/admin/dashboard-live/sla-breaches', [\App\Http\Controllers\AdminDashboardLiveController::class, 'slaBreaches']);
+    Route::get('/admin/dashboard-live/revenue-today', [\App\Http\Controllers\AdminDashboardLiveController::class, 'revenueToday']);
+
+    // Service areas (bespoke, beyond generic CRUD)
+    Route::get('/admin/service-areas/zones', [\App\Http\Controllers\AdminServiceAreaController::class, 'zones']);
+    Route::post('/admin/service-areas/zones', [\App\Http\Controllers\AdminServiceAreaController::class, 'storeZone']);
+    Route::delete('/admin/service-areas/zones/{id}', [\App\Http\Controllers\AdminServiceAreaController::class, 'destroyZone'])->whereNumber('id');
+    Route::get('/admin/service-areas/coverage-check', [\App\Http\Controllers\AdminServiceAreaController::class, 'coverageCheck']);
+    Route::get('/admin/service-areas/stats', [\App\Http\Controllers\AdminServiceAreaController::class, 'stats']);
+
+    // Slots (bespoke, beyond generic CRUD)
+    Route::get('/admin/slots/holidays', [\App\Http\Controllers\AdminSlotController::class, 'holidays']);
+    Route::post('/admin/slots/holidays', [\App\Http\Controllers\AdminSlotController::class, 'storeHoliday']);
+    Route::delete('/admin/slots/holidays/{id}', [\App\Http\Controllers\AdminSlotController::class, 'destroyHoliday'])->whereNumber('id');
+    Route::post('/admin/slots/{id}/capacity', [\App\Http\Controllers\AdminSlotController::class, 'updateCapacity'])->whereNumber('id');
+    Route::post('/admin/slots/{id}/toggle', [\App\Http\Controllers\AdminSlotController::class, 'toggle'])->whereNumber('id');
+
+    // Notifications
+    Route::get('/admin/notifications/templates', [\App\Http\Controllers\AdminNotificationController::class, 'templates']);
+    Route::post('/admin/notifications/templates', [\App\Http\Controllers\AdminNotificationController::class, 'storeTemplate']);
+    Route::get('/admin/notifications/templates/{id}', [\App\Http\Controllers\AdminNotificationController::class, 'showTemplate'])->whereNumber('id');
+    Route::put('/admin/notifications/templates/{id}', [\App\Http\Controllers\AdminNotificationController::class, 'updateTemplate'])->whereNumber('id');
+    Route::delete('/admin/notifications/templates/{id}', [\App\Http\Controllers\AdminNotificationController::class, 'destroyTemplate'])->whereNumber('id');
+    Route::get('/admin/notifications/campaigns', [\App\Http\Controllers\AdminNotificationController::class, 'campaigns']);
+    Route::post('/admin/notifications/campaigns', [\App\Http\Controllers\AdminNotificationController::class, 'storeCampaign']);
+    Route::get('/admin/notifications/campaigns/{id}', [\App\Http\Controllers\AdminNotificationController::class, 'showCampaign'])->whereNumber('id');
+    Route::post('/admin/notifications/campaigns/{id}/send-broadcast', [\App\Http\Controllers\AdminNotificationController::class, 'sendBroadcast'])->whereNumber('id');
+    Route::post('/admin/notifications/campaigns/{id}/send-single', [\App\Http\Controllers\AdminNotificationController::class, 'sendSingle'])->whereNumber('id');
+    Route::get('/admin/notifications/delivery-logs', [\App\Http\Controllers\AdminNotificationController::class, 'deliveryLogs']);
+    Route::post('/admin/notifications/delivery-logs/{id}/retry', [\App\Http\Controllers\AdminNotificationController::class, 'retryDelivery'])->whereNumber('id');
+    Route::get('/admin/notifications/schedules', [\App\Http\Controllers\AdminNotificationController::class, 'schedules']);
+    Route::post('/admin/notifications/schedules', [\App\Http\Controllers\AdminNotificationController::class, 'storeSchedule']);
+    Route::delete('/admin/notifications/schedules/{id}', [\App\Http\Controllers\AdminNotificationController::class, 'destroySchedule'])->whereNumber('id');
+    Route::post('/admin/notifications/schedules/process-due', [\App\Http\Controllers\AdminNotificationController::class, 'processDue']);
+    Route::get('/admin/notifications/inbox', [\App\Http\Controllers\AdminNotificationController::class, 'inbox']);
+    Route::post('/admin/notifications/inbox/{id}/read', [\App\Http\Controllers\AdminNotificationController::class, 'markRead'])->whereNumber('id');
+    Route::post('/admin/notifications/inbox/read-all', [\App\Http\Controllers\AdminNotificationController::class, 'markAllRead']);
+    Route::get('/admin/notifications/inbox/unread-count', [\App\Http\Controllers\AdminNotificationController::class, 'unreadCount']);
+
+    // Support
+    Route::get('/admin/support/tickets', [\App\Http\Controllers\AdminSupportController::class, 'tickets']);
+    Route::get('/admin/support/tickets/{id}', [\App\Http\Controllers\AdminSupportController::class, 'showTicket'])->whereNumber('id');
+    Route::post('/admin/support/tickets/{id}/reply', [\App\Http\Controllers\AdminSupportController::class, 'reply'])->whereNumber('id');
+    Route::post('/admin/support/tickets/{id}/assign', [\App\Http\Controllers\AdminSupportController::class, 'assign'])->whereNumber('id');
+    Route::post('/admin/support/tickets/{id}/escalate', [\App\Http\Controllers\AdminSupportController::class, 'escalate'])->whereNumber('id');
+    Route::post('/admin/support/tickets/{id}/status', [\App\Http\Controllers\AdminSupportController::class, 'updateStatus'])->whereNumber('id');
+    Route::post('/admin/support/tickets/{id}/internal-note', [\App\Http\Controllers\AdminSupportController::class, 'addInternalNote'])->whereNumber('id');
+    Route::get('/admin/support/categories', [\App\Http\Controllers\AdminSupportController::class, 'categories']);
+    Route::post('/admin/support/categories', [\App\Http\Controllers\AdminSupportController::class, 'storeCategory']);
+    Route::delete('/admin/support/categories/{id}', [\App\Http\Controllers\AdminSupportController::class, 'destroyCategory'])->whereNumber('id');
+    Route::get('/admin/support/sla-policies', [\App\Http\Controllers\AdminSupportController::class, 'slaPolicies']);
+    Route::post('/admin/support/sla-policies', [\App\Http\Controllers\AdminSupportController::class, 'storeSlaPolicy']);
+    Route::get('/admin/support/analytics', [\App\Http\Controllers\AdminSupportController::class, 'analytics']);
+
+    // Security
+    Route::post('/admin/step-up', [\App\Http\Controllers\AdminSecurityController::class, 'stepUp']);
+    Route::get('/admin/security/sessions', [\App\Http\Controllers\AdminSecurityController::class, 'sessions']);
+    Route::post('/admin/security/sessions/{id}/revoke', [\App\Http\Controllers\AdminSecurityController::class, 'revokeSession'])->whereNumber('id');
+    Route::post('/admin/security/sessions/revoke-all', [\App\Http\Controllers\AdminSecurityController::class, 'revokeAllSessions']);
+    Route::get('/admin/security/ip-rules', [\App\Http\Controllers\AdminSecurityController::class, 'ipRules']);
+    Route::post('/admin/security/ip-rules', [\App\Http\Controllers\AdminSecurityController::class, 'storeIpRule']);
+    Route::delete('/admin/security/ip-rules/{id}', [\App\Http\Controllers\AdminSecurityController::class, 'destroyIpRule'])->whereNumber('id');
+    Route::get('/admin/security/failed-logins', [\App\Http\Controllers\AdminSecurityController::class, 'failedLogins']);
+    Route::post('/admin/security/2fa/setup', [\App\Http\Controllers\AdminSecurityController::class, 'setup2fa']);
+    Route::post('/admin/security/2fa/enable', [\App\Http\Controllers\AdminSecurityController::class, 'enable2fa']);
+    Route::post('/admin/security/2fa/disable', [\App\Http\Controllers\AdminSecurityController::class, 'disable2fa']);
+    Route::get('/admin/security/events', [\App\Http\Controllers\AdminSecurityController::class, 'events']);
+
+    // CRM
+    Route::get('/admin/crm/customers/{id}/360', [\App\Http\Controllers\AdminCrmController::class, 'customer360'])->whereNumber('id');
+    Route::get('/admin/crm/customers/{id}/timeline', [\App\Http\Controllers\AdminCrmController::class, 'timeline'])->whereNumber('id');
+    Route::get('/admin/crm/customers/{id}/clv', [\App\Http\Controllers\AdminCrmController::class, 'clv'])->whereNumber('id');
+    Route::get('/admin/crm/customers/{id}/notes', [\App\Http\Controllers\AdminCrmController::class, 'notes'])->whereNumber('id');
+    Route::post('/admin/crm/customers/{id}/notes', [\App\Http\Controllers\AdminCrmController::class, 'storeNote'])->whereNumber('id');
+    Route::delete('/admin/crm/notes/{id}', [\App\Http\Controllers\AdminCrmController::class, 'destroyNote'])->whereNumber('id');
+    Route::get('/admin/crm/complaints', [\App\Http\Controllers\AdminCrmController::class, 'complaints']);
+    Route::post('/admin/crm/complaints', [\App\Http\Controllers\AdminCrmController::class, 'storeComplaint']);
+    Route::post('/admin/crm/complaints/{id}/resolve', [\App\Http\Controllers\AdminCrmController::class, 'resolveComplaint'])->whereNumber('id');
+    Route::post('/admin/crm/customers/{id}/block', [\App\Http\Controllers\AdminCrmController::class, 'block'])->whereNumber('id');
+    Route::post('/admin/crm/customers/{id}/unblock', [\App\Http\Controllers\AdminCrmController::class, 'unblock'])->whereNumber('id');
+    Route::get('/admin/crm/customers/{id}/communications', [\App\Http\Controllers\AdminCrmController::class, 'communications'])->whereNumber('id');
+    Route::post('/admin/crm/customers/{id}/communications', [\App\Http\Controllers\AdminCrmController::class, 'storeCommunication'])->whereNumber('id');
+    Route::get('/admin/crm/customers/{id}/loyalty', [\App\Http\Controllers\AdminCrmController::class, 'loyalty'])->whereNumber('id');
+    Route::post('/admin/crm/customers/{id}/loyalty/credit', [\App\Http\Controllers\AdminCrmController::class, 'creditLoyalty'])->whereNumber('id');
+    Route::get('/admin/crm/customers/{id}/referral-events', [\App\Http\Controllers\AdminCrmController::class, 'referralEvents'])->whereNumber('id');
+    Route::get('/admin/crm/customers/{id}/spam-signals', [\App\Http\Controllers\AdminCrmController::class, 'spamSignals'])->whereNumber('id');
+    Route::post('/admin/crm/customers/{id}/spam-scan', [\App\Http\Controllers\AdminCrmController::class, 'spamScan'])->whereNumber('id');
+
+    // Finance
+    Route::get('/admin/finance/dashboard', [\App\Http\Controllers\AdminFinanceController::class, 'dashboard']);
+    Route::get('/admin/finance/revenue', [\App\Http\Controllers\AdminFinanceController::class, 'revenue']);
+    Route::get('/admin/finance/gst-summary', [\App\Http\Controllers\AdminFinanceController::class, 'gstSummary']);
+    Route::get('/admin/finance/tds-entries', [\App\Http\Controllers\AdminFinanceController::class, 'tdsEntries']);
+    Route::get('/admin/finance/settlements', [\App\Http\Controllers\AdminFinanceController::class, 'settlements']);
+    Route::get('/admin/finance/settlements/{id}', [\App\Http\Controllers\AdminFinanceController::class, 'showSettlement'])->whereNumber('id');
+    Route::post('/admin/finance/settlements/process', [\App\Http\Controllers\AdminFinanceController::class, 'processSettlement']);
+    Route::get('/admin/finance/payouts', [\App\Http\Controllers\AdminFinanceController::class, 'payouts']);
+    Route::post('/admin/finance/payouts/{id}/mark-paid', [\App\Http\Controllers\AdminFinanceController::class, 'markPayoutPaid'])->whereNumber('id');
+    Route::get('/admin/finance/refunds', [\App\Http\Controllers\AdminFinanceController::class, 'refunds']);
+    Route::post('/admin/finance/refunds/{id}/approve', [\App\Http\Controllers\AdminFinanceController::class, 'approveRefund'])->whereNumber('id')->middleware('step-up');
+    Route::get('/admin/finance/failed-payments', [\App\Http\Controllers\AdminFinanceController::class, 'failedPayments']);
+    Route::get('/admin/finance/invoices', [\App\Http\Controllers\AdminFinanceController::class, 'invoices']);
+    Route::post('/admin/finance/invoices/generate', [\App\Http\Controllers\AdminFinanceController::class, 'generateInvoice']);
+    Route::get('/admin/finance/reconciliation', [\App\Http\Controllers\AdminFinanceController::class, 'reconciliation']);
+    Route::post('/admin/finance/reports/export', [\App\Http\Controllers\AdminFinanceController::class, 'exportReport']);
+    Route::get('/admin/finance/reports/runs', [\App\Http\Controllers\AdminFinanceController::class, 'reportRuns']);
+
+    // Technicians-ops
+    Route::post('/admin/technicians-ops/{id}/suspend', [\App\Http\Controllers\AdminTechnicianOpsController::class, 'suspend'])->whereNumber('id');
+    Route::post('/admin/technicians-ops/{id}/reinstate', [\App\Http\Controllers\AdminTechnicianOpsController::class, 'reinstate'])->whereNumber('id');
+    Route::post('/admin/technicians-ops/{id}/force-offline', [\App\Http\Controllers\AdminTechnicianOpsController::class, 'forceOffline'])->whereNumber('id');
+    Route::post('/admin/technicians-ops/{id}/reassign', [\App\Http\Controllers\AdminTechnicianOpsController::class, 'reassign'])->whereNumber('id');
+    Route::get('/admin/technicians-ops/{id}/performance', [\App\Http\Controllers\AdminTechnicianOpsController::class, 'performance'])->whereNumber('id');
+    Route::get('/admin/technicians-ops/{id}/complaints', [\App\Http\Controllers\AdminTechnicianOpsController::class, 'complaints'])->whereNumber('id');
+    Route::get('/admin/technicians-ops/{id}/jobs', [\App\Http\Controllers\AdminTechnicianOpsController::class, 'jobs'])->whereNumber('id');
+    Route::get('/admin/technicians-ops/{id}/earnings', [\App\Http\Controllers\AdminTechnicianOpsController::class, 'earnings'])->whereNumber('id');
+    Route::get('/admin/technicians-ops/suspended', [\App\Http\Controllers\AdminTechnicianOpsController::class, 'suspended']);
+
+    // Pricing-ops
+    Route::get('/admin/pricing-ops/{type}', [\App\Http\Controllers\AdminPricingOpsController::class, 'show']);
+    Route::get('/admin/pricing-ops/{type}/versions', [\App\Http\Controllers\AdminPricingOpsController::class, 'versions']);
+    Route::post('/admin/pricing-ops/{type}', [\App\Http\Controllers\AdminPricingOpsController::class, 'store']);
+
+    // Ops (DLQ, monitoring, manual recovery, NO_SERVICE queue, cancellation policies, retention)
+    Route::get('/admin/ops/monitoring/summary', [\App\Http\Controllers\AdminOpsController::class, 'monitoringSummary']);
+    Route::get('/admin/ops/queue/failed', [\App\Http\Controllers\AdminOpsController::class, 'failedJobs']);
+    Route::post('/admin/ops/queue/{uuid}/replay', [\App\Http\Controllers\AdminOpsController::class, 'replayFailedJob']);
+    Route::delete('/admin/ops/queue/{uuid}', [\App\Http\Controllers\AdminOpsController::class, 'deleteFailedJob']);
+    Route::get('/admin/ops/module-failures', [\App\Http\Controllers\AdminOpsController::class, 'moduleFailures']);
+    Route::post('/admin/ops/module-failures/{id}/replay', [\App\Http\Controllers\AdminOpsController::class, 'replayModuleFailure'])->whereNumber('id');
+    Route::post('/admin/ops/bookings/{id}/retry-dispatch', [\App\Http\Controllers\AdminOpsController::class, 'retryDispatch'])->whereNumber('id');
+    Route::post('/admin/ops/bookings/{id}/retry-settlement', [\App\Http\Controllers\AdminOpsController::class, 'retrySettlement'])->whereNumber('id');
+    Route::post('/admin/ops/locks/{id}/unlock', [\App\Http\Controllers\AdminOpsController::class, 'unlockLock'])->whereNumber('id');
+    Route::post('/admin/ops/bookings/{id}/force-assign', [\App\Http\Controllers\AdminOpsController::class, 'forceAssign'])->whereNumber('id');
+    Route::get('/admin/ops/no-service-queue', [\App\Http\Controllers\AdminOpsController::class, 'noServiceQueue']);
+    Route::post('/admin/ops/no-service-queue/{id}/resolve', [\App\Http\Controllers\AdminOpsController::class, 'resolveNoService'])->whereNumber('id');
+    Route::get('/admin/ops/cancellation-policies', [\App\Http\Controllers\AdminOpsController::class, 'cancellationPolicies']);
+    Route::post('/admin/ops/cancellation-policies', [\App\Http\Controllers\AdminOpsController::class, 'storeCancellationPolicy']);
+    Route::delete('/admin/ops/cancellation-policies/{id}', [\App\Http\Controllers\AdminOpsController::class, 'destroyCancellationPolicy'])->whereNumber('id');
+    Route::post('/admin/ops/run-retention', [\App\Http\Controllers\AdminOpsController::class, 'runRetention']);
+
+    // Bookings workflow
+    Route::get('/admin/bookings-workflow/dashboard', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'dashboard']);
+    Route::post('/admin/bookings-workflow/list', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'list']);
+    Route::get('/admin/bookings-workflow/live', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'live']);
+    Route::get('/admin/bookings-workflow/disputes', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'disputes']);
+    Route::post('/admin/bookings-workflow/disputes/{id}/resolve', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'resolveDispute'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/bulk-action', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'bulkAction']);
+    Route::post('/admin/bookings-workflow/create', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'create']);
+    Route::get('/admin/bookings-workflow/tags', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'tags']);
+    Route::get('/admin/bookings-workflow/sla-policies', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'slaPolicies']);
+    Route::get('/admin/bookings-workflow/{id}/overview', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'overview'])->whereNumber('id');
+    Route::get('/admin/bookings-workflow/{id}/detail', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'detail'])->whereNumber('id');
+    Route::get('/admin/bookings-workflow/{id}/timeline', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'timeline'])->whereNumber('id');
+    Route::get('/admin/bookings-workflow/{id}/chat', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'chat'])->whereNumber('id');
+    Route::get('/admin/bookings-workflow/{id}/fraud', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'fraud'])->whereNumber('id');
+    Route::get('/admin/bookings-workflow/{id}/duplicates', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'duplicates'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/{id}/reassign', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'reassign'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/{id}/force-complete', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'forceComplete'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/{id}/escalate', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'escalate'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/{id}/dispute', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'raiseDispute'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/{id}/state-override', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'stateOverride'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/{id}/internal-note', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'addInternalNote'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/{id}/tag', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'tag'])->whereNumber('id');
+    Route::get('/admin/bookings-workflow/{id}/nearby-technicians', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'nearbyTechnicians'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/{id}/dispatch', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'dispatch'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/{id}/assign-multiple', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'assignMultiple'])->whereNumber('id');
+    Route::post('/admin/bookings-workflow/{id}/auto-assign', [\App\Http\Controllers\AdminBookingWorkflowController::class, 'autoAssign'])->whereNumber('id');
 });
 
 Route::middleware(['auth:sanctum', 'admin.token'])->group(function () {

@@ -37,4 +37,6 @@ return [
 
     'cdn_base_url' => env('CDN_BASE_URL'),
 
+    'internal_api_key' => env('FIXMATE_INTERNAL_API_KEY'),
+
 ];

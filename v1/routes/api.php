@@ -93,6 +93,41 @@ Route::middleware(['auth:sanctum', 'admin.token'])->group(function () {
     Route::post('/admin/technicians/approve', [\App\Http\Controllers\AdminTechnicianController::class, 'approve']);
     Route::get('/admin/technicians/{id}', [\App\Http\Controllers\AdminTechnicianController::class, 'show'])->whereNumber('id');
     Route::get('/admin/technicians/{id}/jobs', [\App\Http\Controllers\AdminTechnicianController::class, 'jobs'])->whereNumber('id');
+
+    // CMS
+    Route::get('/admin/cms/pages', [\App\Http\Controllers\AdminCmsController::class, 'pages']);
+    Route::post('/admin/cms/pages', [\App\Http\Controllers\AdminCmsController::class, 'storePage']);
+    Route::get('/admin/cms/pages/{id}', [\App\Http\Controllers\AdminCmsController::class, 'showPage'])->whereNumber('id');
+    Route::put('/admin/cms/pages/{id}', [\App\Http\Controllers\AdminCmsController::class, 'updatePage'])->whereNumber('id');
+    Route::delete('/admin/cms/pages/{id}', [\App\Http\Controllers\AdminCmsController::class, 'destroyPage'])->whereNumber('id');
+    Route::post('/admin/cms/pages/{id}/publish', [\App\Http\Controllers\AdminCmsController::class, 'publishPage'])->whereNumber('id');
+    Route::post('/admin/cms/sections', [\App\Http\Controllers\AdminCmsController::class, 'storeSection']);
+    Route::put('/admin/cms/sections/{id}', [\App\Http\Controllers\AdminCmsController::class, 'updateSection'])->whereNumber('id');
+    Route::delete('/admin/cms/sections/{id}', [\App\Http\Controllers\AdminCmsController::class, 'destroySection'])->whereNumber('id');
+    Route::post('/admin/cms/sections/{id}/publish', [\App\Http\Controllers\AdminCmsController::class, 'publishSection'])->whereNumber('id');
+    Route::get('/admin/cms/seo', [\App\Http\Controllers\AdminCmsController::class, 'seoList']);
+    Route::post('/admin/cms/seo', [\App\Http\Controllers\AdminCmsController::class, 'upsertSeo']);
+    Route::get('/admin/cms/banners', [\App\Http\Controllers\AdminCmsController::class, 'banners']);
+    Route::post('/admin/cms/banners', [\App\Http\Controllers\AdminCmsController::class, 'storeBanner']);
+    Route::put('/admin/cms/banners/{id}', [\App\Http\Controllers\AdminCmsController::class, 'updateBanner'])->whereNumber('id');
+    Route::delete('/admin/cms/banners/{id}', [\App\Http\Controllers\AdminCmsController::class, 'destroyBanner'])->whereNumber('id');
+
+    // Settings
+    Route::get('/admin/settings/payment-gateway', [\App\Http\Controllers\AdminSettingsController::class, 'getPaymentGateway']);
+    Route::put('/admin/settings/payment-gateway', [\App\Http\Controllers\AdminSettingsController::class, 'putPaymentGateway']);
+    Route::get('/admin/settings/notifications', [\App\Http\Controllers\AdminSettingsController::class, 'getNotifications']);
+    Route::put('/admin/settings/notifications', [\App\Http\Controllers\AdminSettingsController::class, 'putNotifications']);
+    Route::get('/admin/settings/referral', [\App\Http\Controllers\AdminSettingsController::class, 'getReferral']);
+    Route::put('/admin/settings/referral', [\App\Http\Controllers\AdminSettingsController::class, 'putReferral']);
+    Route::get('/admin/settings/upload', [\App\Http\Controllers\AdminSettingsController::class, 'getUpload']);
+    Route::put('/admin/settings/upload', [\App\Http\Controllers\AdminSettingsController::class, 'putUpload']);
+
+    // Promotions (bespoke, beyond generic CRUD)
+    Route::get('/admin/promotions/analytics', [\App\Http\Controllers\AdminPromotionExtraController::class, 'analytics']);
+    Route::post('/admin/promotions/reorder', [\App\Http\Controllers\AdminPromotionExtraController::class, 'reorder']);
+    Route::post('/admin/promotions/bulk-action', [\App\Http\Controllers\AdminPromotionExtraController::class, 'bulkAction']);
+    Route::get('/admin/promotions/{id}/preview', [\App\Http\Controllers\AdminPromotionExtraController::class, 'preview'])->whereNumber('id');
+    Route::post('/admin/promotions/{id}/duplicate', [\App\Http\Controllers\AdminPromotionExtraController::class, 'duplicate'])->whereNumber('id');
 });
 
 Route::middleware(['auth:sanctum', 'admin.token'])->group(function () {

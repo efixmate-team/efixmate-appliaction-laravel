@@ -338,7 +338,7 @@ class MasterCrudController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => ApiResponseFilter::filter($rows),
+            'data' => ApiResponseFilter::filter($rows, $cfg['id_col']),
             'pagination' => ['total' => $total, 'page' => $page, 'limit' => $limit === 'all' ? $total : (int) ($limit ?? 10)],
         ]);
     }
@@ -352,7 +352,7 @@ class MasterCrudController extends Controller
         if ($resource === 'countries') $this->hydrateCountryRelations($row);
         elseif ($resource === 'services') $this->hydrateServiceRelations($row);
 
-        return response()->json(['status' => true, 'data' => ApiResponseFilter::filter($row)]);
+        return response()->json(['status' => true, 'data' => ApiResponseFilter::filter($row, $cfg['id_col'])]);
     }
 
     public function store(Request $request, string $resource)
@@ -401,7 +401,7 @@ class MasterCrudController extends Controller
             if ($resource === 'countries') $this->hydrateCountryRelations($row);
         }
 
-        return response()->json(['status' => true, 'message' => 'Record created', 'data' => ApiResponseFilter::filter($row)], 201);
+        return response()->json(['status' => true, 'message' => 'Record created', 'data' => ApiResponseFilter::filter($row, $cfg['id_col'])], 201);
     }
 
     public function update(Request $request, string|int $id, string $resource)
@@ -468,7 +468,7 @@ class MasterCrudController extends Controller
             if ($resource === 'countries') $this->hydrateCountryRelations($row);
         }
 
-        return response()->json(['status' => true, 'message' => 'Record updated', 'data' => ApiResponseFilter::filter($row)]);
+        return response()->json(['status' => true, 'message' => 'Record updated', 'data' => ApiResponseFilter::filter($row, $cfg['id_col'])]);
     }
 
     public function destroy(string|int $id, string $resource)

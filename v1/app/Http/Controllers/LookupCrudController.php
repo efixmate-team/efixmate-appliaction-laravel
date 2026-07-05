@@ -102,7 +102,7 @@ class LookupCrudController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => ApiResponseFilter::filter($rows->all()),
+            'data' => ApiResponseFilter::filter($rows->all(), $cfg['id_col']),
             'pagination' => [
                 'total' => $total,
                 'page' => $page,
@@ -117,7 +117,7 @@ class LookupCrudController extends Controller
         $row = DB::table($cfg['table'])->where($cfg['id_col'], $id)->where('is_deleted', false)->first();
         abort_if(! $row, 404, 'Record not found');
 
-        return response()->json(['status' => true, 'data' => ApiResponseFilter::filter($row)]);
+        return response()->json(['status' => true, 'data' => ApiResponseFilter::filter($row, $cfg['id_col'])]);
     }
 
     public function store(Request $request, string $resource)
@@ -145,7 +145,7 @@ class LookupCrudController extends Controller
         $id = DB::table($cfg['table'])->insertGetId($payload, $cfg['id_col']);
         $row = DB::table($cfg['table'])->where($cfg['id_col'], $id)->first();
 
-        return response()->json(['status' => true, 'message' => 'Record created', 'data' => ApiResponseFilter::filter($row)], 201);
+        return response()->json(['status' => true, 'message' => 'Record created', 'data' => ApiResponseFilter::filter($row, $cfg['id_col'])], 201);
     }
 
     public function update(Request $request, string|int $id, string $resource)
@@ -172,7 +172,7 @@ class LookupCrudController extends Controller
 
         $row = DB::table($cfg['table'])->where($cfg['id_col'], $id)->first();
 
-        return response()->json(['status' => true, 'message' => 'Record updated', 'data' => ApiResponseFilter::filter($row)]);
+        return response()->json(['status' => true, 'message' => 'Record updated', 'data' => ApiResponseFilter::filter($row, $cfg['id_col'])]);
     }
 
     public function destroy(string|int $id, string $resource)

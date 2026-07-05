@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -33,6 +34,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'step-up' => \App\Http\Middleware\RequireStepUp::class,
             'customer.optional' => \App\Http\Middleware\OptionalCustomerAuth::class,
         ]);
+
+        // API-only app has no named "login" route; without this, unauthenticated
+        // requests that don't send Accept: application/json crash with a 500
+        // (RouteNotFoundException) instead of a clean 401 JSON response.
+        Authenticate::redirectUsing(fn () => null);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

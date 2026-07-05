@@ -19,22 +19,31 @@ class ApiResponseFilter
         'status_id', 'status_type_id', 'slot_id',
     ];
 
-    public static function filter(mixed $data): mixed
+    /**
+     * @param string|null $pkField When the caller knows the row's real primary
+     *   key column (e.g. 'technician_id'), pass it explicitly so it's aliased to
+     *   `id` unambiguously. Without it, the heuristic PK_FIELDS list is used —
+     *   which picks the *first* matching column, so a row carrying both a real PK
+     *   and an earlier-listed foreign key (e.g. a Booking row has customer_id
+     *   before booking_id) would alias the wrong one. Always pass $pkField for
+     *   new call sites.
+     */
+    public static function filter(mixed $data, ?string $pkField = null): mixed
     {
         if ($data === null) return $data;
 
         if (is_array($data) && array_is_list($data)) {
-            return array_map(fn ($row) => self::filterRow($row), $data);
+            return array_map(fn ($row) => self::filterRow($row, $pkField), $data);
         }
 
-        return self::filterRow($data);
+        return self::filterRow($data, $pkField);
     }
 
-    private static function filterRow(mixed $row): mixed
+    private static function filterRow(mixed $row, ?string $pkField = null): mixed
     {
         if (is_object($row)) {
             $row = (array) $row;
-            $filtered = self::filterRow($row);
+            $filtered = self::filterRow($row, $pkField);
 
             return (object) $filtered;
         }
@@ -46,10 +55,14 @@ class ApiResponseFilter
         }
 
         if (! array_key_exists('id', $row)) {
-            foreach (self::PK_FIELDS as $pk) {
-                if (array_key_exists($pk, $row)) {
-                    $row['id'] = $row[$pk];
-                    break;
+            if ($pkField !== null && array_key_exists($pkField, $row)) {
+                $row['id'] = $row[$pkField];
+            } else {
+                foreach (self::PK_FIELDS as $pk) {
+                    if (array_key_exists($pk, $row)) {
+                        $row['id'] = $row[$pk];
+                        break;
+                    }
                 }
             }
         }

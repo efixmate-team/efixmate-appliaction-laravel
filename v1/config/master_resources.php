@@ -249,4 +249,12 @@ return [
         'audit_on_insert' => false,
         'audit_on_update' => null,
     ],
+    'skills' => [
+        'table' => 'efm_mstr_skills',
+        'id_col' => 'skill_id',
+        'insert_fields' => ['skill_name', 'category_id', 'description', 'skill_icon', 'skill_color', 'order_seq', 'is_active'],
+        'search_col' => 'skill_name',
+        'audit_on_insert' => true,
+        'audit_on_update' => 'full',
+    ],
 ];

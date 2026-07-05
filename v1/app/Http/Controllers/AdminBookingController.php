@@ -26,7 +26,7 @@ class AdminBookingController extends Controller
     /** GET /api/booking/all */
     public function all()
     {
-        return response()->json(['success' => true, 'data' => ApiResponseFilter::filter(Booking::all()->toArray())]);
+        return response()->json(['success' => true, 'data' => ApiResponseFilter::filter(Booking::all()->toArray(), 'booking_id')]);
     }
 
     /** GET /api/booking/{id} */
@@ -36,6 +36,16 @@ class AdminBookingController extends Controller
         $assignments = BookingTechnician::where('booking_id', $id)->get();
 
         return response()->json(['success' => true, 'data' => ['booking' => $booking, 'assignments' => $assignments]]);
+    }
+
+    /** GET /api/booking/{id}/commission-snapshot */
+    public function commissionSnapshot(int $id)
+    {
+        $booking = Booking::findOrFail($id);
+        $snapshot = $booking->commissionSnapshot;
+        abort_if(! $snapshot, 404, 'Commission snapshot not found');
+
+        return response()->json(['success' => true, 'data' => $snapshot]);
     }
 
     /** POST /api/booking/admin-paginated */
@@ -76,7 +86,7 @@ class AdminBookingController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Bookings fetched',
-            'data' => ApiResponseFilter::filter($data->all()),
+            'data' => ApiResponseFilter::filter($data->all(), 'booking_id'),
             'pagination' => ['total' => $total, 'page' => $page, 'limit' => $limit, 'totalPages' => (int) ceil($total / max($limit, 1))],
         ]);
     }
@@ -110,7 +120,7 @@ class AdminBookingController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Assignments fetched',
-            'data' => ApiResponseFilter::filter($data->all()),
+            'data' => ApiResponseFilter::filter($data->all(), 'asignment_id'),
             'pagination' => ['total' => $total, 'page' => $page, 'limit' => $limit, 'totalPages' => (int) ceil($total / max($limit, 1))],
         ]);
     }

@@ -8,12 +8,15 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\LookupCrudController;
 use App\Http\Controllers\MasterCrudController;
 use App\Http\Controllers\BookingCartController;
+use App\Http\Controllers\BookingCheckoutController;
 use App\Http\Controllers\BookingFeatureController;
+use App\Http\Controllers\BookingTrackController;
 use App\Http\Controllers\CustomerBookingListController;
 use App\Http\Controllers\CustomerDeviceController;
 use App\Http\Controllers\CustomerReferralController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceDiscoveryController;
 use App\Http\Controllers\TechnicianBookingController;
@@ -70,6 +73,26 @@ Route::middleware(['auth:sanctum', 'admin.token'])->group(function () {
     Route::get('/admin/get-parents', [\App\Http\Controllers\AdminMenuManagementController::class, 'parents']);
     Route::get('/admin/get-groups', [\App\Http\Controllers\AdminMenuManagementController::class, 'groups']);
     Route::post('/admin/delete-menus', [\App\Http\Controllers\AdminMenuManagementController::class, 'destroy']);
+
+    // Customer management
+    Route::post('/admin/users/paginated', [\App\Http\Controllers\AdminCustomerController::class, 'paginated']);
+    Route::post('/admin/users/create', [\App\Http\Controllers\AdminCustomerController::class, 'store']);
+    Route::post('/admin/users/update', [\App\Http\Controllers\AdminCustomerController::class, 'update']);
+    Route::post('/admin/users/verify', [\App\Http\Controllers\AdminCustomerController::class, 'verify']);
+    Route::get('/admin/users/{id}', [\App\Http\Controllers\AdminCustomerController::class, 'show'])->whereNumber('id');
+    Route::get('/admin/users/{id}/bookings', [\App\Http\Controllers\AdminCustomerController::class, 'bookings'])->whereNumber('id');
+    Route::get('/admin/users/{id}/addresses', [\App\Http\Controllers\AdminCustomerController::class, 'addresses'])->whereNumber('id');
+    Route::get('/admin/users/{id}/activity-logs', [\App\Http\Controllers\AdminCustomerController::class, 'activityLogs'])->whereNumber('id');
+
+    // Technician management
+    Route::post('/admin/technicians/paginated', [\App\Http\Controllers\AdminTechnicianController::class, 'paginated']);
+    Route::post('/admin/technicians/create', [\App\Http\Controllers\AdminTechnicianController::class, 'store']);
+    Route::post('/admin/technicians/verify-document', [\App\Http\Controllers\AdminTechnicianController::class, 'verifyDocument']);
+    Route::post('/admin/technicians/verify-bank', [\App\Http\Controllers\AdminTechnicianController::class, 'verifyBank']);
+    Route::post('/admin/technicians/review-section', [\App\Http\Controllers\AdminTechnicianController::class, 'reviewSection']);
+    Route::post('/admin/technicians/approve', [\App\Http\Controllers\AdminTechnicianController::class, 'approve']);
+    Route::get('/admin/technicians/{id}', [\App\Http\Controllers\AdminTechnicianController::class, 'show'])->whereNumber('id');
+    Route::get('/admin/technicians/{id}/jobs', [\App\Http\Controllers\AdminTechnicianController::class, 'jobs'])->whereNumber('id');
 });
 
 Route::middleware(['auth:sanctum', 'admin.token'])->group(function () {
@@ -175,6 +198,15 @@ Route::prefix('user')->name('user.')->group(function () {
         Route::post('/booking/cart/lines/{lineId}/photos', [BookingCartController::class, 'uploadLinePhotos'])->whereNumber('lineId');
         Route::delete('/booking/cart/lines/{lineId}/photos', [BookingCartController::class, 'deleteLinePhoto'])->whereNumber('lineId');
 
+        Route::post('/booking/checkout', [BookingCheckoutController::class, 'checkout']);
+        Route::get('/bookings/{bookingId}/payment-summary', [BookingCheckoutController::class, 'paymentSummary'])->whereNumber('bookingId');
+        Route::get('/bookings/{bookingId}/confirmation', [BookingCheckoutController::class, 'confirmationSummary'])->whereNumber('bookingId');
+        Route::get('/bookings/{bookingId}/track', [BookingTrackController::class, 'track'])->whereNumber('bookingId');
+        Route::get('/bookings/{bookingId}', [BookingCheckoutController::class, 'customerDetail'])->whereNumber('bookingId');
+        Route::post('/booking/apply-coupon', [BookingCheckoutController::class, 'applyCouponToLocks']);
+        Route::post('/booking/cart/apply-coupon', [BookingCheckoutController::class, 'applyCouponToLocks']);
+        Route::get('/coupons', [PromotionController::class, 'couponsList']);
+
         Route::post('/payment/create-order', [PaymentController::class, 'createOrder']);
         Route::post('/payment/verify', [PaymentController::class, 'verify']);
         Route::get('/payment/status', [PaymentController::class, 'statusGet']);
@@ -194,6 +226,8 @@ Route::prefix('user')->name('user.')->group(function () {
     // Public / guest-accessible discovery endpoints (no auth in Node).
     Route::get('/payment/methods', [PaymentController::class, 'methodsCatalog']);
     Route::get('/service-category/home', [ServiceDiscoveryController::class, 'homeCategories']);
+    Route::get('/promotions/home/carousel', [PromotionController::class, 'carousel']);
+    Route::get('/promotions/home/offers', [PromotionController::class, 'offers']);
     Route::get('/services/popular', [ServiceDiscoveryController::class, 'popular']);
     Route::get('/services/emergency', [ServiceDiscoveryController::class, 'emergency']);
     Route::get('/services/quick', [ServiceDiscoveryController::class, 'quick']);
@@ -270,6 +304,7 @@ Route::post('/booking/payment/webhook', [AdminBookingController::class, 'payment
 
 Route::prefix('booking')->middleware(['auth:sanctum', 'admin.token'])->group(function () {
     Route::get('/all', [AdminBookingController::class, 'all']);
+    Route::get('/{id}/commission-snapshot', [AdminBookingController::class, 'commissionSnapshot'])->whereNumber('id');
     Route::get('/{id}', [AdminBookingController::class, 'show'])->whereNumber('id');
     Route::post('/admin-paginated', [AdminBookingController::class, 'paginated']);
     Route::post('/admin-assignments', [AdminBookingController::class, 'assignments']);

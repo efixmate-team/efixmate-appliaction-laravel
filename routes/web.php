@@ -3,12 +3,22 @@
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-Route::get('/', fn () => redirect()->route(auth()->check() ? 'admin.dashboard' : 'login'));
+Route::get('/', fn () => Inertia::render('ClientPage', [
+    'title' => 'Home',
+    'source' => 'client/app/(public)/(landing)/page.tsx',
+    'area' => 'public',
+    'path' => '/',
+    'params' => [],
+]));
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AdminLoginController::class, 'create'])->name('login');
-    Route::post('/login', [AdminLoginController::class, 'store']);
+    Route::get('/admin/login', [AdminLoginController::class, 'create'])->name('login');
+    Route::get('/login/{admin_uid}', [AdminLoginController::class, 'createWithUid'])->name('login.magic-link');
+    Route::post('/admin/login', [AdminLoginController::class, 'store']);
+    Route::post('/check-uid', [AdminLoginController::class, 'checkUid'])
+        ->middleware('throttle:5,1');
 });
 
 Route::middleware('auth')->group(function () {

@@ -188,6 +188,16 @@ class BookingController extends Controller
         ]);
     }
 
+    /** GET /api/customer/booking/{id}/commission-snapshot */
+    public function commissionSnapshot(Request $request, int $bookingId)
+    {
+        $booking = $this->ownedBooking($request, $bookingId);
+        $snapshot = $booking->commissionSnapshot;
+        abort_if(! $snapshot, 404, 'Commission snapshot not found');
+
+        return response()->json(['success' => true, 'data' => $snapshot]);
+    }
+
     /** GET /api/customer/bookings */
     public function index(Request $request)
     {

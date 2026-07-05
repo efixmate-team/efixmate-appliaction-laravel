@@ -1,6 +1,7 @@
 <script setup>
 import { useForm, Link } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
+import AdminShell from '@/Layouts/AdminShell.vue';
 
 const props = defineProps({
     booking: Object,
@@ -15,70 +16,50 @@ function assign() {
 </script>
 
 <template>
-    <div class="min-h-screen bg-gray-50 p-6 dark:bg-gray-900">
-        <Link :href="route('admin.booking-management.bookings.index')" class="text-sm text-blue-600 hover:underline">&larr; Back to bookings</Link>
+    <AdminShell :title="booking.booking_uid" source="client/app/admin/booking-management/bookings/[id]/page.tsx">
+        <div class="space-y-5">
+            <Link :href="route('admin.booking-management.bookings.index')" class="text-sm font-medium text-indigo-600 hover:underline">Back to bookings</Link>
 
-        <h1 class="mt-2 mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-            {{ booking.booking_uid }}
-            <span class="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-200">
-                {{ booking.status_label }}
-            </span>
-        </h1>
-
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <div class="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                <h2 class="mb-2 text-sm font-semibold text-gray-900 dark:text-white">Customer</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-300">
-                    {{ booking.customer?.first_name }} {{ booking.customer?.last_name }} — {{ booking.customer?.mobile_number }}
-                </p>
-
-                <h2 class="mt-4 mb-2 text-sm font-semibold text-gray-900 dark:text-white">Service</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-300">{{ booking.service?.service }} (qty {{ booking.quantity }})</p>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Scheduled: {{ booking.scheduled_date }}</p>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Problem: {{ booking.problem_description }}</p>
+            <div class="flex flex-wrap items-center gap-3">
+                <h2 class="text-2xl font-semibold text-slate-950">{{ booking.booking_uid }}</h2>
+                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">{{ booking.status_label }}</span>
             </div>
 
-            <div class="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                <h2 class="mb-2 text-sm font-semibold text-gray-900 dark:text-white">Price breakdown</h2>
-                <ul v-if="booking.price_breakdown" class="space-y-1 text-sm text-gray-600 dark:text-gray-300">
-                    <li v-for="line in booking.price_breakdown.lines" :key="line.line_id" class="flex justify-between">
-                        <span>{{ line.label }}</span>
-                        <span>{{ line.amount }}</span>
-                    </li>
-                    <li class="flex justify-between border-t border-gray-200 pt-1 font-medium dark:border-gray-700">
-                        <span>Customer payable</span>
-                        <span>{{ booking.price_breakdown.customer_payable }}</span>
-                    </li>
-                </ul>
-                <p v-else class="text-sm text-gray-400">No price breakdown recorded.</p>
-            </div>
+            <div class="grid gap-5 lg:grid-cols-2">
+                <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+                    <h3 class="text-sm font-semibold text-slate-950">Customer</h3>
+                    <p class="mt-2 text-sm text-slate-600">{{ booking.customer?.first_name }} {{ booking.customer?.last_name }} - {{ booking.customer?.mobile_number }}</p>
+                    <h3 class="mt-5 text-sm font-semibold text-slate-950">Service</h3>
+                    <p class="mt-2 text-sm text-slate-600">{{ booking.service?.service }} (qty {{ booking.quantity }})</p>
+                    <p class="mt-1 text-sm text-slate-500">Scheduled: {{ booking.scheduled_date }}</p>
+                    <p class="mt-1 text-sm text-slate-500">Problem: {{ booking.problem_description }}</p>
+                </section>
 
-            <div class="rounded-lg border border-gray-200 bg-white p-4 lg:col-span-2 dark:border-gray-700 dark:bg-gray-800">
-                <h2 class="mb-2 text-sm font-semibold text-gray-900 dark:text-white">Technician assignment</h2>
+                <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+                    <h3 class="text-sm font-semibold text-slate-950">Price breakdown</h3>
+                    <ul v-if="booking.price_breakdown" class="mt-3 space-y-2 text-sm text-slate-600">
+                        <li v-for="line in booking.price_breakdown.lines" :key="line.line_id" class="flex justify-between"><span>{{ line.label }}</span><span>{{ line.amount }}</span></li>
+                        <li class="flex justify-between border-t border-slate-200 pt-2 font-medium text-slate-950"><span>Customer payable</span><span>{{ booking.price_breakdown.customer_payable }}</span></li>
+                    </ul>
+                    <p v-else class="mt-3 text-sm text-slate-400">No price breakdown recorded.</p>
+                </section>
 
-                <ul v-if="booking.assignments?.length" class="mb-3 space-y-1 text-sm text-gray-600 dark:text-gray-300">
-                    <li v-for="a in booking.assignments" :key="a.asignment_id">
-                        {{ a.technician?.first_name }} {{ a.technician?.last_name }} ({{ a.technician?.mobile_number }}) — {{ a.assignment_role }}
-                    </li>
-                </ul>
-                <p v-else class="mb-3 text-sm text-gray-400">No technician assigned yet.</p>
+                <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2">
+                    <h3 class="text-sm font-semibold text-slate-950">Technician assignment</h3>
+                    <ul v-if="booking.assignments?.length" class="mt-3 space-y-2 text-sm text-slate-600">
+                        <li v-for="a in booking.assignments" :key="a.asignment_id">{{ a.technician?.first_name }} {{ a.technician?.last_name }} ({{ a.technician?.mobile_number }}) - {{ a.assignment_role }}</li>
+                    </ul>
+                    <p v-else class="mt-3 text-sm text-slate-400">No technician assigned yet.</p>
 
-                <form @submit.prevent="assign" class="flex items-center gap-2">
-                    <select v-model="form.technician_id" class="rounded-md border border-gray-300 px-3 py-1.5 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
-                        <option value="">Select technician…</option>
-                        <option v-for="t in availableTechnicians" :key="t.technician_id" :value="t.technician_id">
-                            {{ t.first_name }} {{ t.last_name }} ({{ t.current_jobs }}/{{ t.max_jobs }} jobs)
-                        </option>
-                    </select>
-                    <button
-                        type="submit"
-                        :disabled="!form.technician_id || form.processing"
-                        class="rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-gray-900"
-                    >
-                        Assign
-                    </button>
-                </form>
+                    <form @submit.prevent="assign" class="mt-4 flex flex-wrap items-center gap-2">
+                        <select v-model="form.technician_id" class="rounded-md border border-slate-300 px-3 py-2 text-sm">
+                            <option value="">Select technician</option>
+                            <option v-for="t in availableTechnicians" :key="t.technician_id" :value="t.technician_id">{{ t.first_name }} {{ t.last_name }} ({{ t.current_jobs }}/{{ t.max_jobs }} jobs)</option>
+                        </select>
+                        <button type="submit" :disabled="!form.technician_id || form.processing" class="rounded-md bg-slate-900 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50">Assign</button>
+                    </form>
+                </section>
             </div>
         </div>
-    </div>
+    </AdminShell>
 </template>

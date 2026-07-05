@@ -1,0 +1,361 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { Trash2, FileSpreadsheet, Plus, MapPin } from "lucide-react";
+import PaginatedTable, { Column, Filters, DropdownFilter } from "@/app/admin/(components)/Table";
+import { buildBulkCrudActions, makeIsActiveBulkHandlers } from "@/app/admin/(lib)/bulkCrudActions";
+import { masterAPI } from "@/lib/api";
+import Modal from "@/components/modals/Modal";
+import Input from '@/app/admin/(components)/Forms/Input';
+import AsyncSelect from '@/app/admin/(components)/Forms/AsyncSelect';
+import Toggle from '@/app/admin/(components)/Forms/Toggle';
+import Form from '@/app/admin/(components)/Forms/Form';
+import SuccessOverlay from "@/app/admin/(components)/Overlay/Successoverlay";
+import FailedOverlay from "@/app/admin/(components)/Overlay/Failedoverlay";
+import BulkUploadModal from "@/app/admin/(components)/BulkUploadModal";
+import { useGeographyFilterOptions } from "@/app/admin/(lib)/tableFilters";
+
+export default function CitiesPage() {
+  const resource = "cities";
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const [selectedCountry, setSelectedCountry] = useState<any>("");
+  const [selectedState, setSelectedState] = useState<any>("");
+
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [total, setTotal] = useState(0);
+  const [search, setSearch] = useState("");
+  const [filterCountryId, setFilterCountryId] = useState("");
+  const [filterStateId, setFilterStateId] = useState("");
+  const geoOptions = useGeographyFilterOptions(filterCountryId, filterStateId, "");
+
+  const [successOverlay, setSuccessOverlay] = useState(false);
+  const [failedOverlay, setFailedOverlay] = useState(false);
+
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState<any>(null);
+
+  const [openCreateForm, setOpenCreateForm] = useState(false);
+  const [openEditForm, setOpenEditForm] = useState(false);
+  const [editRow, setEditRow] = useState<any>(null);
+  const [editLoading, setEditLoading] = useState(false);
+  const [openBulkModal, setOpenBulkModal] = useState(false);
+
+  const [editForm, setEditForm] = useState({
+    country_id: "",
+    state_id: "",
+    city_name: "",
+    is_active: false,
+  });
+
+  const fetchData = useCallback(async (overrides: any = {}) => {
+    try {
+      setLoading(true);
+      const stateId = overrides.state_id ?? filterStateId;
+      const res = await masterAPI.getCities({
+        page: overrides.page ?? page,
+        limit: overrides.limit ?? limit,
+        search: overrides.search ?? search,
+        ...(stateId ? { state_id: stateId } : {}),
+      });
+      if (res.status && res.data) {
+        setData(res.data);
+        setTotal(res.pagination?.total || res.data.length);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, limit, search, filterStateId]);
+
+  useEffect(() => { fetchData(); }, []);
+
+  const handleToggle = async (newValue: boolean, row: any) => {
+    try {
+      await masterAPI.updateCity(row.city_id, { is_active: newValue });
+      fetchData();
+    } catch (err) { }
+  };
+
+  const { handleBulkActivate, handleBulkDeactivate } = makeIsActiveBulkHandlers(
+    (id, data) => masterAPI.updateCity(id, data),
+    {
+      onSuccess: () => {
+        setSuccessOverlay(true);
+        setTimeout(() => { setSuccessOverlay(false); fetchData(); }, 1500);
+      },
+      onError: () => {
+        setFailedOverlay(true);
+        setTimeout(() => setFailedOverlay(false), 3000);
+      },
+    }
+  );
+
+  const handleBulkDelete = async (ids: any[]) => {
+    try {
+      await Promise.all(ids.map((id) => masterAPI.deleteCity(id)));
+      setSuccessOverlay(true);
+      setTimeout(() => { setSuccessOverlay(false); fetchData(); }, 1500);
+    } catch {
+      setFailedOverlay(true);
+      setTimeout(() => setFailedOverlay(false), 3000);
+    }
+  };
+
+  const handleDelete = (row: any) => {
+    setDeleteId(row.city_id);
+    setOpenDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await masterAPI.deleteCity(deleteId);
+      setOpenDeleteModal(false);
+      setSuccessOverlay(true);
+      setTimeout(() => { setSuccessOverlay(false); fetchData(); }, 1500);
+    } catch (error) {
+      setFailedOverlay(true); setTimeout(() => setFailedOverlay(false), 3000);
+    }
+  };
+
+  const handleEdit = (row: any) => {
+    setEditRow(row);
+    setEditForm({
+      country_id: row.country_id || "",
+      state_id: row.state_id || "",
+      city_name: row.city_name || "",
+      is_active: row.is_active,
+    });
+    setOpenEditForm(true);
+  };
+
+  const handleUpdateSubmit = async () => {
+    setEditLoading(true);
+    try {
+      const payload = { ...editForm };
+      const response = await masterAPI.updateCity(editRow.city_id, payload);
+      if (response && response.status) {
+        setSuccessOverlay(true);
+        setTimeout(() => {
+          setSuccessOverlay(false); setOpenEditForm(false); setEditRow(null); fetchData();
+        }, 2000);
+      } else {
+        setFailedOverlay(true); setTimeout(() => setFailedOverlay(false), 3000);
+      }
+    } catch (err) { setFailedOverlay(true); setTimeout(() => setFailedOverlay(false), 3000); }
+    finally { setEditLoading(false); }
+  };
+
+  return (
+    <div className="space-y-6">
+
+      <SuccessOverlay show={successOverlay} onFinish={() => setSuccessOverlay(false)} title="Success" subtitle="Saved successfully." />
+      <FailedOverlay show={failedOverlay} title="Failed" subtitle="Unable to save changes." onFinish={() => setFailedOverlay(false)} />
+
+      <Form
+        showMe={openCreateForm}
+        cols={2} card title="Add Cities" subtitle="Create a new entry"
+        onSubmit={async (formData, values) => {
+          const payload = {
+            state_id: values.state_id,
+            city_name: values.city_name,
+            is_active: values.is_active,
+          };
+          const response = await masterAPI.createCity(payload);
+          if (response && response.status) {
+            setSuccessOverlay(true);
+            setTimeout(() => { setSuccessOverlay(false); setOpenCreateForm(false); fetchData(); }, 2000);
+          } else {
+            setFailedOverlay(true); setTimeout(() => setFailedOverlay(false), 3000);
+          }
+        }}
+        onReset={() => setOpenCreateForm(false)}
+        submitLabel="Create" showReset loading={false}
+      >
+        <AsyncSelect
+          name="country_id"
+          title="Country"
+          resource="countries"
+          filters={{ limit: 'all' }}
+          value={selectedCountry}
+          onChange={(e: any) => {
+            setSelectedCountry(e.target.value);
+            setSelectedState(""); // Reset child
+          }}
+        />
+        <AsyncSelect
+          name="state_id"
+          title="State"
+          resource="states"
+          filters={selectedCountry ? { country_id: selectedCountry, limit: 'all' } : { limit: 'all' }}
+          disabled={!selectedCountry}
+          required
+          value={selectedState}
+          onChange={(e: any) => setSelectedState(e.target.value)}
+        />
+        <Input name="city_name" title="City Name" required />
+        <Toggle name="is_active" title="Status" defaultChecked />
+      </Form>
+
+      {editRow && (
+        <Form
+          showMe={openEditForm}
+          cols={2} card title="Edit Entry" subtitle="Modifying record"
+          onSubmit={handleUpdateSubmit}
+          onReset={() => { setOpenEditForm(false); setEditRow(null); }}
+          submitLabel="Save Changes" showReset loading={editLoading}
+        >
+          <AsyncSelect
+            name="country_id"
+            title="Country"
+            resource="countries"
+            filters={{ limit: 'all' }}
+            value={editForm.country_id}
+            onChange={(e: any) => setEditForm(p => ({ ...p, country_id: e.target.value, state_id: "" }))}
+          />
+          <AsyncSelect
+            name="state_id"
+            title="State"
+            resource="states"
+            filters={editForm.country_id ? { country_id: editForm.country_id, limit: 'all' } : { limit: 'all' }}
+            disabled={!editForm.country_id}
+            required
+            value={editForm.state_id}
+            onChange={(e: any) => setEditForm(p => ({ ...p, state_id: e.target.value }))}
+          />
+          <Input name="city_name" title="City Name" required value={editForm.city_name} onChange={(e) => setEditForm(p => ({ ...p, city_name: e.target.value }))} />
+          <Toggle name="is_active" title="Status" checked={editForm.is_active} onChange={(v) => setEditForm(p => ({ ...p, is_active: v }))} />
+        </Form>
+      )}
+
+      <PaginatedTable
+        showMe={!openCreateForm && !openEditForm}
+        title="Cities" badge="Settings" subtitle={`${total} records found`}
+        data={data} total={total} loading={loading} page={page} limit={limit}
+        onPageChange={(p) => { setPage(p); fetchData({ page: p }); }}
+        onLimitChange={(l) => { setLimit(l); fetchData({ limit: l, page: 1 }); }}
+        onSort={() => { }}
+        onSearch={(v) => { setSearch(v); fetchData({ search: v, page: 1 }); }}
+        searchValue={search}
+        showSearch
+        showFilter showAdd={false} showExport showRefresh onRefresh={() => fetchData()} rowKey="city_id"
+        headerActions={
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setOpenBulkModal(true)}
+              className="cursor-pointer inline-flex items-center gap-2 px-3 py-1 text-xs rounded-lg transition-all border active:bg-[#e2e8f0] text-[#475569] hover:text-[#0f172a] hover:bg-[#f1f5f9] border-[#e2e8f0] hover:border-[#e2e8f0]"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+              Upload via Excel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedCountry("");
+                setSelectedState("");
+                setOpenCreateForm(true);
+              }}
+              className="cursor-pointer inline-flex items-center gap-2 px-3 py-1 text-xs rounded-lg transition-all border active:bg-[#e2e8f0] text-[#475569] hover:text-[#0f172a] hover:bg-[#f1f5f9] border-[#e2e8f0] hover:border-[#e2e8f0]"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Add New
+            </button>
+          </div>
+        }
+      >
+        <Filters>
+          <DropdownFilter
+            value={filterCountryId}
+            onChange={(v: string) => {
+              setFilterCountryId(v);
+              setFilterStateId("");
+              setPage(1);
+              fetchData({ page: 1, state_id: "" });
+            }}
+            placeholder="All Countries"
+            options={geoOptions.countries}
+          />
+          <DropdownFilter
+            value={filterStateId}
+            onChange={(v: string) => {
+              setFilterStateId(v);
+              setPage(1);
+              fetchData({ page: 1, state_id: v });
+            }}
+            placeholder="All States"
+            options={geoOptions.states}
+          />
+        </Filters>
+        <Column header="SL" type="serial" />
+        <Column header="City Name" dataKey="city_name" sortable />
+        <Column header="State" dataKey="state_name" sortable />
+        <Column header="Country" dataKey="country_name" sortable />
+        <Column header="Status" dataKey="is_active" type="toggle" onToggle={handleToggle} />
+        <Column
+          header="Action"
+          dataKey="_actions"
+          type="actions"
+          align="right"
+          actions={buildBulkCrudActions({
+            onEdit: handleEdit,
+            onActivateRow: (row) => { void handleToggle(true, row); },
+            onDeactivateRow: (row) => { void handleToggle(false, row); },
+            onBulkActivate: handleBulkActivate,
+            onBulkDeactivate: handleBulkDeactivate,
+            onDeleteRow: handleDelete,
+            onBulkDelete: handleBulkDelete,
+          })}
+        />
+      </PaginatedTable>
+
+      <Modal openModal={openDeleteModal} setOpenModal={setOpenDeleteModal}>
+        <div className="p-2 bg-[#ffffff] rounded-2xl w-full max-w-sm mx-auto text-center">
+          <div className="w-12 h-12 bg-[#fef2f2] rounded-xl flex items-center justify-center mx-auto mb-4">
+            <Trash2 className="w-6 h-6 text-[#7b5757]" />
+          </div>
+          <h2 className="text-[16px] font-bold">Delete Record?</h2>
+          <p className="text-[12px] text-[#5c6a7f] mt-2">This action cannot be undone. Are you sure you want to delete this city?</p>
+          <div className="mt-6 flex gap-2.5">
+            <button onClick={() => setOpenDeleteModal(false)} className="flex-1 py-2.5 rounded-xl bg-[#f1f5f9] font-semibold text-[13px]">Cancel</button>
+            <button onClick={confirmDelete} className="flex-1 py-2.5 rounded-xl bg-[#fef2f2] text-[#ffffff] font-semibold text-[13px]">Delete Permanent</button>
+          </div>
+        </div>
+      </Modal>
+
+      <BulkUploadModal
+        open={openBulkModal}
+        onClose={() => setOpenBulkModal(false)}
+        templateFileName="cities_template.xlsx"
+        columns={["state_id", "city_name", "is_active"]}
+        exampleRow={[1, "Mumbai", "TRUE"]}
+        columnDescription="state_id (numeric ID), city_name, is_active (TRUE/FALSE)"
+        onUpload={async (rows) => {
+          const errors: string[] = [];
+          let success = 0;
+          for (let i = 0; i < rows.length; i++) {
+            const r = rows[i];
+            const rowNum = i + 2;
+            try {
+              const res = await masterAPI.createCity({
+                state_id: parseInt(String(r.state_id), 10),
+                city_name: r.city_name || "",
+                is_active: String(r.is_active ?? "TRUE").toUpperCase() !== "FALSE",
+              });
+              if (res?.status) success++;
+              else errors.push(`Row ${rowNum}: ${res?.message || "Failed"}`);
+            } catch (err: any) {
+              errors.push(`Row ${rowNum}: ${err?.message || "Error"}`);
+            }
+          }
+          if (success > 0) fetchData();
+          return { success, failed: errors.length, errors };
+        }}
+      />
+    </div>
+  );
+}
+

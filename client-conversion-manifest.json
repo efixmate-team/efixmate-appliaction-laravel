@@ -1,0 +1,1765 @@
+{
+    "generatedAt":  "2026-07-05T02:30:42.4471652+05:30",
+    "legacySnapshot":  "tools/legacy-client-source",
+    "assetTarget":  "public/client",
+    "convertedVueFiles":  298,
+    "routeCount":  44,
+    "routes":  [
+                   {
+                       "uri":  "/profile/coupons",
+                       "source":  "client/app/(user)/profile/coupons/page.tsx",
+                       "area":  "user",
+                       "title":  "Coupons"
+                   },
+                   {
+                       "uri":  "/profile/payments",
+                       "source":  "client/app/(user)/profile/payments/page.tsx",
+                       "area":  "user",
+                       "title":  "Payments"
+                   },
+                   {
+                       "uri":  "/profile/referral",
+                       "source":  "client/app/(user)/profile/referral/page.tsx",
+                       "area":  "user",
+                       "title":  "Referral"
+                   },
+                   {
+                       "uri":  "/technician/login",
+                       "source":  "client/app/technician/login/page.tsx",
+                       "area":  "technician",
+                       "title":  "Login"
+                   },
+                   {
+                       "uri":  "/technician/register",
+                       "source":  "client/app/technician/register/page.tsx",
+                       "area":  "technician",
+                       "title":  "Register"
+                   },
+                   {
+                       "uri":  "/about-us",
+                       "source":  "client/app/(public)/(landing)/(company)/about-us/page.tsx",
+                       "area":  "public",
+                       "title":  "About Us"
+                   },
+                   {
+                       "uri":  "/account-deletion-policy",
+                       "source":  "client/app/(public)/(landing)/(legal)/account-deletion-policy/page.tsx",
+                       "area":  "public",
+                       "title":  "Account Deletion Policy"
+                   },
+                   {
+                       "uri":  "/become-a-partner",
+                       "source":  "client/app/(public)/(landing)/become-a-partner/page.tsx",
+                       "area":  "public",
+                       "title":  "Become A Partner"
+                   },
+                   {
+                       "uri":  "/bookings",
+                       "source":  "client/app/(user)/bookings/page.tsx",
+                       "area":  "user",
+                       "title":  "Bookings"
+                   },
+                   {
+                       "uri":  "/cancellation-policy",
+                       "source":  "client/app/(public)/(landing)/(legal)/cancellation-policy/page.tsx",
+                       "area":  "public",
+                       "title":  "Cancellation Policy"
+                   },
+                   {
+                       "uri":  "/cart",
+                       "source":  "client/app/(user)/cart/page.tsx",
+                       "area":  "user",
+                       "title":  "Cart"
+                   },
+                   {
+                       "uri":  "/contact-us",
+                       "source":  "client/app/(public)/(landing)/(company)/contact-us/page.tsx",
+                       "area":  "public",
+                       "title":  "Contact Us"
+                   },
+                   {
+                       "uri":  "/cookie-policy",
+                       "source":  "client/app/(public)/(landing)/(legal)/cookie-policy/page.tsx",
+                       "area":  "public",
+                       "title":  "Cookie Policy"
+                   },
+                   {
+                       "uri":  "/disclaimer",
+                       "source":  "client/app/(public)/(landing)/(legal)/disclaimer/page.tsx",
+                       "area":  "public",
+                       "title":  "Disclaimer"
+                   },
+                   {
+                       "uri":  "/faq",
+                       "source":  "client/app/(public)/(landing)/faq/page.tsx",
+                       "area":  "public",
+                       "title":  "Faq"
+                   },
+                   {
+                       "uri":  "/grievance-policy",
+                       "source":  "client/app/(public)/(landing)/(legal)/grievance-policy/page.tsx",
+                       "area":  "public",
+                       "title":  "Grievance Policy"
+                   },
+                   {
+                       "uri":  "/login",
+                       "source":  "client/app/(auth)/login/page.tsx",
+                       "area":  "auth",
+                       "title":  "Login"
+                   },
+                   {
+                       "uri":  "/offers",
+                       "source":  "client/app/(user)/offers/page.tsx",
+                       "area":  "user",
+                       "title":  "Offers"
+                   },
+                   {
+                       "uri":  "/payment",
+                       "source":  "client/app/(user)/payment/page.tsx",
+                       "area":  "user",
+                       "title":  "Payment"
+                   },
+                   {
+                       "uri":  "/privacy-policy",
+                       "source":  "client/app/(public)/(landing)/(legal)/privacy-policy/page.tsx",
+                       "area":  "public",
+                       "title":  "Privacy Policy"
+                   },
+                   {
+                       "uri":  "/profile",
+                       "source":  "client/app/(user)/profile/page.tsx",
+                       "area":  "user",
+                       "title":  "Profile"
+                   },
+                   {
+                       "uri":  "/refund-policy",
+                       "source":  "client/app/(public)/(landing)/(legal)/refund-policy/page.tsx",
+                       "area":  "public",
+                       "title":  "Refund Policy"
+                   },
+                   {
+                       "uri":  "/safety-and-verification",
+                       "source":  "client/app/(public)/(landing)/(legal)/safety-and-verification/page.tsx",
+                       "area":  "public",
+                       "title":  "Safety And Verification"
+                   },
+                   {
+                       "uri":  "/service-partner-agreement",
+                       "source":  "client/app/(public)/(landing)/(legal)/service-partner-agreement/page.tsx",
+                       "area":  "public",
+                       "title":  "Service Partner Agreement"
+                   },
+                   {
+                       "uri":  "/services",
+                       "source":  "client/app/(public)/services/page.tsx",
+                       "area":  "public",
+                       "title":  "Services"
+                   },
+                   {
+                       "uri":  "/services-in",
+                       "source":  "client/app/(public)/services-in/page.tsx",
+                       "area":  "public",
+                       "title":  "Services In"
+                   },
+                   {
+                       "uri":  "/technician",
+                       "source":  "client/app/technician/page.tsx",
+                       "area":  "technician",
+                       "title":  "Technician"
+                   },
+                   {
+                       "uri":  "/terms-and-conditions",
+                       "source":  "client/app/(public)/(landing)/(legal)/terms-and-conditions/page.tsx",
+                       "area":  "public",
+                       "title":  "Terms And Conditions"
+                   },
+                   {
+                       "uri":  "/warranty-policy",
+                       "source":  "client/app/(public)/(landing)/(legal)/warranty-policy/page.tsx",
+                       "area":  "public",
+                       "title":  "Warranty Policy"
+                   },
+                   {
+                       "uri":  "/bookings/{bookingId}/track",
+                       "source":  "client/app/(user)/bookings/[bookingId]/track/page.tsx",
+                       "area":  "user",
+                       "title":  "Track"
+                   },
+                   {
+                       "uri":  "/technician/{technicianId}/Completed-Jobs",
+                       "source":  "client/app/technician/[technicianId]/Completed-Jobs/page.tsx",
+                       "area":  "technician",
+                       "title":  "Completed Jobs"
+                   },
+                   {
+                       "uri":  "/technician/{technicianId}/dashboard",
+                       "source":  "client/app/technician/[technicianId]/dashboard/page.tsx",
+                       "area":  "technician",
+                       "title":  "Dashboard"
+                   },
+                   {
+                       "uri":  "/technician/{technicianId}/Earnings",
+                       "source":  "client/app/technician/[technicianId]/Earnings/page.tsx",
+                       "area":  "technician",
+                       "title":  "Earnings"
+                   },
+                   {
+                       "uri":  "/technician/{technicianId}/Job-Requests",
+                       "source":  "client/app/technician/[technicianId]/Job-Requests/page.tsx",
+                       "area":  "technician",
+                       "title":  "Job Requests"
+                   },
+                   {
+                       "uri":  "/technician/{technicianId}/profile",
+                       "source":  "client/app/technician/[technicianId]/profile/page.tsx",
+                       "area":  "technician",
+                       "title":  "Profile"
+                   },
+                   {
+                       "uri":  "/bookings/{bookingId}",
+                       "source":  "client/app/(user)/bookings/[bookingId]/page.tsx",
+                       "area":  "user",
+                       "title":  "BookingId"
+                   },
+                   {
+                       "uri":  "/login/{uid}",
+                       "source":  "client/app/(auth)/login/[uid]/page.tsx",
+                       "area":  "auth",
+                       "title":  "Uid"
+                   },
+                   {
+                       "uri":  "/service/{serviceId}",
+                       "source":  "client/app/(user)/service/[serviceId]/page.tsx",
+                       "area":  "user",
+                       "title":  "ServiceId"
+                   },
+                   {
+                       "uri":  "/services-in/{city}",
+                       "source":  "client/app/(public)/services-in/[city]/page.tsx",
+                       "area":  "public",
+                       "title":  "City"
+                   },
+                   {
+                       "uri":  "/{slug}",
+                       "source":  "client/app/(public)/(landing)/[slug]/page.tsx",
+                       "area":  "public",
+                       "title":  "Slug"
+                   },
+                   {
+                       "uri":  "/services-in/{city}/{service}",
+                       "source":  "client/app/(public)/services-in/[city]/[service]/page.tsx",
+                       "area":  "public",
+                       "title":  "Service"
+                   },
+                   {
+                       "uri":  "/{slug}/{service}",
+                       "source":  "client/app/(public)/(seo)/[slug]/[service]/page.tsx",
+                       "area":  "public",
+                       "title":  "Service"
+                   },
+                   {
+                       "uri":  "/services-in/{city}/{service}/{detail}",
+                       "source":  "client/app/(public)/services-in/[city]/[service]/[detail]/page.tsx",
+                       "area":  "public",
+                       "title":  "Detail"
+                   },
+                   {
+                       "uri":  "/{slug}/{service}/{detail}",
+                       "source":  "client/app/(public)/(seo)/[slug]/[service]/[detail]/page.tsx",
+                       "area":  "public",
+                       "title":  "Detail"
+                   }
+               ],
+    "files":  [
+                  {
+                      "source":  "app/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/not-found.tsx",
+                      "target":  "resources/js/MigratedClient/app/not-found.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(auth)/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/(auth)/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(auth)/login/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(auth)/login/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(auth)/login/[uid]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(auth)/login/[uid]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/HomePageView.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/HomePageView.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(company)/about-us/AboutPageView.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(company)/about-us/AboutPageView.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(company)/about-us/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(company)/about-us/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(company)/contact-us/ContactPageView.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(company)/contact-us/ContactPageView.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(company)/contact-us/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(company)/contact-us/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/account-deletion-policy/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/account-deletion-policy/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/cancellation-policy/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/cancellation-policy/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/cookie-policy/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/cookie-policy/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/disclaimer/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/disclaimer/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/grievance-policy/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/grievance-policy/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/privacy-policy/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/privacy-policy/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/refund-policy/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/refund-policy/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/safety-and-verification/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/safety-and-verification/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/service-partner-agreement/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/service-partner-agreement/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/terms-and-conditions/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/terms-and-conditions/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/(legal)/warranty-policy/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/(legal)/warranty-policy/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/become-a-partner/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/become-a-partner/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/faq/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/faq/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/[slug]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/[slug]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/BecomeAPartnerView.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/BecomeAPartnerView.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/FaqView.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/FaqView.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/HomeAuthShell.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/HomeAuthShell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/HomeBannerCarousel.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/HomeBannerCarousel.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/LandingChromeProvider.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/LandingChromeProvider.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/LandingFooter.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/LandingFooter.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/LandingHeader.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/LandingHeader.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/LandingHomeFooter.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/LandingHomeFooter.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/LandingNavHeroShell.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/LandingNavHeroShell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/LandingSectionHeading.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/LandingSectionHeading.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/LandingSubPage.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/LandingSubPage.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/LegalDocumentPage.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/LegalDocumentPage.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/LegalPageLayout.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/LegalPageLayout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(landing)/_components/SimpleLegalPage.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(landing)/_components/SimpleLegalPage.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(seo)/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(seo)/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(seo)/[slug]/[service]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(seo)/[slug]/[service]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/(seo)/[slug]/[service]/[detail]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/(seo)/[slug]/[service]/[detail]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/services/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/services/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/services/ServicesPageView.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/services/ServicesPageView.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/services-in/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/services-in/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/services-in/[city]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/services-in/[city]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/services-in/[city]/[service]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/services-in/[city]/[service]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(public)/services-in/[city]/[service]/[detail]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(public)/services-in/[city]/[service]/[detail]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/bookings/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/bookings/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/bookings/[bookingId]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/bookings/[bookingId]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/bookings/[bookingId]/track/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/bookings/[bookingId]/track/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/cart/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/cart/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/offers/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/offers/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/offers/_components/CouponCard.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/offers/_components/CouponCard.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/offers/_components/OffersHeroBanner.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/offers/_components/OffersHeroBanner.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/offers/_components/OffersSidebar.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/offers/_components/OffersSidebar.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/payment/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/payment/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/profile/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/profile/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/profile/coupons/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/profile/coupons/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/profile/payments/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/profile/payments/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/profile/referral/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/profile/referral/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/service/[serviceId]/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/service/[serviceId]/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/service/[serviceId]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/service/[serviceId]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/(user)/_components/LocationModal.tsx",
+                      "target":  "resources/js/MigratedClient/app/(user)/_components/LocationModal.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/BulkUploadModal.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/BulkUploadModal.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/PageHeader.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/PageHeader.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/PlaceholderPage.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/PlaceholderPage.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/ScopeSelector.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/ScopeSelector.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/SetupGuideButton.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/SetupGuideButton.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/AsyncSelect.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/AsyncSelect.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/Card.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/Card.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/Checkbox.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/Checkbox.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/DatePicker.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/DatePicker.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/DateRange.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/DateRange.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/FileUpload.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/FileUpload.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/Form.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/Form.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/Input.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/Input.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/MultiSelect.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/MultiSelect.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/NumberStepper.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/NumberStepper.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/RadioGroup.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/RadioGroup.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/RangeSlider.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/RangeSlider.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/Select.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/Select.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/Textarea.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/Textarea.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Forms/Toggle.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Forms/Toggle.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Loader/TechnicianAssigning.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Loader/TechnicianAssigning.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Overlay/Failedoverlay.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Overlay/Failedoverlay.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Overlay/Successoverlay.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Overlay/Successoverlay.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Sidebar/Sidebar.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Sidebar/Sidebar.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/Paginatedtable.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/Paginatedtable.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/cells/ActionsCell.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/cells/ActionsCell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/cells/AvatarCell.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/cells/AvatarCell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/cells/ChipsCell.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/cells/ChipsCell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/cells/LinkCell.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/cells/LinkCell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/cells/StatusCell.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/cells/StatusCell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/cells/TextCell.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/cells/TextCell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/cells/ToggleCell.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/cells/ToggleCell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/filters/DateFilter.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/filters/DateFilter.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/filters/DropdownFilter.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/filters/DropdownFilter.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/filters/SearchFilter.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/filters/SearchFilter.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/filters/ToggleFilter.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/filters/ToggleFilter.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/pagination/Pagination.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/pagination/Pagination.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/table/Column.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/table/Column.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/table/FilterBar.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/table/FilterBar.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/table/Filters.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/table/Filters.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/table/TableBody.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/table/TableBody.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/table/TableHeader.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/table/TableHeader.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/toolbar/ExportMenu.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/toolbar/ExportMenu.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/toolbar/TableTitle.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/toolbar/TableTitle.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/toolbar/Toolbar.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/toolbar/Toolbar.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(components)/Table/toolbar/ToolbarButton.jsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(components)/Table/toolbar/ToolbarButton.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/(lib)/bulkExcelUpload.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/(lib)/bulkExcelUpload.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/admin-management/admins/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/admin-management/admins/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/admin-management/admins/[adminId]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/admin-management/admins/[adminId]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/admin-management/menus/MenuFormDrawer.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/admin-management/menus/MenuFormDrawer.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/admin-management/menus/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/admin-management/menus/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/admin-management/permissions/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/admin-management/permissions/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/admin-management/roles/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/admin-management/roles/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/booking-management/bookings/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/booking-management/bookings/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/booking-management/bookings/[id]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/booking-management/bookings/[id]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/booking-management/workflow/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/booking-management/workflow/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/booking-management/workflow/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/booking-management/workflow/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/booking-management/workflow/(components)/BookingShell.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/booking-management/workflow/(components)/BookingShell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/booking-management/workflow/(components)/BookingTimeline.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/booking-management/workflow/(components)/BookingTimeline.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/booking-management/workflow/(components)/DispatchModal.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/booking-management/workflow/(components)/DispatchModal.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/booking-management/workflow/(components)/FraudIndicators.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/booking-management/workflow/(components)/FraudIndicators.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/booking-management/workflow/[bookingId]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/booking-management/workflow/[bookingId]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/cms/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/cms/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/cms/globals/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/cms/globals/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/cms/[slug]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/cms/[slug]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/contact-inquiries/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/contact-inquiries/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/contact-inquiries/(components)/ContactInquiryShell.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/contact-inquiries/(components)/ContactInquiryShell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/contact-inquiries/(components)/InquiryStatusBadge.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/contact-inquiries/(components)/InquiryStatusBadge.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/contact-inquiries/[inquiryId]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/contact-inquiries/[inquiryId]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/crm/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/crm/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/crm/(components)/ActivityTimeline.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/crm/(components)/ActivityTimeline.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/crm/(components)/CrmShell.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/crm/(components)/CrmShell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/crm/analytics/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/crm/analytics/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/crm/complaints/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/crm/complaints/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/crm/customers/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/crm/customers/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/crm/customers/[customerId]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/crm/customers/[customerId]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/crm/customers/[customerId]/(components)/BookingsPanel.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/crm/customers/[customerId]/(components)/BookingsPanel.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/crm/customers/[customerId]/(components)/CreateBookingWizard.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/crm/customers/[customerId]/(components)/CreateBookingWizard.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/crm/spam/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/crm/spam/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/dashboard/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/dashboard/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/(components)/DateRangeFilter.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/(components)/DateRangeFilter.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/(components)/FinanceShell.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/(components)/FinanceShell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/(components)/RevenueChart.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/(components)/RevenueChart.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/failed/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/failed/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/invoices/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/invoices/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/payouts/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/payouts/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/refunds/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/refunds/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/reports/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/reports/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/finance/wallet/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/finance/wallet/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/lookups/area-types/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/lookups/area-types/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/lookups/booking-types/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/lookups/booking-types/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/lookups/currencies/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/lookups/currencies/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/lookups/document-types/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/lookups/document-types/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/lookups/languages/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/lookups/languages/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/lookups/payment-modes/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/lookups/payment-modes/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/lookups/timezones/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/lookups/timezones/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/lookups/units/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/lookups/units/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/announcement-management/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/announcement-management/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/announcement-management/ScopeSelector.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/announcement-management/ScopeSelector.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/announcement-management/announcements/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/announcement-management/announcements/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/announcement-management/promotions/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/announcement-management/promotions/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/coupon-management/coupons/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/coupon-management/coupons/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/finance-management/charges/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/finance-management/charges/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/finance-management/commissions/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/finance-management/commissions/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/finance-management/discounts/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/finance-management/discounts/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/finance-management/taxes/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/finance-management/taxes/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/geography/areas/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/geography/areas/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/geography/areas/_MapPicker.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/geography/areas/_MapPicker.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/geography/areas/_PolygonPicker.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/geography/areas/_PolygonPicker.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/geography/areas/map/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/geography/areas/map/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/geography/areas/map/_AreasMap.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/geography/areas/map/_AreasMap.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/geography/cities/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/geography/cities/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/geography/countries/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/geography/countries/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/geography/states/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/geography/states/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/pricing-rules/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/pricing-rules/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/services-management/service-categories/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/services-management/service-categories/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/services-management/services/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/services-management/services/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/services-management/skills/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/services-management/skills/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/masters/time-slot-management/time-slots/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/masters/time-slot-management/time-slots/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/(components)/AdminNotificationBell.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/(components)/AdminNotificationBell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/(components)/ChannelBadge.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/(components)/ChannelBadge.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/(components)/DeliveryStatusBadge.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/(components)/DeliveryStatusBadge.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/(components)/DeliveryTable.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/(components)/DeliveryTable.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/(components)/EmptyState.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/(components)/EmptyState.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/(components)/ErrorAlert.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/(components)/ErrorAlert.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/(components)/LoadingBlock.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/(components)/LoadingBlock.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/(components)/NotificationShell.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/(components)/NotificationShell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/broadcast/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/broadcast/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/history/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/history/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/logs/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/logs/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/logs/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/logs/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/scheduled/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/scheduled/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/notifications/templates/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/notifications/templates/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/operations/audit/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/operations/audit/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/operations/bookings/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/operations/bookings/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/operations/live-dashboard/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/operations/live-dashboard/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/reports/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/reports/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/security/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/security/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/security/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/security/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/security/(components)/SecurityShell.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/security/(components)/SecurityShell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/security/2fa/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/security/2fa/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/security/alerts/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/security/alerts/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/security/ip-rules/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/security/ip-rules/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/security/sessions/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/security/sessions/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/settings/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/settings/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/settings/notifications/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/settings/notifications/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/settings/payments/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/settings/payments/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/settings/profile/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/settings/profile/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/(components)/PriorityBadge.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/(components)/PriorityBadge.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/(components)/SupportShell.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/(components)/SupportShell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/(components)/TableSkeleton.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/(components)/TableSkeleton.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/(components)/TicketChat.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/(components)/TicketChat.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/(components)/TicketStatusBadge.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/(components)/TicketStatusBadge.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/(components)/TicketTimeline.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/(components)/TicketTimeline.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/categories/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/categories/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/sla/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/sla/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/tickets/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/tickets/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/tickets/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/tickets/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/tickets/new/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/tickets/new/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/tickets/[ticketId]/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/tickets/[ticketId]/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/support/tickets/[ticketId]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/support/tickets/[ticketId]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/technician-management/applications/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/technician-management/applications/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/technician-management/referrals/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/technician-management/referrals/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/technician-management/technicians/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/technician-management/technicians/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/technician-management/technicians/[technicianId]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/technician-management/technicians/[technicianId]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/tracker/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/tracker/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/transactions/invoices/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/transactions/invoices/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/transactions/payments/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/transactions/payments/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/transactions/payouts/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/transactions/payouts/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/transactions/refunds/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/transactions/refunds/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/transactions/taxes/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/transactions/taxes/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/user-management/feedbacks/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/user-management/feedbacks/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/user-management/users/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/user-management/users/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/user-management/users/[customerId]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/user-management/users/[customerId]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/user-management/users/[customerId]/_AddressMapPicker.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/user-management/users/[customerId]/_AddressMapPicker.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/user-management/users/[customerId]/_ServiceCatalogCard.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/user-management/users/[customerId]/_ServiceCatalogCard.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/user-management/users/[customerId]/bookings/[bookingId]/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/user-management/users/[customerId]/bookings/[bookingId]/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/admin/user-management/users/[customerId]/create-booking/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/admin/user-management/users/[customerId]/create-booking/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/login/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/login/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/register/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/register/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/[technicianId]/layout.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/[technicianId]/layout.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/[technicianId]/Completed-Jobs/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/[technicianId]/Completed-Jobs/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/[technicianId]/dashboard/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/[technicianId]/dashboard/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/[technicianId]/Earnings/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/[technicianId]/Earnings/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/[technicianId]/Job-Requests/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/[technicianId]/Job-Requests/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/[technicianId]/profile/page.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/[technicianId]/profile/page.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "app/technician/_components/TechnicianFooter.tsx",
+                      "target":  "resources/js/MigratedClient/app/technician/_components/TechnicianFooter.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/BrandLogo.tsx",
+                      "target":  "resources/js/MigratedClient/components/BrandLogo.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/CookieConsent.tsx",
+                      "target":  "resources/js/MigratedClient/components/CookieConsent.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/PublicChromeProvider.tsx",
+                      "target":  "resources/js/MigratedClient/components/PublicChromeProvider.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/PublicHeader.tsx",
+                      "target":  "resources/js/MigratedClient/components/PublicHeader.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/PublicPageShell.tsx",
+                      "target":  "resources/js/MigratedClient/components/PublicPageShell.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/SiteFooter.tsx",
+                      "target":  "resources/js/MigratedClient/components/SiteFooter.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/AnimatedAmount.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/AnimatedAmount.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/CartDrawer.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/CartDrawer.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/CouponSection.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/CouponSection.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/ExpandableServiceCard.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/ExpandableServiceCard.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/LinePhotoUpload.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/LinePhotoUpload.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/PriceBreakdown.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/PriceBreakdown.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/QuantityStepper.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/QuantityStepper.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/ServiceAddModal.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/ServiceAddModal.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/ServiceConfigPanel.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/ServiceConfigPanel.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/SlotPicker.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/SlotPicker.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/StickyCartBar.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/StickyCartBar.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/booking/TrustBar.tsx",
+                      "target":  "resources/js/MigratedClient/components/booking/TrustBar.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/forms/FormInput.tsx",
+                      "target":  "resources/js/MigratedClient/components/forms/FormInput.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/ui/badge.tsx",
+                      "target":  "resources/js/MigratedClient/components/ui/badge.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/ui/button.tsx",
+                      "target":  "resources/js/MigratedClient/components/ui/button.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/ui/card.tsx",
+                      "target":  "resources/js/MigratedClient/components/ui/card.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/ui/tabs.tsx",
+                      "target":  "resources/js/MigratedClient/components/ui/tabs.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/user/AddressFormStep.tsx",
+                      "target":  "resources/js/MigratedClient/components/user/AddressFormStep.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/user/UserAvatar.tsx",
+                      "target":  "resources/js/MigratedClient/components/user/UserAvatar.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "components/user/UserLoginModal.tsx",
+                      "target":  "resources/js/MigratedClient/components/user/UserLoginModal.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "providers/AdminPermissionProvider.tsx",
+                      "target":  "resources/js/MigratedClient/providers/AdminPermissionProvider.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "providers/AuthProvider.tsx",
+                      "target":  "resources/js/MigratedClient/providers/AuthProvider.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "providers/LocationProvider.tsx",
+                      "target":  "resources/js/MigratedClient/providers/LocationProvider.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "providers/SettingsProvider.tsx",
+                      "target":  "resources/js/MigratedClient/providers/SettingsProvider.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "providers/TechnicianAuthProvider.tsx",
+                      "target":  "resources/js/MigratedClient/providers/TechnicianAuthProvider.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "providers/ToastProvider.tsx",
+                      "target":  "resources/js/MigratedClient/providers/ToastProvider.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "providers/UserAuthProvider.tsx",
+                      "target":  "resources/js/MigratedClient/providers/UserAuthProvider.vue",
+                      "kind":  "component"
+                  },
+                  {
+                      "source":  "src/features/security/components/StepUpDialog.tsx",
+                      "target":  "resources/js/MigratedClient/src/features/security/components/StepUpDialog.vue",
+                      "kind":  "component"
+                  }
+              ]
+}

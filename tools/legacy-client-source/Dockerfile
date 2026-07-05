@@ -1,0 +1,52 @@
+# client/Dockerfile
+
+# --- BUILD STAGE ---
+FROM node:22 AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm config set fetch-retry-maxtimeout 600000 \
+    && npm config set fetch-retry-mintimeout 100000 \
+    && npm config set registry https://registry.npmmirror.com
+RUN npm ci
+
+COPY . .
+
+ENV NEXT_TELEMETRY_DISABLED 1
+
+ARG BACKEND_URL
+ENV BACKEND_URL=$BACKEND_URL
+
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
+ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+
+ARG GOOGLE_MAPS_API_KEY
+ENV GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
+
+ARG JWT_SECRET
+ENV JWT_SECRET=$JWT_SECRET
+
+ARG NEXT_PUBLIC_FIREBASE_VAPID_KEY
+ENV NEXT_PUBLIC_FIREBASE_VAPID_KEY=$NEXT_PUBLIC_FIREBASE_VAPID_KEY
+
+RUN npm run build
+
+
+# --- RUNNER STAGE ---
+FROM node:22
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+COPY --from=builder /app ./
+
+EXPOSE 3000
+
+# 🔥 IMPORTANT: bind to 127.0.0.1
+CMD ["npm", "start", "--", "-H", "127.0.0.1"]

@@ -11,6 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             Illuminate\Support\Facades\Route::middleware('web')
                 ->group(__DIR__.'/../routes/admin.php');
+            Illuminate\Support\Facades\Route::middleware('web')
+                ->group(__DIR__.'/../routes/client.php');
         },
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
@@ -28,3 +30,4 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*'),
         );
     })->create();
+

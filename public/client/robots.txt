@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin
+Disallow: /api/
+Disallow: /technician/
+
+Allow: /
+
+Sitemap: https://efixmate.com/sitemap.xml

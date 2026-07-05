@@ -16,7 +16,8 @@ class CustomerAddress extends Model
     protected $fillable = [
         'customer_id', 'address', 'city', 'state', 'country', 'pincode', 'latitude',
         'longitude', 'area_id', 'is_active', 'created_by', 'created_at', 'updated_by',
-        'updated_at', 'is_selected',
+        'updated_at', 'is_selected', 'address_type', 'house_no', 'landmark',
+        'contact_name', 'contact_phone',
     ];
 
     protected $casts = [

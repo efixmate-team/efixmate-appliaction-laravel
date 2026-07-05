@@ -3,6 +3,8 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "audit:client-migration": "node tools/client-migration-audit.mjs",
+        "audit:client-migration:strict": "node tools/client-migration-audit.mjs --fail-on-placeholders",
         "build": "vite build",
         "dev": "vite"
     },

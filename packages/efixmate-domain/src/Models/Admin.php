@@ -4,15 +4,19 @@ namespace Efixmate\Domain\Models;
 
 use Efixmate\Domain\Concerns\HasIsDeletedFlag;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * Plain data model — deliberately does not implement Authenticatable here so this
  * shared package stays guard-agnostic. The outer (Inertia) app's app/Models/Admin.php
- * extends this and adds Authenticatable for session-guard login (see Stage 4).
+ * extends this and adds Authenticatable for session-guard login (see the foundation
+ * phase's Stage 4). HasApiTokens is added here (rather than only in a v1 subclass)
+ * so v1 can issue Sanctum tokens for admin-gated API parity routes (see Stage 1/6
+ * of the full-server-parity plan) without needing a second Admin model.
  */
 class Admin extends Model
 {
-    use HasIsDeletedFlag;
+    use HasApiTokens, HasIsDeletedFlag;
 
     protected $table = 'efm_admins';
     protected $primaryKey = 'admin_id';

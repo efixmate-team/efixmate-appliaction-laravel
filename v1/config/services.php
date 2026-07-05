@@ -35,4 +35,6 @@ return [
         ],
     ],
 
+    'cdn_base_url' => env('CDN_BASE_URL'),
+
 ];

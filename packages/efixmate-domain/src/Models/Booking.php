@@ -76,4 +76,14 @@ class Booking extends Model
     {
         return $this->hasOne(BookingPriceBreakdown::class, 'booking_id', 'booking_id');
     }
+
+    public function commissionSnapshot()
+    {
+        return $this->hasOne(BookingCommissionSnapshot::class, 'booking_id', 'booking_id');
+    }
+
+    public function statusLogs()
+    {
+        return $this->hasMany(BookingStatusLog::class, 'booking_id', 'booking_id');
+    }
 }

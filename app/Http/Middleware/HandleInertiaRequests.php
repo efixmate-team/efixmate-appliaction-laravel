@@ -37,7 +37,11 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            //
+            'auth' => [
+                // Bearer token for the separate v1 API app — see AdminLoginController;
+                // only present once an admin session has logged in.
+                'v1ApiToken' => $request->session()->get('v1_admin_token'),
+            ],
         ];
     }
 }

@@ -1,0 +1,573 @@
+﻿{
+    "generatedAt":  "2026-07-05T02:11:34.1233924+05:30",
+    "oldProject":  "E:\\Projects\\efixmate",
+    "newProject":  "E:\\Projects\\efixmate-appliaction-laravel",
+    "legacyPageCount":  137,
+    "apiCompatibility":  [
+                             "admin",
+                             "user",
+                             "technician",
+                             "booking",
+                             "lookup",
+                             "master",
+                             "pricing",
+                             "public",
+                             "webapp",
+                             "areas",
+                             "assign-technician",
+                             "check-uid",
+                             "logout",
+                             "health",
+                             "metrics"
+                         ],
+    "pages":  [
+                  {
+                      "Source":  "client/app/admin/masters/geography/areas/map/page.tsx",
+                      "Uri":  "/admin/masters/geography/areas/map"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/announcement-management/announcements/page.tsx",
+                      "Uri":  "/admin/masters/announcement-management/announcements"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/announcement-management/promotions/page.tsx",
+                      "Uri":  "/admin/masters/announcement-management/promotions"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/coupon-management/coupons/page.tsx",
+                      "Uri":  "/admin/masters/coupon-management/coupons"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/finance-management/charges/page.tsx",
+                      "Uri":  "/admin/masters/finance-management/charges"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/finance-management/commissions/page.tsx",
+                      "Uri":  "/admin/masters/finance-management/commissions"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/finance-management/discounts/page.tsx",
+                      "Uri":  "/admin/masters/finance-management/discounts"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/finance-management/taxes/page.tsx",
+                      "Uri":  "/admin/masters/finance-management/taxes"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/geography/areas/page.tsx",
+                      "Uri":  "/admin/masters/geography/areas"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/geography/cities/page.tsx",
+                      "Uri":  "/admin/masters/geography/cities"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/geography/countries/page.tsx",
+                      "Uri":  "/admin/masters/geography/countries"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/geography/states/page.tsx",
+                      "Uri":  "/admin/masters/geography/states"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/services-management/service-categories/page.tsx",
+                      "Uri":  "/admin/masters/services-management/service-categories"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/services-management/services/page.tsx",
+                      "Uri":  "/admin/masters/services-management/services"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/services-management/skills/page.tsx",
+                      "Uri":  "/admin/masters/services-management/skills"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/time-slot-management/time-slots/page.tsx",
+                      "Uri":  "/admin/masters/time-slot-management/time-slots"
+                  },
+                  {
+                      "Source":  "client/app/admin/support/tickets/new/page.tsx",
+                      "Uri":  "/admin/support/tickets/new"
+                  },
+                  {
+                      "Source":  "client/app/admin/admin-management/admins/page.tsx",
+                      "Uri":  "/admin/admin-management/admins"
+                  },
+                  {
+                      "Source":  "client/app/admin/admin-management/menus/page.tsx",
+                      "Uri":  "/admin/admin-management/menus"
+                  },
+                  {
+                      "Source":  "client/app/admin/admin-management/permissions/page.tsx",
+                      "Uri":  "/admin/admin-management/permissions"
+                  },
+                  {
+                      "Source":  "client/app/admin/admin-management/roles/page.tsx",
+                      "Uri":  "/admin/admin-management/roles"
+                  },
+                  {
+                      "Source":  "client/app/admin/booking-management/workflow/page.tsx",
+                      "Uri":  "/admin/booking-management/workflow"
+                  },
+                  {
+                      "Source":  "client/app/admin/cms/globals/page.tsx",
+                      "Uri":  "/admin/cms/globals"
+                  },
+                  {
+                      "Source":  "client/app/admin/crm/analytics/page.tsx",
+                      "Uri":  "/admin/crm/analytics"
+                  },
+                  {
+                      "Source":  "client/app/admin/crm/complaints/page.tsx",
+                      "Uri":  "/admin/crm/complaints"
+                  },
+                  {
+                      "Source":  "client/app/admin/crm/customers/page.tsx",
+                      "Uri":  "/admin/crm/customers"
+                  },
+                  {
+                      "Source":  "client/app/admin/crm/spam/page.tsx",
+                      "Uri":  "/admin/crm/spam"
+                  },
+                  {
+                      "Source":  "client/app/admin/finance/failed/page.tsx",
+                      "Uri":  "/admin/finance/failed"
+                  },
+                  {
+                      "Source":  "client/app/admin/finance/invoices/page.tsx",
+                      "Uri":  "/admin/finance/invoices"
+                  },
+                  {
+                      "Source":  "client/app/admin/finance/payouts/page.tsx",
+                      "Uri":  "/admin/finance/payouts"
+                  },
+                  {
+                      "Source":  "client/app/admin/finance/refunds/page.tsx",
+                      "Uri":  "/admin/finance/refunds"
+                  },
+                  {
+                      "Source":  "client/app/admin/finance/reports/page.tsx",
+                      "Uri":  "/admin/finance/reports"
+                  },
+                  {
+                      "Source":  "client/app/admin/finance/wallet/page.tsx",
+                      "Uri":  "/admin/finance/wallet"
+                  },
+                  {
+                      "Source":  "client/app/admin/lookups/area-types/page.tsx",
+                      "Uri":  "/admin/lookups/area-types"
+                  },
+                  {
+                      "Source":  "client/app/admin/lookups/booking-types/page.tsx",
+                      "Uri":  "/admin/lookups/booking-types"
+                  },
+                  {
+                      "Source":  "client/app/admin/lookups/currencies/page.tsx",
+                      "Uri":  "/admin/lookups/currencies"
+                  },
+                  {
+                      "Source":  "client/app/admin/lookups/document-types/page.tsx",
+                      "Uri":  "/admin/lookups/document-types"
+                  },
+                  {
+                      "Source":  "client/app/admin/lookups/languages/page.tsx",
+                      "Uri":  "/admin/lookups/languages"
+                  },
+                  {
+                      "Source":  "client/app/admin/lookups/payment-modes/page.tsx",
+                      "Uri":  "/admin/lookups/payment-modes"
+                  },
+                  {
+                      "Source":  "client/app/admin/lookups/timezones/page.tsx",
+                      "Uri":  "/admin/lookups/timezones"
+                  },
+                  {
+                      "Source":  "client/app/admin/lookups/units/page.tsx",
+                      "Uri":  "/admin/lookups/units"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/announcement-management/page.tsx",
+                      "Uri":  "/admin/masters/announcement-management"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/pricing-rules/page.tsx",
+                      "Uri":  "/admin/masters/pricing-rules"
+                  },
+                  {
+                      "Source":  "client/app/admin/notifications/broadcast/page.tsx",
+                      "Uri":  "/admin/notifications/broadcast"
+                  },
+                  {
+                      "Source":  "client/app/admin/notifications/history/page.tsx",
+                      "Uri":  "/admin/notifications/history"
+                  },
+                  {
+                      "Source":  "client/app/admin/notifications/logs/page.tsx",
+                      "Uri":  "/admin/notifications/logs"
+                  },
+                  {
+                      "Source":  "client/app/admin/notifications/scheduled/page.tsx",
+                      "Uri":  "/admin/notifications/scheduled"
+                  },
+                  {
+                      "Source":  "client/app/admin/notifications/templates/page.tsx",
+                      "Uri":  "/admin/notifications/templates"
+                  },
+                  {
+                      "Source":  "client/app/admin/operations/audit/page.tsx",
+                      "Uri":  "/admin/operations/audit"
+                  },
+                  {
+                      "Source":  "client/app/admin/operations/bookings/page.tsx",
+                      "Uri":  "/admin/operations/bookings"
+                  },
+                  {
+                      "Source":  "client/app/admin/operations/live-dashboard/page.tsx",
+                      "Uri":  "/admin/operations/live-dashboard"
+                  },
+                  {
+                      "Source":  "client/app/admin/security/2fa/page.tsx",
+                      "Uri":  "/admin/security/2fa"
+                  },
+                  {
+                      "Source":  "client/app/admin/security/alerts/page.tsx",
+                      "Uri":  "/admin/security/alerts"
+                  },
+                  {
+                      "Source":  "client/app/admin/security/ip-rules/page.tsx",
+                      "Uri":  "/admin/security/ip-rules"
+                  },
+                  {
+                      "Source":  "client/app/admin/security/sessions/page.tsx",
+                      "Uri":  "/admin/security/sessions"
+                  },
+                  {
+                      "Source":  "client/app/admin/settings/notifications/page.tsx",
+                      "Uri":  "/admin/settings/notifications"
+                  },
+                  {
+                      "Source":  "client/app/admin/settings/payments/page.tsx",
+                      "Uri":  "/admin/settings/payments"
+                  },
+                  {
+                      "Source":  "client/app/admin/settings/profile/page.tsx",
+                      "Uri":  "/admin/settings/profile"
+                  },
+                  {
+                      "Source":  "client/app/admin/support/categories/page.tsx",
+                      "Uri":  "/admin/support/categories"
+                  },
+                  {
+                      "Source":  "client/app/admin/support/sla/page.tsx",
+                      "Uri":  "/admin/support/sla"
+                  },
+                  {
+                      "Source":  "client/app/admin/support/tickets/page.tsx",
+                      "Uri":  "/admin/support/tickets"
+                  },
+                  {
+                      "Source":  "client/app/admin/technician-management/applications/page.tsx",
+                      "Uri":  "/admin/technician-management/applications"
+                  },
+                  {
+                      "Source":  "client/app/admin/technician-management/referrals/page.tsx",
+                      "Uri":  "/admin/technician-management/referrals"
+                  },
+                  {
+                      "Source":  "client/app/admin/technician-management/technicians/page.tsx",
+                      "Uri":  "/admin/technician-management/technicians"
+                  },
+                  {
+                      "Source":  "client/app/admin/transactions/invoices/page.tsx",
+                      "Uri":  "/admin/transactions/invoices"
+                  },
+                  {
+                      "Source":  "client/app/admin/transactions/payments/page.tsx",
+                      "Uri":  "/admin/transactions/payments"
+                  },
+                  {
+                      "Source":  "client/app/admin/transactions/payouts/page.tsx",
+                      "Uri":  "/admin/transactions/payouts"
+                  },
+                  {
+                      "Source":  "client/app/admin/transactions/refunds/page.tsx",
+                      "Uri":  "/admin/transactions/refunds"
+                  },
+                  {
+                      "Source":  "client/app/admin/transactions/taxes/page.tsx",
+                      "Uri":  "/admin/transactions/taxes"
+                  },
+                  {
+                      "Source":  "client/app/admin/user-management/feedbacks/page.tsx",
+                      "Uri":  "/admin/user-management/feedbacks"
+                  },
+                  {
+                      "Source":  "client/app/admin/user-management/users/page.tsx",
+                      "Uri":  "/admin/user-management/users"
+                  },
+                  {
+                      "Source":  "client/app/admin/cms/page.tsx",
+                      "Uri":  "/admin/cms"
+                  },
+                  {
+                      "Source":  "client/app/admin/contact-inquiries/page.tsx",
+                      "Uri":  "/admin/contact-inquiries"
+                  },
+                  {
+                      "Source":  "client/app/admin/crm/page.tsx",
+                      "Uri":  "/admin/crm"
+                  },
+                  {
+                      "Source":  "client/app/admin/finance/page.tsx",
+                      "Uri":  "/admin/finance"
+                  },
+                  {
+                      "Source":  "client/app/admin/masters/page.tsx",
+                      "Uri":  "/admin/masters"
+                  },
+                  {
+                      "Source":  "client/app/admin/notifications/page.tsx",
+                      "Uri":  "/admin/notifications"
+                  },
+                  {
+                      "Source":  "client/app/admin/reports/page.tsx",
+                      "Uri":  "/admin/reports"
+                  },
+                  {
+                      "Source":  "client/app/admin/security/page.tsx",
+                      "Uri":  "/admin/security"
+                  },
+                  {
+                      "Source":  "client/app/admin/settings/page.tsx",
+                      "Uri":  "/admin/settings"
+                  },
+                  {
+                      "Source":  "client/app/admin/support/page.tsx",
+                      "Uri":  "/admin/support"
+                  },
+                  {
+                      "Source":  "client/app/admin/tracker/page.tsx",
+                      "Uri":  "/admin/tracker"
+                  },
+                  {
+                      "Source":  "client/app/(user)/profile/coupons/page.tsx",
+                      "Uri":  "/profile/coupons"
+                  },
+                  {
+                      "Source":  "client/app/(user)/profile/payments/page.tsx",
+                      "Uri":  "/profile/payments"
+                  },
+                  {
+                      "Source":  "client/app/(user)/profile/referral/page.tsx",
+                      "Uri":  "/profile/referral"
+                  },
+                  {
+                      "Source":  "client/app/technician/login/page.tsx",
+                      "Uri":  "/technician/login"
+                  },
+                  {
+                      "Source":  "client/app/technician/register/page.tsx",
+                      "Uri":  "/technician/register"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(company)/about-us/page.tsx",
+                      "Uri":  "/about-us"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/account-deletion-policy/page.tsx",
+                      "Uri":  "/account-deletion-policy"
+                  },
+                  {
+                      "Source":  "client/app/admin/page.tsx",
+                      "Uri":  "/admin"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/become-a-partner/page.tsx",
+                      "Uri":  "/become-a-partner"
+                  },
+                  {
+                      "Source":  "client/app/(user)/bookings/page.tsx",
+                      "Uri":  "/bookings"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/cancellation-policy/page.tsx",
+                      "Uri":  "/cancellation-policy"
+                  },
+                  {
+                      "Source":  "client/app/(user)/cart/page.tsx",
+                      "Uri":  "/cart"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(company)/contact-us/page.tsx",
+                      "Uri":  "/contact-us"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/cookie-policy/page.tsx",
+                      "Uri":  "/cookie-policy"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/disclaimer/page.tsx",
+                      "Uri":  "/disclaimer"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/faq/page.tsx",
+                      "Uri":  "/faq"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/grievance-policy/page.tsx",
+                      "Uri":  "/grievance-policy"
+                  },
+                  {
+                      "Source":  "client/app/(user)/offers/page.tsx",
+                      "Uri":  "/offers"
+                  },
+                  {
+                      "Source":  "client/app/(user)/payment/page.tsx",
+                      "Uri":  "/payment"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/privacy-policy/page.tsx",
+                      "Uri":  "/privacy-policy"
+                  },
+                  {
+                      "Source":  "client/app/(user)/profile/page.tsx",
+                      "Uri":  "/profile"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/refund-policy/page.tsx",
+                      "Uri":  "/refund-policy"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/safety-and-verification/page.tsx",
+                      "Uri":  "/safety-and-verification"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/service-partner-agreement/page.tsx",
+                      "Uri":  "/service-partner-agreement"
+                  },
+                  {
+                      "Source":  "client/app/(public)/services/page.tsx",
+                      "Uri":  "/services"
+                  },
+                  {
+                      "Source":  "client/app/(public)/services-in/page.tsx",
+                      "Uri":  "/services-in"
+                  },
+                  {
+                      "Source":  "client/app/technician/page.tsx",
+                      "Uri":  "/technician"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/terms-and-conditions/page.tsx",
+                      "Uri":  "/terms-and-conditions"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/(legal)/warranty-policy/page.tsx",
+                      "Uri":  "/warranty-policy"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/page.tsx",
+                      "Uri":  "/"
+                  },
+                  {
+                      "Source":  "client/app/admin/user-management/users/[customerId]/create-booking/page.tsx",
+                      "Uri":  "/admin/user-management/users/{customerId}/create-booking"
+                  },
+                  {
+                      "Source":  "client/app/admin/admin-management/admins/[adminId]/page.tsx",
+                      "Uri":  "/admin/admin-management/admins/{adminId}"
+                  },
+                  {
+                      "Source":  "client/app/admin/booking-management/workflow/[bookingId]/page.tsx",
+                      "Uri":  "/admin/booking-management/workflow/{bookingId}"
+                  },
+                  {
+                      "Source":  "client/app/admin/crm/customers/[customerId]/page.tsx",
+                      "Uri":  "/admin/crm/customers/{customerId}"
+                  },
+                  {
+                      "Source":  "client/app/admin/support/tickets/[ticketId]/page.tsx",
+                      "Uri":  "/admin/support/tickets/{ticketId}"
+                  },
+                  {
+                      "Source":  "client/app/admin/technician-management/technicians/[technicianId]/page.tsx",
+                      "Uri":  "/admin/technician-management/technicians/{technicianId}"
+                  },
+                  {
+                      "Source":  "client/app/admin/user-management/users/[customerId]/page.tsx",
+                      "Uri":  "/admin/user-management/users/{customerId}"
+                  },
+                  {
+                      "Source":  "client/app/admin/cms/[slug]/page.tsx",
+                      "Uri":  "/admin/cms/{slug}"
+                  },
+                  {
+                      "Source":  "client/app/admin/contact-inquiries/[inquiryId]/page.tsx",
+                      "Uri":  "/admin/contact-inquiries/{inquiryId}"
+                  },
+                  {
+                      "Source":  "client/app/(user)/bookings/[bookingId]/track/page.tsx",
+                      "Uri":  "/bookings/{bookingId}/track"
+                  },
+                  {
+                      "Source":  "client/app/technician/[technicianId]/Completed-Jobs/page.tsx",
+                      "Uri":  "/technician/{technicianId}/Completed-Jobs"
+                  },
+                  {
+                      "Source":  "client/app/technician/[technicianId]/dashboard/page.tsx",
+                      "Uri":  "/technician/{technicianId}/dashboard"
+                  },
+                  {
+                      "Source":  "client/app/technician/[technicianId]/Earnings/page.tsx",
+                      "Uri":  "/technician/{technicianId}/Earnings"
+                  },
+                  {
+                      "Source":  "client/app/technician/[technicianId]/Job-Requests/page.tsx",
+                      "Uri":  "/technician/{technicianId}/Job-Requests"
+                  },
+                  {
+                      "Source":  "client/app/technician/[technicianId]/profile/page.tsx",
+                      "Uri":  "/technician/{technicianId}/profile"
+                  },
+                  {
+                      "Source":  "client/app/(user)/bookings/[bookingId]/page.tsx",
+                      "Uri":  "/bookings/{bookingId}"
+                  },
+                  {
+                      "Source":  "client/app/(auth)/login/[uid]/page.tsx",
+                      "Uri":  "/login/{uid}"
+                  },
+                  {
+                      "Source":  "client/app/(user)/service/[serviceId]/page.tsx",
+                      "Uri":  "/service/{serviceId}"
+                  },
+                  {
+                      "Source":  "client/app/(public)/services-in/[city]/page.tsx",
+                      "Uri":  "/services-in/{city}"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(landing)/[slug]/page.tsx",
+                      "Uri":  "/{slug}"
+                  },
+                  {
+                      "Source":  "client/app/admin/user-management/users/[customerId]/bookings/[bookingId]/page.tsx",
+                      "Uri":  "/admin/user-management/users/{customerId}/bookings/{bookingId}"
+                  },
+                  {
+                      "Source":  "client/app/(public)/services-in/[city]/[service]/page.tsx",
+                      "Uri":  "/services-in/{city}/{service}"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(seo)/[slug]/[service]/page.tsx",
+                      "Uri":  "/{slug}/{service}"
+                  },
+                  {
+                      "Source":  "client/app/(public)/services-in/[city]/[service]/[detail]/page.tsx",
+                      "Uri":  "/services-in/{city}/{service}/{detail}"
+                  },
+                  {
+                      "Source":  "client/app/(public)/(seo)/[slug]/[service]/[detail]/page.tsx",
+                      "Uri":  "/{slug}/{service}/{detail}"
+                  }
+              ]
+}

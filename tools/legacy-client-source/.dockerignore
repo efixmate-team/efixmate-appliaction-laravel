@@ -1,0 +1,14 @@
+# Ignore local dependencies (the container installs its own)
+node_modules
+
+# Ignore build outputs and distribution folders
+dist
+build
+.next
+.next-*
+.next-build-*
+
+# Ignore logs and environment secrets
+npm-debug.log
+.env
+.git

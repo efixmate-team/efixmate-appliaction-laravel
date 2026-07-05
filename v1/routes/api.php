@@ -208,6 +208,7 @@ Route::prefix('user')->name('user.')->group(function () {
 Route::prefix('technician')->name('technician.')->group(function () {
     Route::post('/send-otp', [TechnicianOtpController::class, 'sendOtp'])->name('send-otp');
     Route::post('/verify-otp', [TechnicianOtpController::class, 'verifyOtp'])->name('verify-otp');
+    Route::get('/required-document-list', [\App\Http\Controllers\TechnicianRegistrationController::class, 'requiredDocumentList']);
 
     Route::middleware(['auth:sanctum', 'technician.token'])->group(function () {
         Route::get('/me', fn (Request $request) => $request->user());
@@ -215,6 +216,49 @@ Route::prefix('technician')->name('technician.')->group(function () {
         Route::post('/booking/{booking}/start-service', [TechnicianBookingController::class, 'startService']);
         Route::post('/booking/{booking}/complete-service', [TechnicianBookingController::class, 'completeService']);
         Route::post('/booking/{booking}/reject', [TechnicianBookingController::class, 'reject']);
+
+        Route::post('/auth/logout-all', [\App\Http\Controllers\TechnicianProfileController::class, 'logoutAll']);
+
+        // Registration wizard
+        Route::get('/registration/status', [\App\Http\Controllers\TechnicianRegistrationController::class, 'status']);
+        Route::get('/registration/services', [\App\Http\Controllers\TechnicianRegistrationController::class, 'services']);
+        Route::get('/registration/skills', [\App\Http\Controllers\TechnicianRegistrationController::class, 'skillsList']);
+        Route::post('/registration/basic-details', [\App\Http\Controllers\TechnicianRegistrationController::class, 'basicDetails']);
+        Route::post('/registration/skills', [\App\Http\Controllers\TechnicianRegistrationController::class, 'saveSkills']);
+        Route::post('/registration/upload-document', [\App\Http\Controllers\TechnicianRegistrationController::class, 'uploadDocument']);
+        Route::post('/registration/upload-selfie', [\App\Http\Controllers\TechnicianRegistrationController::class, 'uploadSelfie']);
+        Route::post('/registration/bank-details', [\App\Http\Controllers\TechnicianRegistrationController::class, 'bankDetails']);
+        Route::post('/registration/submit', [\App\Http\Controllers\TechnicianRegistrationController::class, 'submit']);
+        Route::post('/registration/resubmit-corrections', [\App\Http\Controllers\TechnicianRegistrationController::class, 'resubmitCorrections']);
+        Route::post('/registration/verify-upi', [\App\Http\Controllers\TechnicianRegistrationController::class, 'verifyUpiId']);
+        Route::post('/registration/upi-verification-order', [\App\Http\Controllers\TechnicianRegistrationController::class, 'upiVerificationOrder']);
+        Route::post('/registration/confirm-upi-payment', [\App\Http\Controllers\TechnicianRegistrationController::class, 'confirmUpiPayment']);
+
+        // Home dashboard
+        Route::get('/home/dashboard', [\App\Http\Controllers\TechnicianHomeController::class, 'dashboard']);
+        Route::patch('/home/availability', [\App\Http\Controllers\TechnicianHomeController::class, 'setAvailability']);
+        Route::get('/home/notifications/unread-count', [\App\Http\Controllers\TechnicianHomeController::class, 'unreadNotifications']);
+        Route::get('/home/my-jobs', [\App\Http\Controllers\TechnicianHomeController::class, 'myJobs']);
+        Route::get('/home/my-earnings', [\App\Http\Controllers\TechnicianHomeController::class, 'myEarnings']);
+        Route::post('/home/withdraw-request', [\App\Http\Controllers\TechnicianHomeController::class, 'requestWithdrawal']);
+        Route::get('/home/jobs/{bookingId}', [\App\Http\Controllers\TechnicianHomeController::class, 'jobDetail'])->whereNumber('bookingId');
+        Route::post('/home/jobs/skip', [\App\Http\Controllers\TechnicianHomeController::class, 'skipJob']);
+        Route::post('/home/jobs/accept', [\App\Http\Controllers\TechnicianHomeController::class, 'acceptJob']);
+        Route::patch('/home/jobs/{bookingId}/status', [\App\Http\Controllers\TechnicianHomeController::class, 'updateJobStatus'])->whereNumber('bookingId');
+        Route::post('/home/device/register', [\App\Http\Controllers\TechnicianHomeController::class, 'registerDevice']);
+        Route::post('/home/location/update', [\App\Http\Controllers\TechnicianHomeController::class, 'updateLocation']);
+        Route::patch('/home/location', [\App\Http\Controllers\TechnicianHomeController::class, 'updateLocation']);
+        Route::post('/home/address', [\App\Http\Controllers\TechnicianHomeController::class, 'upsertAddress']);
+        Route::patch('/home/address', [\App\Http\Controllers\TechnicianHomeController::class, 'upsertAddress']);
+
+        // Profile
+        Route::get('/profile', [\App\Http\Controllers\TechnicianProfileController::class, 'show']);
+        Route::post('/update-profile', [\App\Http\Controllers\TechnicianProfileController::class, 'update']);
+        Route::post('/update-bank', [\App\Http\Controllers\TechnicianProfileController::class, 'updateBank']);
+
+        // Referral
+        Route::get('/referral', [\App\Http\Controllers\TechnicianProfileController::class, 'referral']);
+        Route::post('/referral/apply', [\App\Http\Controllers\TechnicianProfileController::class, 'applyReferral']);
     });
 });
 
